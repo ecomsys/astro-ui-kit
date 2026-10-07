@@ -1,0 +1,18 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div
+    data-slot="progress-track"
+    class={cn("relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-muted", className)}
+    {...rest}
+>
+    <slot />
+</div>

@@ -1,0 +1,428 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    NavigationMenu,
+    NavigationMenuList,
+    NavigationMenuItem,
+    NavigationMenuTrigger,
+    NavigationMenuContent,
+    NavigationMenuLink,
+} from "../../components/ui/navigation-menu";
+import Button from "../../components/ui/Button.astro";
+import { Cloud, Server, Database, Zap, BookOpen, LifeBuoy, Users, Briefcase, ArrowRight } from "@lucide/astro";
+
+// 1. Полноэкранное Мега-меню
+const fullWidthCode = `import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from '../../components/ui/navigation-menu';
+import { Cloud, Server, Database, Zap } from '@lucide/astro';
+
+<header class="w-full border-b bg-card/50 backdrop-blur">
+  <div class="max-w-5xl mx-auto px-4 flex h-16 items-center justify-center">
+    <NavigationMenu>
+      <NavigationMenuList>
+        <!-- fullWidth={true} растягивает меню на весь экран -->
+        <NavigationMenuItem align="start" sideOffset={12} fullWidth={true}>
+          <NavigationMenuTrigger>Все продукты</NavigationMenuTrigger>
+          <NavigationMenuContent class="border-t shadow-xl p-0 rounded-none">
+            <!-- Контейнер max-w-7xl центрирует контент внутри полноэкранного меню -->
+            <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-4 gap-4">
+              <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg">
+                <div class="flex items-center gap-2">
+                  <Cloud class="size-5 text-primary" />
+                  <span class="font-medium">Cloud Hosting</span>
+                </div>
+                <p class="text-xs text-muted-foreground font-normal">Масштабируемый хостинг для ваших проектов</p>
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg">
+                <div class="flex items-center gap-2">
+                  <Server class="size-5 text-primary" />
+                  <span class="font-medium">Dedicated Servers</span>
+                </div>
+                <p class="text-xs text-muted-foreground font-normal">Выделенные мощности под ключ</p>
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg">
+                <div class="flex items-center gap-2">
+                  <Database class="size-5 text-primary" />
+                  <span class="font-medium">Managed DB</span>
+                </div>
+                <p class="text-xs text-muted-foreground font-normal">Базы данных с авто-бэкапами</p>
+              </NavigationMenuLink>
+              <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg">
+                <div class="flex items-center gap-2">
+                  <Zap class="size-5 text-primary" />
+                  <span class="font-medium">Edge Functions</span>
+                </div>
+                <p class="text-xs text-muted-foreground font-normal">Serverless вычисления</p>
+              </NavigationMenuLink>
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  </div>
+</header>`;
+
+// 2. Полноценный хедер с Мега-меню
+const headerCode = `import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from '../../components/ui/navigation-menu';
+import Button from '../../components/ui/Button.astro';
+import { Cloud, Server, Database, Zap, BookOpen, LifeBuoy, Users, Briefcase, ArrowRight } from '@lucide/astro';
+
+<!-- В реальном проекте добавьте class="sticky top-0 z-40" для фиксации шапки при скролле -->
+<header class="w-full border-b bg-card/50 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 flex h-16 items-center justify-between">
+        <div class="font-bold text-lg">VIRGO UI</div>
+
+        <NavigationMenu>
+            <NavigationMenuList class="gap-1">
+                <!-- 1. МЕГА-МЕНЮ: Продукты (Привязка к левому краю - align="start") -->
+                <NavigationMenuItem align="start" sideOffset={12}>
+                    <NavigationMenuTrigger>Продукты</NavigationMenuTrigger>
+                    <NavigationMenuContent class="w-[37.5rem] p-0">
+                        <div class="grid grid-cols-[1fr_12.5rem] gap-0">
+                            <!-- Левая колонка: Ссылки с иконками и описанием -->
+                            <div class="p-4 grid grid-cols-2 gap-2">
+                                <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted">
+                                    <div class="flex items-center gap-2">
+                                        <Cloud class="size-5 text-primary" />
+                                        <span class="font-medium">Cloud Hosting</span>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground font-normal">
+                                        Масштабируемый хостинг для ваших проектов
+                                    </p>
+                                </NavigationMenuLink>
+
+                                <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted">
+                                    <div class="flex items-center gap-2">
+                                        <Server class="size-5 text-primary" />
+                                        <span class="font-medium">Dedicated Servers</span>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground font-normal">
+                                        Выделенные мощности под ключ
+                                    </p>
+                                </NavigationMenuLink>
+
+                                <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted">
+                                    <div class="flex items-center gap-2">
+                                        <Database class="size-5 text-primary" />
+                                        <span class="font-medium">Managed DB</span>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground font-normal">Базы данных с авто-бэкапами</p>
+                                </NavigationMenuLink>
+
+                                <NavigationMenuLink href="#" class="flex-col items-start gap-1 hover:bg-muted">
+                                    <div class="flex items-center gap-2">
+                                        <Zap class="size-5 text-primary" />
+                                        <span class="font-medium">Edge Functions</span>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground font-normal">Serverless вычисления</p>
+                                </NavigationMenuLink>
+                            </div>
+
+                            <!-- Правая колонка: Промо-баннер -->
+                            <div class="bg-primary/10 p-4 flex flex-col gap-2 justify-center border-l">
+                                <h3 class="font-bold text-primary">Новинка!</h3>
+                                <p class="text-xs text-muted-foreground">
+                                    Попробуйте наш новый AI-ассистент для управления серверами.
+                                </p>
+                                <Button size="sm" class="w-full mt-2">
+                                    Try Now <ArrowRight class="size-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <!-- 2. ОБЫЧНОЕ МЕНЮ: Ресурсы (По центру - align="center") -->
+                <NavigationMenuItem align="center" sideOffset={12}>
+                    <NavigationMenuTrigger>Ресурсы</NavigationMenuTrigger>
+                    <NavigationMenuContent class="w-64">
+                        <NavigationMenuLink href="#"><BookOpen /> Документация</NavigationMenuLink>
+                        <NavigationMenuLink href="#"><LifeBuoy /> Поддержка</NavigationMenuLink>
+                        <NavigationMenuLink href="#"><Server /> Статус серверов</NavigationMenuLink>
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <!-- 3. МЕНЮ С ГРУППИРОВКОЙ: Компания (Привязка к правому краю - align="end") -->
+                <NavigationMenuItem align="end" sideOffset={12}>
+                    <NavigationMenuTrigger>Компания</NavigationMenuTrigger>
+                    <NavigationMenuContent class="w-72">
+                        <div class="p-2">
+                            <p class="text-xs font-medium text-muted-foreground mb-1">О нас</p>
+                            <NavigationMenuLink href="#"><Users /> Наша команда</NavigationMenuLink>
+                            <NavigationMenuLink href="#"><Briefcase /> Вакансии</NavigationMenuLink>
+                        </div>
+                        <div class="p-2 border-t mt-1">
+                            <p class="text-xs font-medium text-muted-foreground mb-1">Контакты</p>
+                            <NavigationMenuLink href="#">Связаться с нами</NavigationMenuLink>
+                        </div>
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <!-- 4. Обычная ссылка (Без дропдауна) -->
+                <NavigationMenuItem class="flex items-center">
+                    <a href="#" class="inline-flex h-9 items-center px-3 text-sm font-medium hover:bg-muted rounded-lg transition-colors">Цены</a>
+                </NavigationMenuItem>
+            </NavigationMenuList>
+        </NavigationMenu>
+
+        <!-- Кнопки справа -->
+        <div class="flex items-center gap-2">
+            <Button variant="ghost" size="sm">Войти</Button>
+            <Button size="sm">Регистрация</Button>
+        </div>
+    </div>
+</header>`;
+
+// 3. Базовое меню
+const basicCode = `import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from '../../components/ui/navigation-menu';
+import { BookOpen, LifeBuoy, Server } from '@lucide/astro';
+
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem align="start">
+      <NavigationMenuTrigger>Ресурсы</NavigationMenuTrigger>
+      <NavigationMenuContent class="w-64">
+        <NavigationMenuLink href="#"><BookOpen /> Документация</NavigationMenuLink>
+        <NavigationMenuLink href="#"><LifeBuoy /> Поддержка</NavigationMenuLink>
+        <NavigationMenuLink href="#"><Server /> Статус серверов</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+    
+    <NavigationMenuItem class="flex items-center">
+      <a href="#" class="inline-flex h-9 items-center px-3 text-sm font-medium hover:bg-muted rounded-lg transition-colors">Цены</a>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>`;
+---
+
+<DashboardLayout title="Navigation Menu">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Navigation Menu</h1>
+            <p class="text-muted-foreground text-lg">
+                Мега-меню для шапки сайта. Поддерживает наведение (Hover Intent), промо-баннеры внутри, группировку
+                ссылок, умное позиционирование и полноэкранный режим (fullWidth).
+            </p>
+        </div>
+
+        <!-- 1. ПОЛНОЭКРАННОЕ МЕГА-МЕНЮ (FULL-WIDTH) -->
+        <ComponentDoc
+            title="Полноэкранное мега-меню (Full-Width)"
+            description="Пропс fullWidth={true} растягивает меню на весь экран. Внутри используйте max-w-7xl, чтобы центрировать контент."
+            code={fullWidthCode}
+        >
+            <header class="w-full border-b bg-card/50 backdrop-blur -m-6 mb-0">
+                <div class="max-w-5xl mx-auto px-4 flex h-16 items-center justify-center">
+                    <NavigationMenu>
+                        <NavigationMenuList>
+                            <NavigationMenuItem align="start" sideOffset={12} fullWidth={true}>
+                                <NavigationMenuTrigger>Все продукты</NavigationMenuTrigger>
+                                <NavigationMenuContent class="border-t shadow-xl p-0 rounded-none">
+                                    <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-4 gap-4">
+                                        <NavigationMenuLink
+                                            href="#"
+                                            class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg"
+                                        >
+                                            <div class="flex items-center gap-2">
+                                                <Cloud class="size-5 text-primary" />
+                                                <span class="font-medium">Cloud Hosting</span>
+                                            </div>
+                                            <p class="text-xs text-muted-foreground font-normal">
+                                                Масштабируемый хостинг для ваших проектов
+                                            </p>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink
+                                            href="#"
+                                            class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg"
+                                        >
+                                            <div class="flex items-center gap-2">
+                                                <Server class="size-5 text-primary" />
+                                                <span class="font-medium">Dedicated Servers</span>
+                                            </div>
+                                            <p class="text-xs text-muted-foreground font-normal">
+                                                Выделенные мощности под ключ
+                                            </p>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink
+                                            href="#"
+                                            class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg"
+                                        >
+                                            <div class="flex items-center gap-2">
+                                                <Database class="size-5 text-primary" />
+                                                <span class="font-medium">Managed DB</span>
+                                            </div>
+                                            <p class="text-xs text-muted-foreground font-normal">
+                                                Базы данных с авто-бэкапами
+                                            </p>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink
+                                            href="#"
+                                            class="flex-col items-start gap-1 hover:bg-muted p-3 rounded-lg"
+                                        >
+                                            <div class="flex items-center gap-2">
+                                                <Zap class="size-5 text-primary" />
+                                                <span class="font-medium">Edge Functions</span>
+                                            </div>
+                                            <p class="text-xs text-muted-foreground font-normal">
+                                                Serverless вычисления
+                                            </p>
+                                        </NavigationMenuLink>
+                                    </div>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+            </header>
+        </ComponentDoc>
+
+        <!-- 2. ПОЛНОЦЕННЫЙ ХЕДЕР С МЕГА-МЕНЮ -->
+        <ComponentDoc
+            title="Мега-меню (Mega Menu)"
+            description="Полноценная шапка сайта. Содержит мега-меню с сеткой ссылок и промо-баннером, а также обычные дропдауны. (Класс sticky убран для корректного отображения внутри документации)."
+            code={headerCode}
+        >
+            <header class="w-full border-b bg-card/50 backdrop-blur -m-6 mb-0">
+                <div class="max-w-5xl mx-auto px-4 flex h-16 items-center justify-between">
+                    <div class="font-bold text-lg">VIRGO UI</div>
+
+                    <NavigationMenu>
+                        <NavigationMenuList class="gap-1">
+                            <NavigationMenuItem align="start" sideOffset={12}>
+                                <NavigationMenuTrigger>Продукты</NavigationMenuTrigger>
+                                <NavigationMenuContent class="w-[37.5rem] p-0">
+                                    <div class="grid grid-cols-[1fr_12.5rem] gap-0">
+                                        <div class="p-4 grid grid-cols-2 gap-2">
+                                            <NavigationMenuLink
+                                                href="#"
+                                                class="flex-col items-start gap-1 hover:bg-muted"
+                                            >
+                                                <div class="flex items-center gap-2">
+                                                    <Cloud class="size-5 text-primary" />
+                                                    <span class="font-medium">Cloud Hosting</span>
+                                                </div>
+                                                <p class="text-xs text-muted-foreground font-normal">
+                                                    Масштабируемый хостинг для ваших проектов
+                                                </p>
+                                            </NavigationMenuLink>
+                                            <NavigationMenuLink
+                                                href="#"
+                                                class="flex-col items-start gap-1 hover:bg-muted"
+                                            >
+                                                <div class="flex items-center gap-2">
+                                                    <Server class="size-5 text-primary" />
+                                                    <span class="font-medium">Dedicated Servers</span>
+                                                </div>
+                                                <p class="text-xs text-muted-foreground font-normal">
+                                                    Выделенные мощности под ключ
+                                                </p>
+                                            </NavigationMenuLink>
+                                            <NavigationMenuLink
+                                                href="#"
+                                                class="flex-col items-start gap-1 hover:bg-muted"
+                                            >
+                                                <div class="flex items-center gap-2">
+                                                    <Database class="size-5 text-primary" />
+                                                    <span class="font-medium">Managed DB</span>
+                                                </div>
+                                                <p class="text-xs text-muted-foreground font-normal">
+                                                    Базы данных с авто-бэкапами
+                                                </p>
+                                            </NavigationMenuLink>
+                                            <NavigationMenuLink
+                                                href="#"
+                                                class="flex-col items-start gap-1 hover:bg-muted"
+                                            >
+                                                <div class="flex items-center gap-2">
+                                                    <Zap class="size-5 text-primary" />
+                                                    <span class="font-medium">Edge Functions</span>
+                                                </div>
+                                                <p class="text-xs text-muted-foreground font-normal">
+                                                    Serverless вычисления
+                                                </p>
+                                            </NavigationMenuLink>
+                                        </div>
+                                        <div class="bg-primary/10 p-4 flex flex-col gap-2 justify-center border-l">
+                                            <h3 class="font-bold text-primary">Новинка!</h3>
+                                            <p class="text-xs text-muted-foreground">
+                                                Попробуйте наш новый AI-ассистент для управления серверами.
+                                            </p>
+                                            <Button size="sm" class="w-full mt-2"
+                                                >Try Now <ArrowRight class="size-4" /></Button
+                                            >
+                                        </div>
+                                    </div>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
+                            <NavigationMenuItem align="center" sideOffset={12}>
+                                <NavigationMenuTrigger>Ресурсы</NavigationMenuTrigger>
+                                <NavigationMenuContent class="w-64">
+                                    <NavigationMenuLink href="#"><BookOpen /> Документация</NavigationMenuLink>
+                                    <NavigationMenuLink href="#"><LifeBuoy /> Поддержка</NavigationMenuLink>
+                                    <NavigationMenuLink href="#"><Server /> Статус серверов</NavigationMenuLink>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
+                            <NavigationMenuItem align="end" sideOffset={12}>
+                                <NavigationMenuTrigger>Компания</NavigationMenuTrigger>
+                                <NavigationMenuContent class="w-72">
+                                    <div class="p-2">
+                                        <p class="text-xs font-medium text-muted-foreground mb-1">О нас</p>
+                                        <NavigationMenuLink href="#"><Users /> Наша команда</NavigationMenuLink>
+                                        <NavigationMenuLink href="#"><Briefcase /> Вакансии</NavigationMenuLink>
+                                    </div>
+                                    <div class="p-2 border-t mt-1">
+                                        <p class="text-xs font-medium text-muted-foreground mb-1">Контакты</p>
+                                        <NavigationMenuLink href="#">Связаться с нами</NavigationMenuLink>
+                                    </div>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
+                            <NavigationMenuItem class="flex items-center">
+                                <a
+                                    href="#"
+                                    class="inline-flex h-9 items-center px-3 text-sm font-medium hover:bg-muted rounded-lg transition-colors"
+                                    >Цены</a
+                                >
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+
+                    <div class="flex items-center gap-2">
+                        <Button variant="ghost" size="sm">Войти</Button>
+                        <Button size="sm">Регистрация</Button>
+                    </div>
+                </div>
+            </header>
+        </ComponentDoc>
+
+        <!-- 3. БАЗОВОЕ МЕНЮ -->
+        <ComponentDoc
+            title="Базовое меню"
+            description="Один выпадающий пункт и одна обычная ссылка. Наведите курсор на 'Ресурсы'."
+            code={basicCode}
+        >
+            <NavigationMenu>
+                <NavigationMenuList>
+                    <NavigationMenuItem align="start">
+                        <NavigationMenuTrigger>Ресурсы</NavigationMenuTrigger>
+                        <NavigationMenuContent class="w-64">
+                            <NavigationMenuLink href="#"><BookOpen /> Документация</NavigationMenuLink>
+                            <NavigationMenuLink href="#"><LifeBuoy /> Поддержка</NavigationMenuLink>
+                            <NavigationMenuLink href="#"><Server /> Статус серверов</NavigationMenuLink>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem class="flex items-center">
+                        <a
+                            href="#"
+                            class="inline-flex h-9 items-center px-3 text-sm font-medium hover:bg-muted rounded-lg transition-colors"
+                            >Цены</a
+                        >
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+            </NavigationMenu>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

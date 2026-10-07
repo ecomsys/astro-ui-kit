@@ -1,0 +1,464 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Button from "../../components/ui/Button.astro";
+import Label from "../../components/ui/Label.astro";
+import Input from "../../components/ui/Input.astro";
+
+import {
+    Attachment,
+    AttachmentGroup,
+    AttachmentMedia,
+    AttachmentContent,
+    AttachmentTitle,
+    AttachmentDescription,
+    AttachmentActions,
+    AttachmentAction,
+} from "../../components/ui/attachment";
+import { FileText, X, Check, AlertTriangle, Loader2, FileCode, UploadCloud, ImagePlus, Send } from "@lucide/astro";
+
+// 1. УМНАЯ ОДИНОЧНАЯ ЗАГРУЗКА
+const smartUploadCode = `import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentActions, AttachmentAction } from '../../components/ui/attachment';
+import Button from '../../components/ui/Button.astro';
+import { Check, AlertTriangle, Loader2, FileText, X, UploadCloud } from '@lucide/astro';
+
+<div class="flex flex-col items-center gap-6 py-8" x-data="{ 
+  state: 'idle', progress: 0, fileName: '', fileSize: '', isImage: false, imgSrc: '', interval: null, isError: false,
+  pickFile(isError = false) { this.isError = isError; this.$refs.fileInput.click(); },
+  handleFile(e) {
+    const file = e.target.files[0]; if (!file) return;
+    this.fileName = file.name;
+    this.fileSize = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
+    this.isImage = file.type.startsWith('image/');
+    if (this.isImage) {
+      const reader = new FileReader();
+      reader.onload = (event) => { this.imgSrc = event.target.result; this.startUpload(); };
+      reader.readAsDataURL(file);
+    } else { this.imgSrc = ''; this.startUpload(); }
+  },
+  startUpload() {
+    this.state = 'uploading'; this.progress = 0;
+    this.interval = setInterval(() => {
+      this.progress += 5;
+      if (this.progress >= 100) { clearInterval(this.interval); this.state = this.isError ? 'error' : 'done'; }
+    }, 100);
+  },
+  reset() { clearInterval(this.interval); this.state = 'idle'; this.progress = 0; this.fileName = ''; this.fileSize = ''; this.imgSrc = ''; this.$refs.fileInput.value = ''; }
+}">
+  <input type="file" x-ref="fileInput" class="hidden" x-on:change="handleFile($event)" />
+  <div class="flex gap-3" x-show="state === 'idle'">
+    <Button x-on:click="pickFile(false)"><UploadCloud class="size-4" /> Выбрать файл</Button>
+    <Button variant="destructive" x-on:click="pickFile(true)">Выбрать и выдать ошибку</Button>
+  </div>
+  <Attachment x-bind:title="fileName + ' (' + fileSize + ')'" x-bind:data-orientation="isImage ? 'vertical' : 'horizontal'" x-bind:data-state="state" x-show="state !== 'idle'" x-cloak>
+    <AttachmentMedia :variant="isImage ? 'image' : 'icon'">
+      <img x-show="isImage && imgSrc" x-bind:src="imgSrc" alt="Preview" />
+      <template x-if="!isImage && state === 'uploading'"><Loader2 class="animate-spin" /></template>
+      <template x-if="!isImage && state === 'done'"><FileText /></template>
+      <template x-if="!isImage && state === 'error'"><AlertTriangle /></template>
+    </AttachmentMedia>
+    <AttachmentContent>
+      <AttachmentTitle x-text="fileName"></AttachmentTitle>
+      <AttachmentDescription>
+        <span x-show="state === 'uploading'" x-text="'Загрузка... ' + progress + '%'"></span>
+        <span x-show="state === 'done'" x-text="'Загружено · ' + fileSize"></span>
+        <span x-show="state === 'error'">Ошибка загрузки</span>
+      </AttachmentDescription>
+    </AttachmentContent>
+    <AttachmentActions><AttachmentAction aria-label="Remove" x-on:click="reset()"><X /></AttachmentAction></AttachmentActions>
+  </Attachment>
+</div>`;
+
+// 2. МУЛЬТИ-ЗАГРУЗКА В СЛАЙДЕРЕ
+const multiUploadCode = `import { AttachmentGroup, Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentActions, AttachmentAction } from '../../components/ui/attachment';
+import Button from '../../components/ui/Button.astro';
+import { X, ImagePlus, FileText, Check, Loader2 } from '@lucide/astro';
+
+<div class="flex flex-col items-center gap-6 py-8" x-data="{ 
+  files: [],
+  pickImages() { this.$refs.multiInput.click(); },
+  handleImages(e) {
+    Array.from(e.target.files).forEach(file => {
+      const isImage = file.type.startsWith('image/');
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        let fileId = Date.now() + Math.random();
+        let fileSize = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
+        this.files.push({ id: fileId, name: file.name, size: fileSize, isImage: isImage, src: isImage ? event.target.result : '', progress: 0, state: 'uploading' });
+        let interval = setInterval(() => {
+          let f = this.files.find(x => x.id === fileId);
+          if (f) { f.progress += 5; if (f.progress >= 100) { clearInterval(interval); f.state = 'done'; } }
+        }, 100 + Math.random() * 150);
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  },
+  removeFile(id) { this.files = this.files.filter(f => f.id !== id); }
+}">
+  <input type="file" multiple x-ref="multiInput" class="hidden" x-on:change="handleImages($event)" />
+  <Button x-on:click="pickImages()"><ImagePlus class="size-4" /> Выбрать файлы</Button>
+  <div x-show="files.length > 0" class="w-full max-w-2xl">
+    <AttachmentGroup>
+      <template x-for="file in files" :key="file.id">
+        <Attachment x-bind:title="file.name + ' (' + file.size + ')'" x-bind:data-orientation="file.isImage ? 'vertical' : 'horizontal'" x-bind:data-state="file.state">
+          <AttachmentMedia :variant="file.isImage ? 'image' : 'icon'">
+            <img x-show="file.isImage && file.src" x-bind:src="file.src" alt="file.name" />
+            <template x-if="!file.isImage && file.state === 'uploading'"><Loader2 class="animate-spin" /></template>
+            <template x-if="!file.isImage && file.state === 'done'"><FileText /></template>
+          </AttachmentMedia>
+          <AttachmentContent>
+            <AttachmentTitle x-text="file.name"></AttachmentTitle>
+            <AttachmentDescription>
+              <span x-show="file.state === 'uploading'" x-text="'Загрузка... ' + file.progress + '%'"></span>
+              <span x-show="file.state === 'done'" x-text="'Загружено · ' + file.size"></span>
+            </AttachmentDescription>
+          </AttachmentContent>
+          <AttachmentActions><AttachmentAction aria-label="Remove" x-on:click="removeFile(file.id)"><X /></AttachmentAction></AttachmentActions>
+        </Attachment>
+      </template>
+    </AttachmentGroup>
+  </div>
+</div>`;
+
+const formCode = `import { Attachment, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentActions, AttachmentAction } from '../../components/ui/attachment';
+import Button from '../../components/ui/Button.astro';
+import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+import { Check, Loader2, FileText, X, UploadCloud, Send } from '@lucide/astro';
+
+<form class="w-full max-w-md flex flex-col gap-4 py-8" x-data="{
+  state: 'idle', progress: 0, fileName: '', fileSize: '', isImage: false, imgSrc: '', interval: null, fileObject: null, isSubmitting: false, resultText: '',
+  pickFile() { this.$refs.fileInput.click(); },
+  handleFile(e) {
+    const file = e.target.files[0]; if (!file) return;
+    this.fileObject = file; this.fileName = file.name;
+    this.fileSize = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
+    this.isImage = file.type.startsWith('image/');
+    if (this.isImage) {
+      const reader = new FileReader();
+      reader.onload = (event) => { this.imgSrc = event.target.result; this.startUpload(); };
+      reader.readAsDataURL(file);
+    } else { this.imgSrc = ''; this.startUpload(); }
+  },
+  startUpload() {
+    this.state = 'uploading'; this.progress = 0;
+    this.interval = setInterval(() => {
+      this.progress += 10;
+      if (this.progress >= 100) { clearInterval(this.interval); this.state = 'done'; }
+    }, 100);
+  },
+  reset() { clearInterval(this.interval); this.state = 'idle'; this.progress = 0; this.fileName = ''; this.fileSize = ''; this.imgSrc = ''; this.fileObject = null; this.$refs.fileInput.value = ''; },
+  submitForm(e) {
+    if (this.state !== 'done' || !this.fileObject) { this.resultText = 'Ошибка: Сначала загрузите файл!'; return; }
+    e.preventDefault(); this.isSubmitting = true; this.resultText = '';
+    const formData = new FormData(e.target);
+    formData.append('attachments[]', this.fileObject);
+    setTimeout(() => {
+      this.isSubmitting = false;
+      let result = 'Успех! Данные FormData:\n\n';
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          result += '- ' + key + ': Файл ' + value.name + ' (' + this.fileSize + ', тип: ' + value.type + ')\n';
+        } else {
+          result += '- ' + key + ': ' + value + '\n';
+        }
+      }
+      this.resultText = result;
+      console.log('--- Данные FormData для сервера ---', formData);
+      this.reset(); e.target.reset();
+    }, 1500);
+  }
+}" x-on:submit="submitForm($event)">
+  <input type="file" x-ref="fileInput" class="hidden" x-on:change="handleFile($event)" />
+  <div class="flex flex-col gap-2">
+    <Label for="name">Имя</Label><Input id="name" name="name" placeholder="Иван Иванов" required />
+  </div>
+  <div class="flex flex-col gap-2">
+    <Label>Файл для отправки</Label>
+    <div x-show="state === 'idle'">
+      <Button type="button" variant="outline" x-on:click="pickFile()" class="w-full border-dashed"><UploadCloud class="size-4" /> Выбрать файл</Button>
+    </div>
+    <Attachment x-bind:title="fileName + ' (' + fileSize + ')'" x-bind:data-orientation="isImage ? 'vertical' : 'horizontal'" x-bind:data-state="state" x-show="state !== 'idle'" x-cloak>
+      <AttachmentMedia :variant="isImage ? 'image' : 'icon'">
+        <img x-show="isImage && imgSrc" x-bind:src="imgSrc" alt="Preview" />
+        <template x-if="!isImage && state === 'uploading'"><Loader2 class="animate-spin" /></template>
+        <template x-if="!isImage && state === 'done'"><FileText /></template>
+      </AttachmentMedia>
+      <AttachmentContent>
+        <AttachmentTitle x-text="fileName"></AttachmentTitle>
+        <AttachmentDescription>
+          <span x-show="state === 'uploading'" x-text="'Загрузка... ' + progress + '%'"></span>
+          <span x-show="state === 'done'" x-text="'Загружено · ' + fileSize"></span>
+        </AttachmentDescription>
+      </AttachmentContent>
+      <AttachmentActions><AttachmentAction type="button" aria-label="Remove" x-on:click="reset()"><X /></AttachmentAction></AttachmentActions>
+    </Attachment>
+  </div>
+  <Button type="submit" :disabled="isSubmitting">
+    <template x-if="isSubmitting"><Loader2 class="size-4 animate-spin" /></template>
+    <template x-if="!isSubmitting"><Send class="size-4" /></template>
+    Отправить на сервер
+  </Button>
+  <div x-show="resultText" x-cloak class="mt-4 p-4 bg-muted rounded-lg text-xs text-muted-foreground border">
+    <p class="font-bold mb-2 text-foreground">Данные, отправленные на сервер (FormData):</p>
+    <pre x-text="resultText" class="whitespace-pre-wrap break-all"></pre>
+  </div>
+</form>`;
+---
+
+<DashboardLayout title="Attachment">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Attachment</h1>
+            <p class="text-muted-foreground text-lg">
+                Умный загрузчик файлов и картинок. Автоматически определяет тип файла (иконка или превью), поддерживает
+                состояния загрузки и интеграцию с формами (FormData).
+            </p>
+        </div>
+
+        <!-- 1. УМНАЯ ОДИНОЧНАЯ ЗАГРУЗКА -->
+        <ComponentDoc
+            title="Умная одиночная загрузка"
+            description="Компонент сам проверяет file.type. Если это картинка — показывает квадратное превью. Если документ — показывает длинную плашку с иконкой."
+            code={smartUploadCode}
+        >
+            <div
+                class="flex flex-col items-center gap-6 py-8"
+                x-data="{ 
+                state: 'idle', progress: 0, fileName: '', fileSize: '', isImage: false, imgSrc: '', interval: null, isError: false,
+                pickFile(isError = false) { this.isError = isError; this.$refs.fileInput.click(); },
+                handleFile(e) {
+                    const file = e.target.files[0]; if (!file) return;
+                    this.fileName = file.name;
+                    this.fileSize = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
+                    this.isImage = file.type.startsWith('image/');
+                    if (this.isImage) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => { this.imgSrc = event.target.result; this.startUpload(); };
+                        reader.readAsDataURL(file);
+                    } else { this.imgSrc = ''; this.startUpload(); }
+                },
+                startUpload() {
+                    this.state = 'uploading'; this.progress = 0;
+                    this.interval = setInterval(() => {
+                        this.progress += 5;
+                        if (this.progress >= 100) { clearInterval(this.interval); this.state = this.isError ? 'error' : 'done'; }
+                    }, 100);
+                },
+                reset() { clearInterval(this.interval); this.state = 'idle'; this.progress = 0; this.fileName = ''; this.fileSize = ''; this.imgSrc = ''; this.$refs.fileInput.value = ''; }
+            }"
+            >
+                <input type="file" x-ref="fileInput" class="hidden" x-on:change="handleFile($event)" />
+                <div class="flex gap-3" x-show="state === 'idle'">
+                    <Button x-on:click="pickFile(false)"><UploadCloud class="size-4" /> Выбрать файл</Button>
+                    <Button variant="destructive" x-on:click="pickFile(true)">Выбрать и выдать ошибку</Button>
+                </div>
+                <Attachment
+                    x-bind:title="fileName + ' (' + fileSize + ')'"
+                    x-bind:data-orientation="isImage ? 'vertical' : 'horizontal'"
+                    x-bind:data-state="state"
+                    x-show="state !== 'idle'"
+                    x-cloak
+                >
+                    <AttachmentMedia :variant="isImage ? 'image' : 'icon'">
+                        <img x-show="isImage && imgSrc" x-bind:src="imgSrc" alt="Preview" />
+                        <template x-if="!isImage && state === 'uploading'"><Loader2 class="animate-spin" /></template>
+                        <template x-if="!isImage && state === 'done'"><FileText /></template>
+                        <template x-if="!isImage && state === 'error'"><AlertTriangle /></template>
+                    </AttachmentMedia>
+                    <AttachmentContent>
+                        <AttachmentTitle x-text="fileName" />
+                        <AttachmentDescription>
+                            <span x-show="state === 'uploading'" x-text="'Загрузка... ' + progress + '%'"></span>
+                            <span x-show="state === 'done'" x-text="'Загружено · ' + fileSize"></span>
+                            <span x-show="state === 'error'">Ошибка загрузки</span>
+                        </AttachmentDescription>
+                    </AttachmentContent>
+                    <AttachmentActions>
+                        <AttachmentAction aria-label="Remove" x-on:click="reset()"><X /></AttachmentAction>
+                    </AttachmentActions>
+                </Attachment>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. МУЛЬТИ-ЗАГРУЗКА В СЛАЙДЕРЕ -->
+        <ComponentDoc
+            title="Мульти-загрузка в слайдере (Умная)"
+            description="Выберите несколько файлов (картинки и документы вперемешку). Картинки встанут вертикально (квадрат), а файлы (ZIP, PDF) — горизонтально (длинная плашка)."
+            code={multiUploadCode}
+        >
+            <div
+                class="flex flex-col items-center gap-6 py-8"
+                x-data="{ 
+                files: [],
+                pickImages() { this.$refs.multiInput.click(); },
+                handleImages(e) {
+                    Array.from(e.target.files).forEach(file => {
+                        const isImage = file.type.startsWith('image/');
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            let fileId = Date.now() + Math.random();
+                            let fileSize = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
+                            this.files.push({ id: fileId, name: file.name, size: fileSize, isImage: isImage, src: isImage ? event.target.result : '', progress: 0, state: 'uploading' });
+                            let interval = setInterval(() => {
+                                let f = this.files.find(x => x.id === fileId);
+                                if (f) { f.progress += 5; if (f.progress >= 100) { clearInterval(interval); f.state = 'done'; } }
+                            }, 100 + Math.random() * 150);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                    e.target.value = '';
+                },
+                removeFile(id) { this.files = this.files.filter(f => f.id !== id); }
+            }"
+            >
+                <input type="file" multiple x-ref="multiInput" class="hidden" x-on:change="handleImages($event)" />
+                <Button x-on:click="pickImages()"
+                    ><ImagePlus class="size-4" /> Выбрать файлы (картинки и документы)</Button
+                >
+                <div x-show="files.length > 0" class="w-full max-w-2xl">
+                    <AttachmentGroup>
+                        <template x-for="file in files" :key="file.id">
+                            <Attachment
+                                x-bind:title="file.name + ' (' + file.size + ')'"
+                                x-bind:data-orientation="file.isImage ? 'vertical' : 'horizontal'"
+                                x-bind:data-state="file.state"
+                            >
+                                <AttachmentMedia :variant="file.isImage ? 'image' : 'icon'">
+                                    <img x-show="file.isImage && file.src" x-bind:src="file.src" alt="file.name" />
+                                    <template x-if="!file.isImage && file.state === 'uploading'"
+                                        ><Loader2 class="animate-spin" /></template
+                                    >
+                                    <template x-if="!file.isImage && file.state === 'done'"><FileText /></template>
+                                </AttachmentMedia>
+                                <AttachmentContent>
+                                    <AttachmentTitle x-text="file.name" />
+                                    <AttachmentDescription>
+                                        <span
+                                            x-show="file.state === 'uploading'"
+                                            x-text="'Загрузка... ' + file.progress + '%'"></span>
+                                        <span x-show="file.state === 'done'" x-text="'Загружено · ' + file.size"></span>
+                                    </AttachmentDescription>
+                                </AttachmentContent>
+                                <AttachmentActions>
+                                    <AttachmentAction aria-label="Remove" x-on:click="removeFile(file.id)"
+                                        ><X /></AttachmentAction
+                                    >
+                                </AttachmentActions>
+                            </Attachment>
+                        </template>
+                    </AttachmentGroup>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ФОРМА С ВИДИМЫМ РЕЗУЛЬТАТОМ -->
+        <ComponentDoc
+            title="Отправка формы (FormData)"
+            description="Реальный кейс. Заполните поля, прикрепите файл и нажмите 'Отправить'. Результат появится прямо на экране под формой!"
+            code={formCode}
+        >
+            <form
+                class="w-full max-w-md flex flex-col gap-4 py-8"
+                x-data="{
+                state: 'idle', progress: 0, fileName: '', fileSize: '', isImage: false, imgSrc: '', interval: null, fileObject: null, isSubmitting: false, resultText: '',
+                pickFile() { this.$refs.fileInput.click(); },
+                handleFile(e) {
+                    const file = e.target.files[0]; if (!file) return;
+                    this.fileObject = file; this.fileName = file.name;
+                    this.fileSize = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
+                    this.isImage = file.type.startsWith('image/');
+                    if (this.isImage) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => { this.imgSrc = event.target.result; this.startUpload(); };
+                        reader.readAsDataURL(file);
+                    } else { this.imgSrc = ''; this.startUpload(); }
+                },
+                startUpload() {
+                    this.state = 'uploading'; this.progress = 0;
+                    this.interval = setInterval(() => {
+                        this.progress += 10;
+                        if (this.progress >= 100) { clearInterval(this.interval); this.state = 'done'; }
+                    }, 100);
+                },
+                reset() { clearInterval(this.interval); this.state = 'idle'; this.progress = 0; this.fileName = ''; this.fileSize = ''; this.imgSrc = ''; this.fileObject = null; this.$refs.fileInput.value = ''; },
+                submitForm(e) {
+                    if (this.state !== 'done' || !this.fileObject) { this.resultText = 'Ошибка: Сначала загрузите файл!'; return; }
+                    e.preventDefault(); this.isSubmitting = true; this.resultText = '';
+                    const formData = new FormData(e.target);
+                    formData.append('attachments[]', this.fileObject);
+                    setTimeout(() => {
+                        this.isSubmitting = false;
+                        let result = 'Успех! Данные FormData:\n\n';
+                        for (let [key, value] of formData.entries()) {
+                            if (value instanceof File) {
+                                result += '- ' + key + ': Файл ' + value.name + ' (' + this.fileSize + ', тип: ' + value.type + ')\n';
+                            } else {
+                                result += '- ' + key + ': ' + value + '\n';
+                            }
+                        }
+                        this.resultText = result;
+                        console.log('--- Данные FormData для сервера ---', formData);
+                        this.reset(); e.target.reset();
+                    }, 1500);
+                }
+            }"
+                x-on:submit="submitForm($event)"
+            >
+                <input type="file" x-ref="fileInput" class="hidden" x-on:change="handleFile($event)" />
+                <div class="flex flex-col gap-2">
+                    <Label for="form-name">Имя</Label>
+                    <Input id="form-name" name="name" placeholder="Иван Иванов" required />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <Label>Файл для отправки</Label>
+                    <div x-show="state === 'idle'">
+                        <Button type="button" variant="outline" x-on:click="pickFile()" class="w-full border-dashed">
+                            <UploadCloud class="size-4" /> Выбрать файл
+                        </Button>
+                    </div>
+                    <Attachment
+                        x-bind:title="fileName + ' (' + fileSize + ')'"
+                        x-bind:data-orientation="isImage ? 'vertical' : 'horizontal'"
+                        x-bind:data-state="state"
+                        x-show="state !== 'idle'"
+                        x-cloak
+                    >
+                        <AttachmentMedia :variant="isImage ? 'image' : 'icon'">
+                            <img x-show="isImage && imgSrc" x-bind:src="imgSrc" alt="Preview" />
+                            <template x-if="!isImage && state === 'uploading'"
+                                ><Loader2 class="animate-spin" /></template
+                            >
+                            <template x-if="!isImage && state === 'done'"><FileText /></template>
+                        </AttachmentMedia>
+                        <AttachmentContent>
+                            <AttachmentTitle x-text="fileName" />
+                            <AttachmentDescription>
+                                <span x-show="state === 'uploading'" x-text="'Загрузка... ' + progress + '%'"></span>
+                                <span x-show="state === 'done'" x-text="'Загружено · ' + fileSize"></span>
+                            </AttachmentDescription>
+                        </AttachmentContent>
+                        <AttachmentActions>
+                            <AttachmentAction type="button" aria-label="Remove" x-on:click="reset()"
+                                ><X /></AttachmentAction
+                            >
+                        </AttachmentActions>
+                    </Attachment>
+                </div>
+                <Button type="submit" :disabled="isSubmitting">
+                    <template x-if="isSubmitting"><Loader2 class="size-4 animate-spin" /></template>
+                    <template x-if="!isSubmitting"><Send class="size-4" /></template>
+                    Отправить на сервер
+                </Button>
+                <div
+                    x-show="resultText"
+                    x-cloak
+                    class="mt-2 p-4 bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-400 rounded-lg text-xs whitespace-pre-wrap"
+                    x-text="resultText"
+                >
+                </div>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

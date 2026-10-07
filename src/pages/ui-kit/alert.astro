@@ -1,0 +1,135 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Alert, AlertTitle, AlertDescription, AlertAction } from "../../components/ui/alert";
+import Button from "../../components/ui/Button.astro";
+import { Rocket, AlertTriangle, Terminal, X } from "@lucide/astro";
+
+const basicCode = `import { Alert, AlertTitle, AlertDescription } from '../../components/ui/alert';
+import { Terminal, AlertTriangle } from '@lucide/astro';
+
+<Alert>
+  <Terminal class="size-4" />
+  <AlertTitle>Внимание!</AlertTitle>
+  <AlertDescription>Вы забыли сохранить изменения перед выходом.</AlertDescription>
+</Alert>
+
+<Alert variant="destructive">
+  <AlertTriangle class="size-4" />
+  <AlertTitle>Ошибка авторизации</AlertTitle>
+  <AlertDescription>Ваш токен доступа истек. Пожалуйста, войдите заново.</AlertDescription>
+</Alert>`;
+
+const richCode = `import { Alert, AlertTitle, AlertDescription } from '../../components/ui/alert';
+import { Rocket } from '@lucide/astro';
+
+<Alert>
+  <Rocket class="size-4" />
+  <AlertTitle>Новое обновление 2.0!</AlertTitle>
+  <AlertDescription>
+    <p class="mb-2">Мы добавили кучу новых фич в этот релиз:</p>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Компонент Charts (Графики)</li>
+      <li>WYSIWYG Редактор контента</li>
+      <li>Командная палитра (Ctrl+K)</li>
+    </ul>
+  </AlertDescription>
+</Alert>`;
+
+const closableCode = `import { Alert, AlertTitle, AlertDescription, AlertAction } from '../../components/ui/alert';
+import Button from '../../components/ui/Button.astro';
+import { Rocket, X } from '@lucide/astro';
+
+<!-- Магия Alpine.js: x-data хранит состояние, x-show скрывает алерт -->
+<div x-data="{ open: true }">
+  <Alert x-show="open">
+    <Rocket class="size-4" />
+    <AlertTitle>Сервер перезапущен</AlertTitle>
+    <AlertDescription>Мы успешно обновили систему до версии 2.0.</AlertDescription>
+    
+    <!-- Кнопка закрытия кладется в AlertAction -->
+    <AlertAction>
+      <Button variant="ghost" size="icon-sm" x-on:click="open = false">
+        <X class="size-4" />
+      </Button>
+    </AlertAction>
+  </Alert>
+</div>`;
+---
+
+<DashboardLayout title="Alert">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Alert</h1>
+            <p class="text-muted-foreground text-lg">
+                Блоки для отображения важных сообщений (уведомления, ошибки, предупреждения). Поддерживают иконки и
+                любой контент внутри.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЕ ВАРИАНТЫ -->
+        <ComponentDoc
+            title="Базовые варианты"
+            description="По умолчанию используется серый фон (default). Для ошибок используйте variant='destructive' (красный фон)."
+            code={basicCode}
+        >
+            <div class="flex flex-col gap-4 w-full max-w-md">
+                <Alert>
+                    <Terminal class="size-4" />
+                    <AlertTitle>Внимание!</AlertTitle>
+                    <AlertDescription>Вы забыли сохранить изменения перед выходом.</AlertDescription>
+                </Alert>
+
+                <Alert variant="destructive">
+                    <AlertTriangle class="size-4" />
+                    <AlertTitle>Ошибка авторизации</AlertTitle>
+                    <AlertDescription>Ваш токен доступа истек. Пожалуйста, войдите заново.</AlertDescription>
+                </Alert>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. С БОГАТЫМ КОНТЕНТОМ -->
+        <ComponentDoc
+            title="Сложный контент"
+            description="Внутрь AlertDescription можно помещать списки, ссылки и параграфы. Верстка не поедет."
+            code={richCode}
+        >
+            <div class="w-full max-w-md">
+                <Alert>
+                    <Rocket class="size-4" />
+                    <AlertTitle>Новое обновление 2.0!</AlertTitle>
+                    <AlertDescription>
+                        <p class="mb-2">Мы добавили кучу новых фич в этот релиз:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Компонент Charts (Графики)</li>
+                            <li>WYSIWYG Редактор контента</li>
+                            <li>Командная палитра (Ctrl+K)</li>
+                        </ul>
+                    </AlertDescription>
+                </Alert>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ЗАКРЫВАЮЩИЙСЯ АЛЕРТ -->
+        <ComponentDoc
+            title="С кнопкой закрытия"
+            description="Используйте AlertAction для размещения кнопки в правом верхнем углу. Скройте алерт через Alpine.js (x-show='open')."
+            code={closableCode}
+        >
+            <div class="w-full max-w-md" x-data="{ open: true }">
+                <Alert x-show="open">
+                    <Rocket class="size-4" />
+                    <AlertTitle>Сервер перезапущен</AlertTitle>
+                    <AlertDescription>Мы успешно обновили систему до версии 2.0.</AlertDescription>
+
+                    <AlertAction>
+                        <Button variant="ghost" size="icon-sm" x-on:click="open = false">
+                            <X class="size-4" />
+                        </Button>
+                    </AlertAction>
+                </Alert>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

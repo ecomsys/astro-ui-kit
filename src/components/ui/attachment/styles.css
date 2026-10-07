@@ -1,0 +1,22 @@
+/*===========================================================================
+ Анимация загрузки для Attachment 
+=============================================================================*/
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+.shimmer {
+    position: relative;
+    overflow: hidden;
+}
+.shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--muted-foreground), transparent);
+    opacity: 0.15;
+    animation: shimmer 1.5s infinite;
+}

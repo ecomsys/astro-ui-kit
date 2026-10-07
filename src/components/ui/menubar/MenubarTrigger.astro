@@ -1,0 +1,24 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+
+<button
+    type="button"
+    x-ref="trigger"
+    x-on:click="toggle()"
+    x-bind:aria-expanded="open.toString()"
+    x-bind:class="open ? 'bg-muted' : ''"
+    class={cn(
+        "flex cursor-default items-center rounded-sm px-1.5 py-[0.125rem] text-sm font-medium outline-none select-none hover:bg-muted",
+        className,
+    )}
+    data-slot="menubar-trigger"
+    {...rest}
+>
+    <slot />
+</button>

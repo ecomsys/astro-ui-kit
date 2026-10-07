@@ -1,0 +1,8 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<footer data-slot="sheet-footer" class={cn("mt-auto flex flex-col gap-2 p-4", className)} {...rest}>
+    <slot />
+</footer>

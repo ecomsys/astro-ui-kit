@@ -1,0 +1,61 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    opts?: Record<string, any>;
+    slidesPerView?: number;
+    gap?: number;
+    breakpoints?: Record<number, { slidesPerView?: number; gap?: number }>;
+    class?: string;
+    [key: string]: any;
+}
+
+const { opts = {}, slidesPerView = 1, gap = 16, breakpoints = {}, class: className, ...rest } = Astro.props;
+
+const id = `c${Math.random().toString(36).slice(2, 9)}`;
+const emblaOpts = JSON.stringify({ loop: false, align: "start", ...opts }).replace(/"/g, "'");
+
+const generateRules = (spv: number, g: number) => {
+    // МАГИЯ ПЕРЕВОДА: Превращаем пиксели в REM (16px = 1rem)
+    const gRem = g / 16;
+
+    // Считаем ширину с учетом REM
+    const gapWidth = `calc((100% - ${gRem}rem * (${spv} - 1)) / ${spv})`;
+    const marginWidth = `calc(${100 / spv}% - ${gRem}rem)`;
+
+    return `
+    /* 1. БАЗА (gap): Используем rem */
+    .${id} .embla-track { gap: ${gRem}rem !important; }
+    .${id} .embla-track > * { flex: 0 0 ${gapWidth} !important; margin-right: 0px !important; }
+
+    /* 2. ЦИКЛ (margin-right): Используем rem */
+    .${id} .embla-track.is-loop { gap: 0px !important; }
+    .${id} .embla-track.is-loop > * { flex: 0 0 ${marginWidth} !important; margin-right: ${gRem}rem !important; }
+  `;
+};
+
+let css = generateRules(slidesPerView, gap);
+for (const [bp, val] of Object.entries(breakpoints)) {
+    const breakpoint = Number(bp);
+    const v = val as any;
+    const spv = v.slidesPerView || slidesPerView;
+    const g = v.gap || gap;
+    css += `@media (min-width: ${breakpoint}px) { ${generateRules(spv, g)} }`;
+}
+---
+
+<div
+    x-data={`carousel(${emblaOpts})`}
+    x-on:keydown.arrow-left.prevent="prev()"
+    x-on:keydown.arrow-right.prevent="next()"
+    class={cn("w-full", id, className)}
+    role="region"
+    aria-roledescription="carousel"
+    data-slot="carousel"
+    tabindex="0"
+    {...rest}
+>
+    <slot />
+</div>
+
+<style is:inline set:html={css}></style>

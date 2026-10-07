@@ -1,0 +1,112 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Spinner from "../../components/ui/Spinner.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import Spinner from '../../components/ui/Spinner.astro';
+
+<Spinner />`;
+
+const sizesCode = `import Spinner from '../../components/ui/Spinner.astro';
+
+<!-- Размеры задаются через классы Tailwind (size-4, size-6, size-8) -->
+<div class="flex items-center gap-4">
+  <Spinner class="size-4" />
+  <Spinner class="size-6" />
+  <Spinner class="size-8" />
+</div>`;
+
+const colorsCode = `import Spinner from '../../components/ui/Spinner.astro';
+
+<!-- Цвета меняются через текстовые классы Tailwind -->
+<div class="flex items-center gap-4">
+  <Spinner class="size-5 text-primary" />
+  <Spinner class="size-5 text-blue-500" />
+  <Spinner class="size-5 text-destructive" />
+</div>`;
+
+const usageCode = `import Spinner from '../../components/ui/Spinner.astro';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Классический кейс: кнопка в состоянии загрузки -->
+<Button disabled>
+  <Spinner class="size-4" />
+  Загрузка...
+</Button>
+
+<!-- Или просто текст -->
+<div class="flex items-center gap-2 text-muted-foreground">
+  <Spinner class="size-4" />
+  Подождите, идет синхронизация...
+</div>`;
+---
+
+<DashboardLayout title="Spinner">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Spinner</h1>
+            <p class="text-muted-foreground text-lg">
+                Индикатор загрузки. Представляет собой иконку с бесконечной анимацией вращения (animate-spin).
+                Используется в кнопках, таблицах и панелях.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ СПИННЕР -->
+        <ComponentDoc
+            title="Базовый спиннер"
+            description="По умолчанию имеет размер 16px (size-4) и inherits цвет текста."
+            code={basicCode}
+        >
+            <div class="flex justify-center py-8">
+                <Spinner />
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗМЕРЫ -->
+        <ComponentDoc
+            title="Размеры"
+            description="Управляйте размером через классы size-4, size-6, size-8 и т.д."
+            code={sizesCode}
+        >
+            <div class="flex justify-center items-center gap-4 py-8">
+                <Spinner class="size-4" />
+                <Spinner class="size-6" />
+                <Spinner class="size-8" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ЦВЕТА -->
+        <ComponentDoc
+            title="Цвета"
+            description="Цвет меняется через текстовые классы Tailwind (text-primary, text-blue-500 и т.д.)."
+            code={colorsCode}
+        >
+            <div class="flex justify-center items-center gap-4 py-8">
+                <Spinner class="size-5 text-primary" />
+                <Spinner class="size-5 text-blue-500" />
+                <Spinner class="size-5 text-destructive" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ПРИМЕРЫ ИСПОЛЬЗОВАНИЯ -->
+        <ComponentDoc
+            title="Примеры использования"
+            description="Чаще всего применяется в кнопках (когда disabled) и рядом с текстом загрузки."
+            code={usageCode}
+        >
+            <div class="flex flex-col items-center justify-center gap-6 py-8">
+                <Button disabled>
+                    <Spinner class="size-4" />
+                    Загрузка...
+                </Button>
+
+                <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Spinner class="size-4" />
+                    Подождите, идет синхронизация...
+                </div>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

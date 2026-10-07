@@ -1,0 +1,12 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<footer
+    data-slot="card-footer"
+    class={cn("flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)", className)}
+    {...rest}
+>
+    <slot />
+</footer>

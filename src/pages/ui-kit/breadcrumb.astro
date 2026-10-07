@@ -1,0 +1,163 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Breadcrumb,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    BreadcrumbEllipsis,
+} from "../../components/ui/breadcrumb";
+import { ChevronRight } from "@lucide/astro";
+
+const basicCode = `import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '../../components/ui/breadcrumb';
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/components">Компоненты</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`;
+
+const customSeparatorCode = `import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '../../components/ui/breadcrumb';
+import { ChevronRight } from '@lucide/astro';
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+    </BreadcrumbItem>
+    <!-- Кастомный разделитель -->
+    <BreadcrumbSeparator>
+      <ChevronRight class="size-4" />
+    </BreadcrumbSeparator>
+    <BreadcrumbItem>
+      <BreadcrumbPage>Настройки</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`;
+
+const responsiveCode = `import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis } from '../../components/ui/breadcrumb';
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    
+    <!-- Скрываем на мобилках -->
+    <BreadcrumbItem class="hidden md:flex">
+      <BreadcrumbLink href="/docs">Документация</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator class="hidden md:flex" />
+    
+    <!-- Троеточие только на мобилках -->
+    <BreadcrumbItem class="md:hidden">
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator class="md:hidden" />
+    
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`;
+---
+
+<DashboardLayout title="Breadcrumb">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Breadcrumb</h1>
+            <p class="text-muted-foreground text-lg">
+                Навигационные хлебные крошки. Указывают путь к текущей странице. Важно для SEO и удобства пользователя.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЕ КРОШКИ -->
+        <ComponentDoc
+            title="Базовые крошки"
+            description="Стандартный вид со слэшем (/) в качестве разделителя. Последний элемент — текущая страница."
+            code={basicCode}
+        >
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/components">Компоненты</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+        </ComponentDoc>
+
+        <!-- 2. КАСТОМНЫЙ РАЗДЕЛИТЕЛЬ -->
+        <ComponentDoc
+            title="Свой разделитель"
+            description="В BreadcrumbSeparator можно передать любую иконку, например стрелочку."
+            code={customSeparatorCode}
+        >
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator>
+                        <ChevronRight class="size-4" />
+                    </BreadcrumbSeparator>
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Настройки</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+        </ComponentDoc>
+
+        <!-- 3. АДАПТИВНЫЕ КРОШКИ -->
+        <ComponentDoc
+            title="Адаптивные (с троеточием)"
+            description="На мобильных экранах длинный путь не помещается. Средний пункт прячется, вместо него показывается иконка троеточия."
+            code={responsiveCode}
+        >
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/">Главная</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+
+                    <BreadcrumbItem class="hidden md:flex">
+                        <BreadcrumbLink href="/docs">Документация</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator class="hidden md:flex" />
+
+                    <BreadcrumbItem class="md:hidden">
+                        <BreadcrumbEllipsis />
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator class="md:hidden" />
+
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

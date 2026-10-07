@@ -1,0 +1,121 @@
+---
+import { cn } from "../../../lib/utils";
+import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from "../input-group";
+import { ChevronDownIcon, XIcon } from "@lucide/astro";
+
+export interface Props {
+    items?: Array<{ value: string; label: string }>;
+    multiple?: boolean;
+    placeholder?: string;
+    name?: string;
+    class?: string;
+    [key: string]: any; // Разрешаем любые атрибуты (x-on:select-change и т.д.)
+}
+
+const { 
+    items = [], 
+    multiple = false, 
+    placeholder = "Выберите...", 
+    name, 
+    class: className,
+    ...rest // <--- ВОТ ЭТО ЗАБЫЛ ДОБАВИТЬ!
+} = Astro.props;
+
+const safeItems = JSON.stringify(items);
+const safePlaceholder = placeholder.replace(/'/g, "\\'");
+---
+
+<div 
+    x-data={`combobox(${safeItems}, '${safePlaceholder}', ${multiple})`}
+    x-ref="root"
+    class={cn("w-full", className)}
+    data-slot="combobox"
+    {...rest}
+>
+{multiple ? (
+    <div 
+        class="relative flex min-h-8 w-full flex-wrap items-center gap-1 rounded-lg border border-input bg-transparent px-1.5 py-1 pr-8 text-sm transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 dark:bg-input/30"
+        data-slot="combobox-chips"
+        @click="$refs.input.focus()"
+    >
+        <template x-for="item in selected" x-bind:key="item.value">
+            <div 
+                class="flex h-5 shrink-0 items-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium text-foreground"
+                data-slot="combobox-chip"
+            >
+                <span x-text="item.label"></span>
+                <button 
+                    type="button" 
+                    x-on:click.stop="removeChip(item)" 
+                    class="-ml-1 inline-flex items-center opacity-50 hover:opacity-100"
+                >
+                    <XIcon class="size-3"></XIcon>
+                </button>
+            </div>
+        </template>
+
+        <input 
+            x-ref="input"
+            :value="inputValue"
+            x-on:input="search = $event.target.value; highlightedIndex = -1; $nextTick(() => positionContent())"
+            x-on:focus="onInputFocus()"
+            x-on:click="onInputFocus()"
+            x-on:keydown="handleKeydown($event)"
+            :placeholder="inputPlaceholder"
+            class="m-0 h-5 min-w-8 flex-1 border-0 bg-transparent p-0 text-foreground caret-foreground outline-none"
+        />
+
+        <button 
+            type="button" 
+            x-on:click.stop="toggleOpen()" 
+            :class="open ? 'rotate-180' : ''" 
+            class="absolute right-2 top-1.5 flex items-center justify-center transition-transform"
+        >
+            <ChevronDownIcon class="size-4 text-muted-foreground pointer-events-none"></ChevronDownIcon>
+        </button>
+    </div>
+) : (
+    <InputGroup>
+        <InputGroupInput 
+            x-ref="input"
+            :value="inputValue"
+            x-on:input="search = $event.target.value; highlightedIndex = -1; $nextTick(() => positionContent())"
+            x-on:focus="onInputFocus()"
+            x-on:click="onInputFocus()"
+            x-on:keydown="handleKeydown($event)"
+            :placeholder="inputPlaceholder"
+            class="peer"
+        />
+        <InputGroupAddon align="inline-end">
+            <InputGroupButton 
+                size="icon-xs" 
+                variant="ghost" 
+                x-show="selected"
+                x-cloak
+                x-on:click="clearSelection()"
+            >
+                <XIcon class="size-4"></XIcon>
+            </InputGroupButton>
+            <InputGroupButton 
+                size="icon-xs" 
+                variant="ghost" 
+                x-on:click="toggleOpen()"
+                :class="open ? 'rotate-180' : ''"
+                class="transition-transform"
+            >
+                <ChevronDownIcon class="size-4"></ChevronDownIcon>
+            </InputGroupButton>
+        </InputGroupAddon>
+    </InputGroup>
+)}
+
+    {name && (
+        <input 
+            type="hidden" 
+            name={name} 
+            :value="multiple ? selected.map(s => s.value).join(',') : (selected ? selected.value : '')" 
+        />
+    )}
+
+    <slot />
+</div>

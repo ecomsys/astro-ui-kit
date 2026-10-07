@@ -1,0 +1,30 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    withHandle?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+
+const { withHandle = false, class: className, ...rest } = Astro.props;
+
+const baseClasses =
+    "relative flex shrink-0 items-center justify-center bg-border touch-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
+
+// МАГИЯ TAILWIND: Классы применяются автоматически в зависимости от родителя!
+const orientationClasses =
+    "group-data-[orientation=horizontal]:w-px group-data-[orientation=horizontal]:h-full group-data-[orientation=horizontal]:cursor-col-resize group-data-[orientation=horizontal]:after:absolute group-data-[orientation=horizontal]:after:inset-y-0 group-data-[orientation=horizontal]:after:left-1/2 group-data-[orientation=horizontal]:after:w-1 group-data-[orientation=horizontal]:after:-translate-x-1/2 group-data-[orientation=horizontal]:after:content-[''] group-data-[orientation=vertical]:h-px group-data-[orientation=vertical]:w-full group-data-[orientation=vertical]:cursor-row-resize group-data-[orientation=vertical]:after:absolute group-data-[orientation=vertical]:after:inset-x-0 group-data-[orientation=vertical]:after:top-1/2 group-data-[orientation=vertical]:after:h-1 group-data-[orientation=vertical]:after:-translate-y-1/2 group-data-[orientation=vertical]:after:content-['']";
+
+const handleClasses =
+    "z-10 flex shrink-0 rounded-lg bg-border group-data-[orientation=horizontal]:h-6 group-data-[orientation=horizontal]:w-1 group-data-[orientation=vertical]:w-6 group-data-[orientation=vertical]:h-1";
+---
+
+<div
+    data-slot="resizable-handle"
+    x-on:pointerdown="startResize($event)"
+    class={cn(baseClasses, orientationClasses, className)}
+    {...rest}
+>
+    {withHandle && <div class={handleClasses} />}
+</div>

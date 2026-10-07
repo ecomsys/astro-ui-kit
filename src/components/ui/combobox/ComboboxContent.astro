@@ -1,0 +1,55 @@
+---
+import { cn } from "../../../lib/utils";
+import { CheckIcon } from "@lucide/astro";
+
+export interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<template x-teleport="body">
+    <div
+        x-ref="content"
+        x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        x-on:resize.window="globalHide()"
+        style="position: fixed; top: -9999px; left: -9999px; z-index: 9999;"
+        class={cn(
+            "bg-popover text-popover-foreground rounded-lg border shadow-md ring-1 ring-foreground/10 p-1",
+            className,
+        )}
+        data-slot="combobox-content"
+    >
+        <!-- Empty State -->
+        <div x-show="filteredItems.length === 0" class="py-6 text-center text-sm text-muted-foreground">
+            Ничего не найдено.
+        </div>
+
+        <!-- List -->
+        <div class="max-h-60 overflow-y-auto scroll-py-1 p-0.5" data-slot="combobox-list">
+            <template x-for="(item, index) in filteredItems" x-bind:key="item.value">
+                <button
+                    type="button"
+                    x-on:click="selectItem(item)"
+                    @mouseenter="highlightedIndex = index"
+                    :class="highlightedIndex === index ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'"
+                    class="relative flex w-full cursor-default items-center gap-2 rounded-md py-1.5 pr-8 pl-2.5 text-sm outline-none transition-colors select-none"
+                    data-slot="combobox-item"
+                >
+                    <span x-text="item.label"></span>
+                    <span x-show="isSelected(item.value)" class="absolute right-2 flex items-center justify-center">
+                        <CheckIcon class="size-4" />
+                    </span>
+                </button>
+            </template>
+        </div>
+    </div></template
+>

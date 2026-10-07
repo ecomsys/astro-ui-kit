@@ -1,0 +1,28 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<div
+    x-show="subOpen"
+    x-cloak
+    x-transition:enter="transition ease-out duration-100"
+    x-transition:enter-start="transform opacity-0 scale-95"
+    x-transition:enter-end="transform opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-75"
+    x-transition:leave-start="transform opacity-100 scale-100"
+    x-transition:leave-end="transform opacity-0 scale-95"
+    data-slot="context-menu-sub-content"
+    class={cn(
+        "absolute left-full top-0 ml-1 z-50 min-w-36 flex flex-col rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10",
+        className,
+    )}
+    {...rest}
+>
+    <slot />
+</div>
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>

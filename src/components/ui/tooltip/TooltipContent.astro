@@ -1,0 +1,49 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<template x-teleport="body">
+    <div
+        x-ref="tooltip"
+        x-show="visible"
+        x-cloak
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="transform opacity-0 scale-95"
+        x-transition:enter-end="transform opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="transform opacity-100 scale-100"
+        x-transition:leave-end="transform opacity-0 scale-95"
+        style="position: fixed; top: 0; left: 0; z-index: 9999;"
+        class={cn(
+            "inline-flex w-fit max-w-xs items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background shadow-md",
+            className,
+        )}
+        data-slot="tooltip-content"
+        {...rest}
+    >
+        <slot />
+
+        <!-- Носики: используем translate-y-1/2 и -translate-y-1/2 для идеального утапливания -->
+        <div
+            x-show="actualSide === 'top'"
+            class="absolute top-full left-1/2 -translate-x-1/2 -translate-y-1/2 size-2.5 rotate-45 rounded-[0.125rem] bg-foreground"
+        >
+        </div>
+        <div
+            x-show="actualSide === 'bottom'"
+            class="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-1/2 size-2.5 rotate-45 rounded-[0.125rem] bg-foreground"
+        >
+        </div>
+        <div
+            x-show="actualSide === 'left'"
+            class="absolute left-full top-1/2 -translate-y-1/2 -translate-x-1/2 size-2.5 rotate-45 rounded-[0.125rem] bg-foreground"
+        >
+        </div>
+        <div
+            x-show="actualSide === 'right'"
+            class="absolute right-full top-1/2 -translate-y-1/2 translate-x-1/2 size-2.5 rotate-45 rounded-[0.125rem] bg-foreground"
+        >
+        </div>
+    </div>
+</template>

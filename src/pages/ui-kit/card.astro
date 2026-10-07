@@ -1,0 +1,191 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../../components/ui/card";
+import Button from "../../components/ui/Button.astro";
+import Badge from "../../components/ui/Badge.astro";
+import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
+import { ArrowRight, ArrowUpRight, Users } from "@lucide/astro";
+
+const basicCode = `import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/card';
+import Button from '../../components/ui/Button.astro';
+
+<Card class="w-96 max-w-full">
+  <CardHeader>
+    <CardTitle>Создать проект</CardTitle>
+    <CardDescription>Разверните свой новый проект за одну минуту.</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p class="text-sm text-muted-foreground">Введите название и выберите тип проекта, чтобы начать работу.</p>
+  </CardContent>
+  <CardFooter class="gap-2">
+    <Button variant="outline">Отмена</Button>
+    <Button>Создать</Button>
+  </CardFooter>
+</Card>`;
+
+const hoverCode = `import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { ArrowRight } from '@lucide/astro';
+
+<!-- Классы hover:shadow-md hover:border-primary transition-all -->
+<button class="text-left w-96 max-w-full">
+  <Card class="hover:shadow-md hover:border-primary transition-all cursor-pointer">
+    <CardHeader>
+      <CardTitle>Документация</CardTitle>
+    </CardHeader>
+    <CardContent class="flex items-center justify-between">
+      <p class="text-sm text-muted-foreground">Как использовать компоненты</p>
+      <ArrowRight class="size-4 text-muted-foreground" />
+    </CardContent>
+  </Card>
+</button>`;
+
+const statsCode = `import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Users } from '@lucide/astro';
+
+<Card class="w-72 max-w-full">
+  <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+    <CardTitle class="text-sm font-medium">Всего пользователей</CardTitle>
+    <Users class="size-4 text-muted-foreground" />
+  </CardHeader>
+  <CardContent>
+    <div class="text-2xl font-bold">+2,350</div>
+    <p class="text-xs text-muted-foreground">+18.2% с прошлого месяца</p>
+  </CardContent>
+</Card>`;
+
+const profileCode = `import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+import Button from '../../components/ui/Button.astro';
+
+<Card class="w-80 max-w-full">
+  <CardHeader class="flex flex-row gap-4 items-center">
+    <Avatar class="size-12">
+      <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="User" />
+      <AvatarFallback>ИВ</AvatarFallback>
+    </Avatar>
+    <div class="flex flex-col">
+      <CardTitle>Иван Иванов</CardTitle>
+      <CardDescription>Frontend Developer</CardDescription>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <p class="text-sm text-muted-foreground">Разрабатывает интерфейсы на Astro и Tailwind. Любит чистый код.</p>
+  </CardContent>
+  <CardFooter>
+    <Button variant="outline" class="w-full">Написать сообщение</Button>
+  </CardFooter>
+</Card>`;
+---
+
+<DashboardLayout title="Card">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Card</h1>
+            <p class="text-muted-foreground text-lg">
+                Карточки используются для группировки связанной информации. Состоят из <code
+                    class="text-sm bg-muted px-1.5 py-0.5 rounded">CardHeader</code
+                >, <code class="text-sm bg-muted px-1.5 py-0.5 rounded">CardContent</code> и <code
+                    class="text-sm bg-muted px-1.5 py-0.5 rounded">CardFooter</code
+                >.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ КАРТОЧКА -->
+        <ComponentDoc
+            title="Базовая карточка"
+            description="Стандартный макет с заголовком, контентом и кнопками в подвале."
+            code={basicCode}
+        >
+            <div class="flex justify-center">
+                <Card class="w-96 max-w-full">
+                    <CardHeader>
+                        <CardTitle>Создать проект</CardTitle>
+                        <CardDescription>Разверните свой новый проект за одну минуту.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p class="text-sm text-muted-foreground">
+                            Введите название и выберите тип проекта, чтобы начать работу.
+                        </p>
+                    </CardContent>
+                    <CardFooter class="gap-2">
+                        <Button variant="outline">Отмена</Button>
+                        <Button>Создать</Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. КЛИКАБЕЛЬНАЯ КАРТОЧКА -->
+        <ComponentDoc
+            title="С эффектом наведения"
+            description="Превращение карточки в кликабельный элемент. Добавьте классы hover для интерактива."
+            code={hoverCode}
+        >
+            <div class="flex justify-center">
+                <button class="text-left w-96 max-w-full">
+                    <Card class="hover:shadow-md hover:border-primary transition-all cursor-pointer">
+                        <CardHeader>
+                            <CardTitle>Документация</CardTitle>
+                        </CardHeader>
+                        <CardContent class="flex items-center justify-between">
+                            <p class="text-sm text-muted-foreground">Как использовать компоненты</p>
+                            <ArrowRight class="size-4 text-muted-foreground" />
+                        </CardContent>
+                    </Card>
+                </button>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. КАРТОЧКА СТАТИСТИКИ -->
+        <ComponentDoc
+            title="Дашборд-статистика"
+            description="Макет для отображения метрик и цифр в админ-панелях."
+            code={statsCode}
+        >
+            <div class="flex justify-center">
+                <Card class="w-72 max-w-full">
+                    <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle class="text-sm font-medium">Всего пользователей</CardTitle>
+                        <Users class="size-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div class="text-2xl font-bold">+2,350</div>
+                        <p class="text-xs text-muted-foreground">+18.2% с прошлого месяца</p>
+                    </CardContent>
+                </Card>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. КАРТОЧКА ПРОФИЛЯ -->
+        <ComponentDoc
+            title="Профиль пользователя"
+            description="Использование компонентов Avatar внутри Card для создания карточек сотрудников."
+            code={profileCode}
+        >
+            <div class="flex justify-center">
+                <Card class="w-80 max-w-full">
+                    <CardHeader class="flex flex-row gap-4 items-center">
+                        <Avatar class="size-12">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="User" />
+                            <AvatarFallback>ИВ</AvatarFallback>
+                        </Avatar>
+                        <div class="flex flex-col">
+                            <CardTitle>Иван Иванов</CardTitle>
+                            <CardDescription>Frontend Developer</CardDescription>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <p class="text-sm text-muted-foreground">
+                            Разрабатывает интерфейсы на Astro и Tailwind. Любит чистый код.
+                        </p>
+                    </CardContent>
+                    <CardFooter>
+                        <Button variant="outline" class="w-full">Написать сообщение</Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

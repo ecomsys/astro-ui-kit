@@ -1,0 +1,14 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<li data-slot="breadcrumb-item" class={cn("inline-flex items-center gap-1", className)} {...rest}>
+    <slot />
+</li>

@@ -1,0 +1,55 @@
+---
+// ThemeToggle.astro
+import { cn } from "../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<button
+    data-slot="themeToggle"
+    class={cn(className, "p-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-muted transition-colors")}
+    x-data="{dark: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches) }"
+    x-init="() => document.documentElement.classList.toggle('dark', dark)"
+    @click="dark = !dark; localStorage.setItem('theme', dark ? 'dark' : 'light'); document.documentElement.classList.toggle('dark', dark)"
+    aria-label="Переключить тему"
+    {...rest}
+>
+    <!-- Иконка Луны (показывается в светлой теме) -->
+    <svg
+        class="w-5 h-5"
+        x-show="!dark"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+    </svg>
+
+    <!-- Иконка Солнца (показывается в тёмной теме) -->
+    <svg
+        class="w-5 h-5"
+        x-show="dark"
+        x-cloak
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <circle cx="12" cy="12" r="4"></circle>
+        <path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+        ></path>
+    </svg>
+</button>

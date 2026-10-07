@@ -1,0 +1,290 @@
+---
+import "./styles.css";
+import { cn } from "../../../lib/utils";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "../dropdown-menu";
+import { Popover, PopoverTrigger, PopoverContent } from "../popover";
+import Button from "../Button.astro";
+import {
+    Bold,
+    Italic,
+    Underline,
+    List,
+    ListOrdered,
+    Link2,
+    Image as ImageIcon,
+    Heading1,
+    Heading2,
+    Heading3,
+    Heading4,
+    Heading5,
+    Heading6,
+    Quote,
+    Code,
+    Eraser,
+    FileCode2,
+    Undo2,
+    Redo2,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+    AlignJustify,
+    ChevronDown,
+    Pilcrow,
+} from "@lucide/astro";
+import HtmlEditorModal from "./HtmlEditorModal.astro";
+
+export interface Props {
+    content?: string;
+    class?: string;
+    [key: string]: any;
+}
+
+const { content = "", class: className, ...rest } = Astro.props;
+
+const btnClasses =
+    "inline-flex items-center justify-center gap-1 rounded-lg text-sm font-medium whitespace-nowrap transition-all outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 h-8 min-w-8 px-2.5 aria-pressed:bg-muted aria-pressed:text-foreground";
+---
+
+<div
+    x-data={`editor(${JSON.stringify(content)})`}
+    class={cn("flex flex-col w-full rounded-xl border bg-card shadow-sm overflow-hidden", className)}
+    data-slot="wysiwyg-editor"
+    {...rest}
+>
+    <!-- ТУЛБАР -->
+    <div
+        class="flex flex-nowrap items-center gap-1 border-b p-2 bg-muted/30 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        @mousedown.prevent
+    >
+        <!-- ИСТОРИЯ -->
+        <button type="button" class={btnClasses} @click="undo()" title="Отменить (Ctrl+Z)">
+            <Undo2 class="size-4" />
+        </button>
+        <button type="button" class={btnClasses} @click="redo()" title="Вернуть (Ctrl+Y)">
+            <Redo2 class="size-4" />
+        </button>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- ФОРМАТИРОВАНИЕ -->
+        <button
+            type="button"
+            class={btnClasses}
+            @click="toggleBold()"
+            :aria-pressed="(active.bold || false).toString()"
+        >
+            <Bold class="size-4" />
+        </button>
+        <button
+            type="button"
+            class={btnClasses}
+            @click="toggleItalic()"
+            :aria-pressed="(active.italic || false).toString()"
+        >
+            <Italic class="size-4" />
+        </button>
+        <button
+            type="button"
+            class={btnClasses}
+            @click="toggleUnderline()"
+            :aria-pressed="(active.underline || false).toString()"
+        >
+            <Underline class="size-4" />
+        </button>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- ВЫПАДАЮЩЕЕ МЕНЮ: БЛОКИ (Добавили H3-H6) -->
+        <DropdownMenu>
+            <DropdownMenuTrigger class={btnClasses}>
+                <Pilcrow class="size-4" />
+                <ChevronDown class="size-3 opacity-50" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" sideOffset={4}>
+                <DropdownMenuItem @click="setParagraph()">
+                    <Pilcrow class="size-4" /> Обычный текст
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleH1()" :aria-pressed="(active.h1 || false).toString()">
+                    <Heading1 class="size-4" /> Заголовок 1
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleH2()" :aria-pressed="(active.h2 || false).toString()">
+                    <Heading2 class="size-4" /> Заголовок 2
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleH3()" :aria-pressed="(active.h3 || false).toString()">
+                    <Heading3 class="size-4" /> Заголовок 3
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleH4()" :aria-pressed="(active.h4 || false).toString()">
+                    <Heading4 class="size-4" /> Заголовок 4
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleH5()" :aria-pressed="(active.h5 || false).toString()">
+                    <Heading5 class="size-4" /> Заголовок 5
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleH6()" :aria-pressed="(active.h6 || false).toString()">
+                    <Heading6 class="size-4" /> Заголовок 6
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleQuote()" :aria-pressed="(active.quote || false).toString()">
+                    <Quote class="size-4" /> Цитата
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="toggleCodeBlock()" :aria-pressed="(active.codeBlock || false).toString()">
+                    <Code class="size-4" /> Блок кода
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- ВЫПАДАЮЩЕЕ МЕНЮ: ВЫРАВНИВАНИЕ -->
+        <DropdownMenu>
+            <DropdownMenuTrigger class={btnClasses}>
+                <AlignLeft class="size-4" />
+                <ChevronDown class="size-3 opacity-50" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" sideOffset={4}>
+                <DropdownMenuItem @click="alignLeft()" :aria-pressed="(active.alignLeft || false).toString()">
+                    <AlignLeft class="size-4" /> По левому краю
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="alignCenter()" :aria-pressed="(active.alignCenter || false).toString()">
+                    <AlignCenter class="size-4" /> По центру
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="alignRight()" :aria-pressed="(active.alignRight || false).toString()">
+                    <AlignRight class="size-4" /> По правому краю
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="alignJustify()" :aria-pressed="(active.alignJustify || false).toString()">
+                    <AlignJustify class="size-4" /> По ширине
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- СПИСКИ -->
+        <button
+            type="button"
+            class={btnClasses}
+            @click="toggleBulletList()"
+            :aria-pressed="(active.bulletList || false).toString()"
+            title="Маркированный список"
+        >
+            <List class="size-4" />
+        </button>
+        <button
+            type="button"
+            class={btnClasses}
+            @click="toggleOrderedList()"
+            :aria-pressed="(active.orderedList || false).toString()"
+            title="Нумерованный список"
+        >
+            <ListOrdered class="size-4" />
+        </button>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- КАРТИНКА (Popover) -->
+        <Popover>
+            <PopoverTrigger class={btnClasses} @mousedown.prevent @click="openImagePopover()" title="Вставить картинку">
+                <ImageIcon class="size-4" />
+            </PopoverTrigger>
+
+            <PopoverContent class="w-72 p-3" align="start" sideOffset={4}>
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-foreground">URL картинки</span>
+                        <input
+                            type="text"
+                            x-model="imageUrl"
+                            @mousedown.stop
+                            class="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 py-1 text-sm shadow-sm transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            placeholder="https://site.com/image.jpg"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-foreground">Описание (Alt)</span>
+                        <input
+                            type="text"
+                            x-model="imageAlt"
+                            @mousedown.stop
+                            class="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 py-1 text-sm shadow-sm transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            placeholder="Что на картинке?"
+                        />
+                    </div>
+
+                    <Button size="sm" class="mt-1" @click="insertImage(); hide()">Вставить картинку</Button>
+                </div>
+            </PopoverContent>
+        </Popover>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- ССЫЛКА (Popover с двумя полями) -->
+        <Popover>
+            <PopoverTrigger
+                class={btnClasses}
+                @mousedown.prevent
+                @click="openLinkPopover()"
+                :aria-pressed="(active.isLinkActive || false).toString()"
+                title="Вставить ссылку"
+            >
+                <Link2 class="size-4" />
+            </PopoverTrigger>
+
+            <PopoverContent class="w-72 p-3" align="start" sideOffset={4}>
+                <div class="flex flex-col gap-2">
+                    <!-- Поле текста ссылки -->
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-foreground">Текст ссылки</span>
+                        <input
+                            type="text"
+                            x-model="linkText"
+                            @mousedown.stop
+                            class="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 py-1 text-sm shadow-sm transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            placeholder="Например: Нажми сюда"
+                        />
+                    </div>
+
+                    <!-- Поле URL -->
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-foreground">Адрес ссылки (URL)</span>
+                        <input
+                            type="text"
+                            x-model="linkUrl"
+                            @mousedown.stop
+                            class="flex h-8 w-full rounded-md border border-input bg-transparent px-2.5 py-1 text-sm shadow-sm transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                            placeholder="https://site.com"
+                        />
+                    </div>
+
+                    <Button size="sm" class="mt-1" @click="applyLink(); hide()">Вставить ссылку</Button>
+                </div>
+            </PopoverContent>
+        </Popover>
+
+        <div class="w-px h-6 bg-border mx-1 shrink-0"></div>
+
+        <!-- ОЧИСТКА ФОРМАТИРОВАНИЯ -->
+        <button type="button" class={btnClasses} @click="clearFormatting()" title="Очистить форматирование">
+            <Eraser class="size-4" />
+        </button>
+
+        <!-- КНОПКА HTML -->
+        <button
+            type="button"
+            class={cn(btnClasses, "ml-auto shrink-0")}
+            @click="openHtmlModal()"
+            title="Редактировать HTML код"
+        >
+            <FileCode2 class="size-4" />
+        </button>
+    </div>
+
+    <!-- ОБЛАСТЬ РЕДАКТИРОВАНИЯ -->
+    <div
+        x-ref="editor"
+        class="prose dark:prose-invert max-w-none flex-1 min-h-[200px] p-4 outline-none focus:outline-none [&_.ProseMirror]:min-h-[180px] [&_.ProseMirror]:outline-none"
+    >
+    </div>
+
+    <input type="hidden" name="content" :value="html" />
+
+    <HtmlEditorModal />
+</div>

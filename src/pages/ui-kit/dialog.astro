@@ -1,0 +1,207 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Dialog,
+    DialogTrigger,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "../../components/ui/dialog";
+import Button from "../../components/ui/Button.astro";
+import Input from "../../components/ui/Input.astro";
+import Label from "../../components/ui/Label.astro";
+import { Trash2 } from "@lucide/astro";
+
+const basicCode = `import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../components/ui/dialog';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex justify-center">
+  <Dialog>
+    <DialogTrigger>
+      <Button>Открыть окно</Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Создать проект</DialogTitle>
+        <DialogDescription>Разверните свой новый проект за одну минуту.</DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button variant="outline" x-on:click="open = false">Отмена</Button>
+        <Button x-on:click="open = false">Создать</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</div>`;
+
+const closeButtonCode = `import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../../components/ui/dialog';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex justify-center">
+  <Dialog>
+    <DialogTrigger>
+      <Button variant="secondary">Открыть с крестиком</Button>
+    </DialogTrigger>
+    <DialogContent showCloseButton={true}>
+      <DialogHeader>
+        <DialogTitle>Окно с крестиком</DialogTitle>
+        <DialogDescription>В правом верхнем углу появилась иконка закрытия.</DialogDescription>
+      </DialogHeader>
+    </DialogContent>
+  </Dialog>
+</div>`;
+
+const formCode = `import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../components/ui/dialog';
+import Button from '../../components/ui/Button.astro';
+import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex justify-center">
+  <Dialog>
+    <DialogTrigger>
+      <Button variant="secondary">Редактировать профиль</Button>
+    </DialogTrigger>
+    <DialogContent showCloseButton={true}>
+      <DialogHeader>
+        <DialogTitle>Изменить данные</DialogTitle>
+        <DialogDescription>Обновите ваш email и пароль здесь.</DialogDescription>
+      </DialogHeader>
+      <div class="flex flex-col gap-4 py-4">
+        <div class="flex flex-col gap-2">
+          <Label for="email-d">Email</Label>
+          <Input id="email-d" type="email" placeholder="m@example.com" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <Label for="pass-d">Пароль</Label>
+          <Input id="pass-d" type="password" />
+        </div>
+      </div>
+      <DialogFooter>
+        <Button variant="outline" x-on:click="open = false">Отмена</Button>
+        <Button x-on:click="open = false">Сохранить</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</div>`;
+
+const destructiveCode = `import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../components/ui/dialog';
+import Button from '../../components/ui/Button.astro';
+import { Trash2 } from '@lucide/astro';
+
+<div class="flex justify-center">
+  <Dialog>
+    <DialogTrigger>
+      <Button variant="destructive"><Trash2 class="size-4" /> Удалить аккаунт</Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Удалить аккаунт навсегда?</DialogTitle>
+        <DialogDescription>Это действие нельзя отменить.</DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button variant="outline" x-on:click="open = false">Отмена</Button>
+        <Button variant="destructive" x-on:click="open = false">Да, удалить</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</div>`;
+---
+
+<DashboardLayout title="Dialog">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Dialog</h1>
+            <p class="text-muted-foreground text-lg">
+                Модальное окно, перекрывающее взаимодействие с основным контентом.
+            </p>
+        </div>
+
+        <ComponentDoc
+            title="Базовое окно"
+            description="Стандартный диалог. По умолчанию крестика нет."
+            code={basicCode}
+        >
+            <div class="flex justify-center">
+                <Dialog>
+                    <DialogTrigger><Button>Открыть окно</Button></DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Создать проект</DialogTitle>
+                            <DialogDescription>Разверните свой новый проект за одну минуту.</DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" x-on:click="open = false">Отмена</Button>
+                            <Button x-on:click="open = false">Создать</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Окно с крестиком" description="Передайте showCloseButton={true}." code={closeButtonCode}>
+            <div class="flex justify-center">
+                <Dialog>
+                    <DialogTrigger><Button variant="secondary">Открыть с крестиком</Button></DialogTrigger>
+                    <DialogContent showCloseButton={true}>
+                        <DialogHeader>
+                            <DialogTitle>Окно с крестиком</DialogTitle>
+                            <DialogDescription>В правом верхнем углу появилась иконка закрытия.</DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Окно с формой" description="Внутрь можно помещать формы." code={formCode}>
+            <div class="flex justify-center">
+                <Dialog>
+                    <DialogTrigger><Button variant="secondary">Редактировать профиль</Button></DialogTrigger>
+                    <DialogContent showCloseButton={true}>
+                        <DialogHeader>
+                            <DialogTitle>Изменить данные</DialogTitle>
+                            <DialogDescription>Обновите ваш email и пароль здесь.</DialogDescription>
+                        </DialogHeader>
+                        <div class="flex flex-col gap-4 py-4">
+                            <div class="flex flex-col gap-2">
+                                <Label for="email-d">Email</Label><Input
+                                    id="email-d"
+                                    type="email"
+                                    placeholder="m@example.com"
+                                />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <Label for="pass-d">Пароль</Label><Input id="pass-d" type="password" />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" x-on:click="open = false">Отмена</Button>
+                            <Button x-on:click="open = false">Сохранить</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Подтверждение удаления" description="Опасные действия." code={destructiveCode}>
+            <div class="flex justify-center">
+                <Dialog>
+                    <DialogTrigger
+                        ><Button variant="destructive"><Trash2 class="size-4" /> Удалить аккаунт</Button></DialogTrigger
+                    >
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Удалить аккаунт навсегда?</DialogTitle>
+                            <DialogDescription>Это действие нельзя отменить.</DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" x-on:click="open = false">Отмена</Button>
+                            <Button variant="destructive" x-on:click="open = false">Да, удалить</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

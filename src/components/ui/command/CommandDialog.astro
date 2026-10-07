@@ -1,0 +1,58 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+
+<!-- Убрали x-effect, скрипт сам всё сделает -->
+<div x-data="commandPalette()" @keydown.escape.window="$store.command.open = false">
+    <slot />
+
+    <template x-teleport="body">
+        <!-- ГЛАВНЫЙ КОНТЕЙНЕР: Скроллится сам, если экран маленький -->
+        <div
+            x-show="$store.command.open"
+            x-cloak
+            class="fixed inset-0 z-[100] flex flex-col items-center justify-normal overflow-y-auto px-4 py-16"
+        >
+            <!-- Затемненный фон (Overlay) -->
+            <div
+                x-show="$store.command.open"
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 isolate bg-black/50 backdrop-blur-sm"
+                @click="$store.command.open = false"
+            >
+            </div>
+
+            <!-- Сама панель (my-auto центрирует, если места хватает) -->
+            <div
+                x-show="$store.command.open"
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+                @keydown.arrow-down.prevent="navigate(1)"
+                @keydown.arrow-up.prevent="navigate(-1)"
+                @keydown.enter.prevent="selectActive()"
+                class={cn(
+                    "relative z-10 w-full max-w-lg rounded-xl bg-popover text-popover-foreground shadow-2xl ring-1 ring-foreground/10",
+                    className,
+                )}
+                data-slot="command-dialog"
+                {...rest}
+            >
+                <slot name="content" />
+            </div>
+        </div>
+    </template>
+</div>

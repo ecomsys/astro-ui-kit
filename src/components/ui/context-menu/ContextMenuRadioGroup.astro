@@ -1,0 +1,11 @@
+---
+export interface Props {
+    modelValue?: string;
+    [key: string]: any;
+}
+const { modelValue = "", ...rest } = Astro.props;
+---
+
+<div x-data={`{ selected: '${modelValue}' }`} data-slot="context-menu-radio-group" {...rest}>
+    <slot />
+</div>

@@ -1,0 +1,166 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Checkbox from "../../components/ui/Checkbox.astro";
+import Label from "../../components/ui/Label.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import Checkbox from '../../components/ui/Checkbox.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex items-center gap-3">
+  <Checkbox id="terms" />
+  <Label for="terms">Принять условия соглашения</Label>
+</div>`;
+
+const sizesCode = `import Checkbox from '../../components/ui/Checkbox.astro';
+
+<!-- Размеры задаются через классы Tailwind (size-4, size-5, size-6) -->
+<Checkbox class="size-4" />
+<Checkbox class="size-5" checked />
+<Checkbox class="size-6" checked />`;
+
+const statesCode = `import Checkbox from '../../components/ui/Checkbox.astro';
+
+<div class="flex items-center gap-6">
+  <!-- Неактивная -->
+  <Checkbox />
+  <!-- Включенная по умолчанию -->
+  <Checkbox checked />
+  <!-- Отключенная -->
+  <Checkbox disabled />
+  <!-- Отключенная, но включенная -->
+  <Checkbox checked disabled />
+</div>`;
+
+const groupCode = `import Checkbox from '../../components/ui/Checkbox.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-4">
+  <div class="flex items-center gap-3">
+    <Checkbox id="perm-1" />
+    <Label for="perm-1">Чтение данных</Label>
+  </div>
+  <div class="flex items-center gap-3">
+    <Checkbox id="perm-2" checked />
+    <Label for="perm-2">Запись данных</Label>
+  </div>
+  <div class="flex items-center gap-3">
+    <Checkbox id="perm-3" disabled />
+    <Label for="perm-3">Удаление (запрещено)</Label>
+  </div>
+</div>`;
+
+const formCode = `import Checkbox from '../../components/ui/Checkbox.astro';
+import Label from '../../components/ui/Label.astro';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Одно name="perms" и разные value. FormData.getAll() соберет все выбранные -->
+<form @submit.prevent="alert('Выбраны права: ' + new FormData($event.target).getAll('perms').join(', '))" class="flex flex-col gap-4 w-full max-w-sm">
+  <div class="flex items-center gap-3">
+    <Checkbox id="perm-read" name="perms" value="read" />
+    <Label for="perm-read">Чтение</Label>
+  </div>
+  <div class="flex items-center gap-3">
+    <Checkbox id="perm-write" name="perms" value="write" checked />
+    <Label for="perm-write">Запись</Label>
+  </div>
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Checkbox">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Checkbox</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для выбора одного или нескольких вариантов. Поддерживает управление с клавиатуры (Пробел) и
+                отправку данных в формы.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ ЧЕКБОКС -->
+        <ComponentDoc
+            title="Базовый чекбокс"
+            description="Связка чекбокса и текстовой подписи (Label) через ID."
+            code={basicCode}
+        >
+            <div class="flex items-center gap-3">
+                <Checkbox id="terms" />
+                <Label for="terms">Принять условия соглашения</Label>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗМЕРЫ -->
+        <ComponentDoc
+            title="Размеры (Sizes)"
+            description="Базовый размер 16px (size-4). Увеличивайте через классы Tailwind."
+            code={sizesCode}
+        >
+            <div class="flex items-center gap-6">
+                <Checkbox class="size-4" />
+                <Checkbox class="size-5" checked />
+                <Checkbox class="size-6" checked />
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. СОСТОЯНИЯ -->
+        <ComponentDoc
+            title="Состояния (States)"
+            description="Неактивная, включенная по умолчанию и отключенная галочки."
+            code={statesCode}
+        >
+            <div class="flex items-center gap-6">
+                <Checkbox />
+                <Checkbox checked />
+                <Checkbox disabled />
+                <Checkbox checked disabled />
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ГРУППА ЧЕКБОКСОВ -->
+        <ComponentDoc
+            title="Список прав доступа"
+            description="Реальный пример использования группы чекбоксов в настройках ролей и разрешений."
+            code={groupCode}
+        >
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-3">
+                    <Checkbox id="perm-1" />
+                    <Label for="perm-1">Чтение данных</Label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <Checkbox id="perm-2" checked />
+                    <Label for="perm-2">Запись данных</Label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <Checkbox id="perm-3" disabled />
+                    <Label for="perm-3">Удаление (запрещено)</Label>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. ОТПРАВКА В ФОРМУ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Используем один name='perms' и разные value. При сабмите FormData.getAll() соберет массив выбранных значений."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Выбраны права: ' + new FormData($event.target).getAll('perms').join(', '))"
+                class="flex flex-col gap-4 w-full max-w-sm"
+            >
+                <div class="flex items-center gap-3">
+                    <Checkbox id="perm-read" name="perms" value="read" />
+                    <Label for="perm-read">Чтение</Label>
+                </div>
+                <div class="flex items-center gap-3">
+                    <Checkbox id="perm-write" name="perms" value="write" checked />
+                    <Label for="perm-write">Запись</Label>
+                </div>
+                <Button type="submit" class="w-full mt-2">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

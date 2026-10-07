@@ -1,0 +1,86 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import AspectRatio from "../../components/ui/AspectRatio.astro";
+
+const basicCode = `import AspectRatio from '../../components/ui/AspectRatio.astro';
+
+<!-- 16:9 (Классическое видео или превью) -->
+<AspectRatio ratio={16 / 9} class="overflow-hidden rounded-xl bg-muted">
+  <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600&q=80" alt="Котик" class="absolute inset-0 h-full w-full object-cover" />
+</AspectRatio>`;
+
+const squareCode = `import AspectRatio from '../../components/ui/AspectRatio.astro';
+
+<!-- 1:1 (Квадрат) -->
+<AspectRatio ratio={1 / 1} class="overflow-hidden rounded-xl bg-muted">
+  <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=300&q=80" alt="Котик" class="absolute inset-0 h-full w-full object-cover" />
+</AspectRatio>`;
+
+const customCode = `import AspectRatio from '../../components/ui/AspectRatio.astro';
+
+<!-- 4:3 (Старая школа) с текстом внутри -->
+<AspectRatio ratio={4 / 3} class="flex items-center justify-center rounded-xl bg-muted border">
+  <span class="text-sm text-muted-foreground">Контент с пропорциями 4:3</span>
+</AspectRatio>`;
+---
+
+<DashboardLayout title="Aspect Ratio">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Aspect Ratio</h1>
+            <p class="text-muted-foreground text-lg">
+                Контейнер, который поддерживает заданные пропорции (ratio). Идеально подходит для видео, изображений и
+                адаптивных карточек, чтобы верстка не прыгала при загрузке.
+            </p>
+        </div>
+
+        <!-- 1. ВИДЕО (16:9) -->
+        <ComponentDoc
+            title="Видео и превью (16:9)"
+            description="Самый частый кейс. Картинка или видео всегда будут сохранять пропорции 16:9 на любом экране."
+            code={basicCode}
+        >
+            <div class="w-full max-w-md">
+                <AspectRatio ratio={16 / 9} class="overflow-hidden rounded-xl bg-muted">
+                    <img
+                        src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=600&q=80"
+                        alt="Котик"
+                        class="absolute inset-0 h-full w-full object-cover"
+                    />
+                </AspectRatio>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. КВАДРАТ (1:1) -->
+        <ComponentDoc
+            title="Квадрат (1:1)"
+            description="Идеально для аватарок, сторис или галерей в Instagram-стиле."
+            code={squareCode}
+        >
+            <div class="w-48">
+                <AspectRatio ratio={1 / 1} class="overflow-hidden rounded-xl bg-muted">
+                    <img
+                        src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=300&q=80"
+                        alt="Котик"
+                        class="absolute inset-0 h-full w-full object-cover"
+                    />
+                </AspectRatio>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ПРОИЗВОЛЬНЫЙ КОНТЕНТ (4:3) -->
+        <ComponentDoc
+            title="Произвольный контент (4:3)"
+            description="Внутрь можно класть не только картинки. Контейнер сожмет любой контент под нужные пропорции."
+            code={customCode}
+        >
+            <div class="w-full max-w-sm">
+                <AspectRatio ratio={4 / 3} class="flex items-center justify-center rounded-xl bg-muted border">
+                    <span class="text-sm text-muted-foreground font-medium">Контент с пропорциями 4:3</span>
+                </AspectRatio>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

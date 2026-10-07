@@ -1,0 +1,23 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    value?: number;
+    class?: string;
+    [key: string]: any;
+}
+
+// Принимаем как статическое value, так и динамическое :value / x-bind:value
+const { value, ":value": dynamicValue, "x-bind:value": xBindValue, class: className, ...rest } = Astro.props;
+
+const alpineValue = dynamicValue || xBindValue;
+
+// Если передали динамическое выражение (например "progress"),
+// создаем геттер, чтобы он реактивно следил за родительской переменной.
+// Если передали число, просто инициализируем им.
+const xData = alpineValue ? `{ get value() { return ${alpineValue} } }` : `{ value: ${value || 0} }`;
+---
+
+<div x-data={xData} data-slot="progress" class={cn("flex flex-wrap gap-3", className)} {...rest}>
+    <slot />
+</div>

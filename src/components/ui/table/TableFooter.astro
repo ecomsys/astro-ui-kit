@@ -1,0 +1,18 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<tfoot
+    data-slot="table-footer"
+    class={cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className)}
+    {...rest}
+>
+    <slot />
+</tfoot>

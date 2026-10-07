@@ -1,0 +1,21 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div
+  data-slot="avatar-fallback"
+  class={cn(
+    "flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs",
+    className,
+  )}
+  {...rest}
+>
+  <slot />
+</div>

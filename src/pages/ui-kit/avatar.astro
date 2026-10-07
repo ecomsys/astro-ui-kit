@@ -1,0 +1,186 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Avatar,
+    AvatarImage,
+    AvatarFallback,
+    AvatarGroup,
+    AvatarGroupCount,
+    AvatarBadge,
+} from "../../components/ui/avatar";
+
+const basicCode = `import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+
+<Avatar>
+  <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="Иван Иванов" />
+  <AvatarFallback>ИВ</AvatarFallback>
+</Avatar>`;
+
+const sizesCode = `import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+
+<Avatar size="sm">
+  <AvatarImage src="https://i.pravatar.cc/150?img=5" alt="User" />
+  <AvatarFallback>СМ</AvatarFallback>
+</Avatar>
+
+<Avatar>
+  <AvatarImage src="https://i.pravatar.cc/150?img=6" alt="User" />
+  <AvatarFallback>ДЕФ</AvatarFallback>
+</Avatar>
+
+<Avatar size="lg">
+  <AvatarImage src="https://i.pravatar.cc/150?img=7" alt="User" />
+  <AvatarFallback>ЛГ</AvatarFallback>
+</Avatar>`;
+
+const fallbackCode = `import { Avatar, AvatarFallback } from '../../components/ui/avatar';
+
+<!-- Если не передать AvatarImage (или ссылка битая), 
+автоматически покажется AvatarFallback -->
+<Avatar>
+  <AvatarFallback>ИВ</AvatarFallback>
+</Avatar>`;
+
+const groupCode = `import { Avatar, AvatarImage, AvatarFallback, AvatarGroup, AvatarGroupCount } from '../../components/ui/avatar';
+
+<AvatarGroup>
+  <Avatar>
+    <AvatarImage src="https://i.pravatar.cc/150?img=1" alt="User 1" />
+    <AvatarFallback>Ю1</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarImage src="https://i.pravatar.cc/150?img=2" alt="User 2" />
+    <AvatarFallback>Ю2</AvatarFallback>
+  </Avatar>
+  <Avatar>
+    <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User 3" />
+    <AvatarFallback>Ю3</AvatarFallback>
+  </Avatar>
+  <AvatarGroupCount>+5</AvatarGroupCount>
+</AvatarGroup>`;
+
+const badgeCode = `import { Avatar, AvatarImage, AvatarFallback, AvatarBadge } from '../../components/ui/avatar';
+
+<!-- Онлайн (зеленый) -->
+<Avatar size="lg">
+  <AvatarImage src="https://i.pravatar.cc/150?img=8" alt="Online User" />
+  <AvatarFallback>ОН</AvatarFallback>
+  <AvatarBadge class="bg-green-500" />
+</Avatar>
+
+<!-- Оффлайн (серый) -->
+<Avatar size="lg">
+  <AvatarImage src="https://i.pravatar.cc/150?img=9" alt="Offline User" />
+  <AvatarFallback>ОФ</AvatarFallback>
+  <AvatarBadge class="bg-muted-foreground" />
+</Avatar>`;
+---
+
+<DashboardLayout title="Avatar">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Avatar</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для отображения профилей пользователей. Поддерживает изображения, резервный текст (Fallback),
+                группы и индикаторы статуса.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ АВАТАР -->
+        <ComponentDoc
+            title="Базовый аватар"
+            description="Изображение с резервным текстом (инициалами), если картинка не загрузилась."
+            code={basicCode}
+        >
+            <div class="flex items-center gap-4">
+                <Avatar>
+                    <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="Иван Иванов" />
+                    <AvatarFallback>ИВ</AvatarFallback>
+                </Avatar>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗМЕРЫ -->
+        <ComponentDoc
+            title="Размеры (Sizes)"
+            description="Три стандартных размера для разных интерфейсов."
+            code={sizesCode}
+        >
+            <div class="flex items-end gap-4">
+                <Avatar size="sm">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=5" alt="User" />
+                    <AvatarFallback>СМ</AvatarFallback>
+                </Avatar>
+                <Avatar>
+                    <AvatarImage src="https://i.pravatar.cc/150?img=6" alt="User" />
+                    <AvatarFallback>ДЕФ</AvatarFallback>
+                </Avatar>
+                <Avatar size="lg">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=7" alt="User" />
+                    <AvatarFallback>ЛГ</AvatarFallback>
+                </Avatar>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ФОЛБЭК (РЕЗЕРВ) -->
+        <ComponentDoc
+            title="Фолбэк (Fallback)"
+            description="Если ссылка на картинку не передана или сломана, аватар покажет инициалы."
+            code={fallbackCode}
+        >
+            <div class="flex items-center gap-4">
+                <Avatar>
+                    <AvatarFallback>ИВ</AvatarFallback>
+                </Avatar>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ГРУППА АВАТАРОВ -->
+        <ComponentDoc
+            title="Группа аватаров"
+            description="Наслоение аватарок. Используйте AvatarGroupCount для отображения оставшегося количества."
+            code={groupCode}
+        >
+            <div class="flex items-center gap-4">
+                <AvatarGroup>
+                    <Avatar>
+                        <AvatarImage src="https://i.pravatar.cc/150?img=1" alt="User 1" />
+                        <AvatarFallback>Ю1</AvatarFallback>
+                    </Avatar>
+                    <Avatar>
+                        <AvatarImage src="https://i.pravatar.cc/150?img=2" alt="User 2" />
+                        <AvatarFallback>Ю2</AvatarFallback>
+                    </Avatar>
+                    <Avatar>
+                        <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User 3" />
+                        <AvatarFallback>Ю3</AvatarFallback>
+                    </Avatar>
+                    <AvatarGroupCount>+5</AvatarGroupCount>
+                </AvatarGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. СТАТУС (BADGE) -->
+        <ComponentDoc
+            title="Индикатор статуса"
+            description="Добавьте AvatarBadge, чтобы показать, что пользователь онлайн (зеленый) или оффлайн (серый)."
+            code={badgeCode}
+        >
+            <div class="flex items-end gap-4">
+                <Avatar size="lg">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=8" alt="Online User" />
+                    <AvatarFallback>ОН</AvatarFallback>
+                    <AvatarBadge class="bg-green-500" />
+                </Avatar>
+
+                <Avatar size="lg">
+                    <AvatarImage src="https://i.pravatar.cc/150?img=9" alt="Offline User" />
+                    <AvatarFallback>ОФ</AvatarFallback>
+                    <AvatarBadge class="bg-muted-foreground" />
+                </Avatar>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

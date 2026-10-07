@@ -1,0 +1,34 @@
+---
+export interface Props {
+    baseSiteWidth?: number;
+    baseFontSize?: number;
+}
+
+const { baseSiteWidth = 1536, baseFontSize = 16 } = Astro.props;
+---
+
+<script is:inline define:vars={{ baseSiteWidth, baseFontSize }}>
+    (function () {
+        let globalScaleFactor = 1;
+        const htmlElement = document.documentElement;
+
+        function updateFontSize() {
+            const screenWidth = window.innerWidth;
+
+            if (screenWidth >= 1024) {
+                const scaleFactor = screenWidth / baseSiteWidth;
+                globalScaleFactor = scaleFactor;
+                const newFontSize = baseFontSize * scaleFactor;
+                htmlElement.style.fontSize = `${newFontSize}px`;
+            } else {
+                globalScaleFactor = 1;
+                htmlElement.style.fontSize = `${baseFontSize}px`;
+            }
+        }
+
+        window.addEventListener("resize", updateFontSize, { passive: true });
+        updateFontSize();
+        // Экспортируем во вне, чтобы другие скрипты могли читать коэффициент
+        window.__scaleFactor = globalScaleFactor;
+    })();
+</script>

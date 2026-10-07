@@ -1,0 +1,8 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<div data-slot="drawer-body" class={cn("flex flex-1 flex-col gap-4 overflow-y-auto p-4", className)} {...rest}>
+    <slot />
+</div>

@@ -1,0 +1,113 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { ButtonGroup, ButtonGroupText, ButtonGroupSeparator } from "../../components/ui/button-group";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import { ButtonGroup } from '../../components/ui/button-group';
+import Button from '../../components/ui/Button.astro';
+
+<ButtonGroup>
+  <Button variant="outline">Назад</Button>
+  <Button variant="outline">1</Button>
+  <Button variant="outline">2</Button>
+  <Button variant="outline">Вперед</Button>
+</ButtonGroup>`;
+
+const textCode = `import { ButtonGroup, ButtonGroupText } from '../../components/ui/button-group';
+import Button from '../../components/ui/Button.astro';
+
+ <div class="max-w-sm">
+    <ButtonGroup class="w-full">
+        <ButtonGroupText>https://</ButtonGroupText>
+        <Button variant="outline" class="flex-1">mysite.com</Button>
+        <Button>Перейти</Button>
+    </ButtonGroup>
+</div>`;
+
+const verticalCode = `import { ButtonGroup } from '../../components/ui/button-group';
+import Button from '../../components/ui/Button.astro';
+
+<ButtonGroup orientation="vertical">
+  <Button variant="outline">Пункт 1</Button>
+  <Button variant="outline">Пункт 2</Button>
+  <Button variant="outline">Пункт 3</Button>
+</ButtonGroup>`;
+
+const separatorCode = `import { ButtonGroup, ButtonGroupSeparator } from '../../components/ui/button-group';
+import Button from '../../components/ui/Button.astro';
+
+<ButtonGroup>
+  <Button variant="outline">Сохранить</Button>
+  <ButtonGroupSeparator />
+  <Button variant="outline">Экспорт</Button>
+</ButtonGroup>`;
+---
+
+<DashboardLayout title="Button Group">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Button Group</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для склейки нескольких кнопок или полей ввода в единый цельный блок. Удаляет скругления и
+                рамки между внутренними элементами.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ ГРУППА -->
+        <ComponentDoc
+            title="Базовая группа"
+            description="Кнопки склеиваются вместе. Скругления остаются только по краям блока."
+            code={basicCode}
+        >
+            <ButtonGroup>
+                <Button variant="outline">Назад</Button>
+                <Button variant="outline">1</Button>
+                <Button variant="outline">2</Button>
+                <Button variant="outline">Вперед</Button>
+            </ButtonGroup>
+        </ComponentDoc>
+
+        <!-- 2. С ТЕКСТОВЫМ ПРЕФИКСОМ -->
+        <ComponentDoc
+            title="С текстом (Input-like)"
+            description="ButtonGroupText добавляет серый блок с текстом (например, https://). Кнопке можно задать flex-1, чтобы она растянулась."
+            code={textCode}
+        >
+            <div class="max-w-sm">
+                <ButtonGroup class="w-full">
+                    <ButtonGroupText>https://</ButtonGroupText>
+                    <Button variant="outline" class="flex-1">mysite.com</Button>
+                    <Button>Перейти</Button>
+                </ButtonGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ВЕРТИКАЛЬНАЯ ГРУППА -->
+        <ComponentDoc
+            title="Вертикальная группа"
+            description="Используйте пропс orientation='vertical', чтобы склеить кнопки стопкой."
+            code={verticalCode}
+        >
+            <ButtonGroup orientation="vertical">
+                <Button variant="outline">Пункт 1</Button>
+                <Button variant="outline">Пункт 2</Button>
+                <Button variant="outline">Пункт 3</Button>
+            </ButtonGroup>
+        </ComponentDoc>
+
+        <!-- 4. С РАЗДЕЛИТЕЛЕМ -->
+        <ComponentDoc
+            title="С разделителем"
+            description="ButtonGroupSeparator добавляет вертикальную линию между элементами внутри группы."
+            code={separatorCode}
+        >
+            <ButtonGroup>
+                <Button variant="outline">Сохранить</Button>
+                <ButtonGroupSeparator />
+                <Button variant="outline">Экспорт</Button>
+            </ButtonGroup>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

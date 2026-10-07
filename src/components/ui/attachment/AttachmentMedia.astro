@@ -1,0 +1,45 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    variant?: "icon" | "image";
+    class?: string;
+    [key: string]: any;
+}
+
+const { variant = "icon", class: className, ...rest } = Astro.props;
+
+const baseClasses =
+    "relative flex aspect-square w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5";
+
+const variants = {
+    icon: "",
+    // Убрали хитрые селекторы [&_img], оставили только прозрачность
+    image: "opacity-60 group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100",
+};
+---
+
+<div
+    data-slot="attachment-media"
+    data-variant={variant}
+    class={cn(baseClasses, variants[variant], className)}
+    {...rest}
+>
+    <slot />
+</div>
+
+<!-- Простой каскадный CSS. Гарантирует, что картинка заполнит квадрат и не будет перетаскиваться мышкой -->
+<style is:global>
+    [data-slot="attachment-media"] img {
+        position: absolute;
+        inset: 0;
+        max-width: initial;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+</style>

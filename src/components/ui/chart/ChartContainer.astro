@@ -1,0 +1,27 @@
+---
+import { cn } from "../../../lib/utils";
+import ChartStyle from "./ChartStyle.astro";
+
+export interface Props {
+    id?: string;
+    config?: Record<string, any>;
+    class?: string;
+    [key: string]: any;
+}
+
+const { id, config = {}, class: className, ...rest } = Astro.props;
+const chartId = `chart-${id || Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div
+    class={cn(
+        "flex w-full justify-center text-xs [&_.chart-axis]:fill-muted-foreground [&_.chart-grid]:stroke-border/50",
+        className,
+    )}
+    data-chart={chartId}
+    data-slot="chart-container"
+    {...rest}
+>
+    <ChartStyle id={chartId} config={config} />
+    <slot />
+</div>

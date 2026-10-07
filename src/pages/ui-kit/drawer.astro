@@ -1,0 +1,274 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Drawer,
+    DrawerTrigger,
+    DrawerContent,
+    DrawerBody, // <--- ИСПОЛЬЗУЕМ ЕГО!
+    DrawerHeader,
+    DrawerTitle,
+    DrawerDescription,
+    DrawerFooter,
+} from "../../components/ui/drawer";
+import Button from "../../components/ui/Button.astro";
+import Input from "../../components/ui/Input.astro";
+import Label from "../../components/ui/Label.astro";
+
+const basicCode = `import { Drawer, DrawerTrigger, DrawerContent, DrawerBody, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter } from '../../components/ui/drawer';
+import Button from '../../components/ui/Button.astro';
+import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+
+<Drawer direction="down">
+  <DrawerTrigger>
+    <Button>Открыть снизу</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Редактировать профиль</DrawerTitle>
+      <DrawerDescription>Обновите данные вашего профиля.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerBody>
+      <div class="flex flex-col gap-2">
+        <Label for="username">Имя пользователя</Label>
+        <Input id="username" placeholder="Иван Иванов" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label for="email">Email</Label>
+        <Input id="email" type="email" placeholder="m@example.com" />
+      </div>
+    </DrawerBody>
+    <DrawerFooter>
+      <Button type="submit">Сохранить изменения</Button>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>`;
+
+const topCode = `import { Drawer, DrawerTrigger, DrawerContent, DrawerBody, DrawerHeader, DrawerTitle, DrawerDescription } from '../../components/ui/drawer';
+import Button from '../../components/ui/Button.astro';
+
+  <Drawer direction="up">
+    <DrawerTrigger><Button variant="secondary">Быстрые действия</Button></DrawerTrigger>
+        <DrawerContent class="max-h-[40vh]">
+        <DrawerHeader>
+            <DrawerTitle class="text-center">Быстрые действия</DrawerTitle>
+            <DrawerDescription class="text-center">Выберите, что хотите сделать.</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody>
+            <div class="flex gap-3 justify-center">
+                <Button variant="outline">Загрузить</Button>
+                <Button variant="outline">Поделиться</Button>
+                <Button variant="outline">Завершить</Button>
+            </div>
+        </DrawerBody>
+      </DrawerContent>
+</Drawer>`;
+
+const leftCode = `import { Drawer, DrawerTrigger, DrawerContent, DrawerBody, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter } from '../../components/ui/drawer';
+import Button from '../../components/ui/Button.astro';
+
+<Drawer direction="left">
+  <DrawerTrigger>
+    <Button variant="outline">Меню слева</Button>
+  </DrawerTrigger>
+  <DrawerContent class="max-w-xs">
+    <DrawerHeader>
+      <DrawerTitle>Навигация</DrawerTitle>
+      <DrawerDescription>Свайпни влево, чтобы закрыть.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerBody>
+      <div class="flex flex-col gap-2">
+        <Button variant="ghost" class="justify-start">Главная</Button>
+        <Button variant="ghost" class="justify-start">Настройки</Button>
+        <Button variant="ghost" class="justify-start">Профиль</Button>
+      </div>
+    </DrawerBody>
+    <DrawerFooter>
+      <Button variant="destructive">Выйти из аккаунта</Button>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>`;
+
+const rightCode = `import { Drawer, DrawerTrigger, DrawerContent, DrawerBody, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter } from '../../components/ui/drawer';
+import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+import Button from '../../components/ui/Button.astro';
+
+<Drawer direction="right">
+  <DrawerTrigger>
+    <Button>Фильтры справа</Button>
+  </DrawerTrigger>
+  <DrawerContent class="max-w-md">
+    <DrawerHeader>
+      <DrawerTitle>Фильтры</DrawerTitle>
+      <DrawerDescription>Настройте параметры поиска.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerBody>
+      <div class="flex flex-col gap-2">
+        <Label for="min-price">Мин. цена</Label>
+        <Input id="min-price" type="number" placeholder="0" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label for="max-price">Макс. цена</Label>
+        <Input id="max-price" type="number" placeholder="10000" />
+      </div>
+    </DrawerBody>
+    <DrawerFooter>
+      <Button>Применить</Button>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>`;
+
+const noSwipeCode = `import { Drawer, DrawerTrigger, DrawerContent, DrawerBody, DrawerHeader, DrawerTitle, DrawerDescription } from '../../components/ui/drawer';
+import Button from '../../components/ui/Button.astro';
+
+<Drawer direction="down">
+  <DrawerTrigger>
+    <Button variant="secondary">Без свайпа</Button>
+  </DrawerTrigger>
+  <DrawerContent showSwipeHandle={false}>
+    <DrawerHeader>
+      <DrawerTitle>Соглашение</DrawerTitle>
+      <DrawerDescription>Закрыть можно только крестиком или кликнув вне зоны.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerBody>
+      <p class="text-sm text-muted-foreground">
+        Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Вдали от всех живут они в
+        буквенных домах на берегу Семантика большого языкового океана.
+      </p>
+    </DrawerBody>
+  </DrawerContent>
+</Drawer>`;
+---
+
+<DashboardLayout title="Drawer">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Drawer</h1>
+            <p class="text-muted-foreground text-lg">
+                Выезжающая панель. Поддерживает свайп мышкой и пальцем во всех 4 направлениях. Оверлей плавно исчезает
+                при свайпе. Умеет полностью заменять модальные окна на мобилках.
+            </p>
+        </div>
+
+        <ComponentDoc
+            title="Снизу (Direction Down)"
+            description="Классический вариант. Тяни за ручку вниз, чтобы закрыть."
+            code={basicCode}
+        >
+            <Drawer direction="down">
+                <DrawerTrigger><Button>Открыть снизу</Button></DrawerTrigger>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>Редактировать профиль</DrawerTitle>
+                        <DrawerDescription>Обновите данные вашего профиля.</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <div class="flex flex-col gap-2">
+                            <Label for="username">Имя пользователя</Label>
+                            <Input id="username" placeholder="Иван Иванов" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <Label for="email">Email</Label>
+                            <Input id="email" type="email" placeholder="m@example.com" />
+                        </div>
+                    </DrawerBody>
+                    <DrawerFooter><Button type="submit">Сохранить изменения</Button></DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Сверху (Direction Up)"
+            description="Выезжает сверху. Удобно для быстрых действий."
+            code={topCode}
+        >
+            <Drawer direction="up">
+                <DrawerTrigger><Button variant="secondary">Быстрые действия</Button></DrawerTrigger>
+                <DrawerContent class="max-h-[40vh]">
+                    <DrawerHeader>
+                        <DrawerTitle class="text-center">Быстрые действия</DrawerTitle>
+                        <DrawerDescription class="text-center">Выберите, что хотите сделать.</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <div class="flex gap-3 justify-center">
+                            <Button variant="outline">Загрузить</Button>
+                            <Button variant="outline">Поделиться</Button>
+                            <Button variant="outline">Завершить</Button>
+                        </div>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+        </ComponentDoc>
+
+        <ComponentDoc title="Слева (Direction Left)" description="Идеально для боковых меню (Sidebar)." code={leftCode}>
+            <Drawer direction="left">
+                <DrawerTrigger><Button variant="outline">Меню слева</Button></DrawerTrigger>
+                <DrawerContent class="max-w-xs">
+                    <DrawerHeader>
+                        <DrawerTitle>Навигация</DrawerTitle>
+                        <DrawerDescription>Свайпни влево, чтобы закрыть.</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <div class="flex flex-col gap-2">
+                            <Button variant="ghost" class="justify-start">Главная</Button>
+                            <Button variant="ghost" class="justify-start">Настройки</Button>
+                            <Button variant="ghost" class="justify-start">Профиль</Button>
+                        </div>
+                    </DrawerBody>
+                    <DrawerFooter><Button variant="destructive">Выйти из аккаунта</Button></DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Справа (Direction Right)"
+            description="Отлично подходит для фильтров или настроек."
+            code={rightCode}
+        >
+            <Drawer direction="right">
+                <DrawerTrigger><Button>Фильтры справа</Button></DrawerTrigger>
+                <DrawerContent class="max-w-md">
+                    <DrawerHeader>
+                        <DrawerTitle>Фильтры</DrawerTitle>
+                        <DrawerDescription>Настройте параметры поиска.</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <div class="flex flex-col gap-2">
+                            <Label for="min-price">Мин. цена</Label>
+                            <Input id="min-price" type="number" placeholder="0" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <Label for="max-price">Макс. цена</Label>
+                            <Input id="max-price" type="number" placeholder="10000" />
+                        </div>
+                    </DrawerBody>
+                    <DrawerFooter><Button>Применить</Button></DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Без ручки свайпа (No Swipe Handle)"
+            description="Убираем showSwipeHandle. Закрытие только крестиком или кликом по фону."
+            code={noSwipeCode}
+        >
+            <Drawer direction="down">
+                <DrawerTrigger><Button variant="secondary">Без свайпа</Button></DrawerTrigger>
+                <DrawerContent showSwipeHandle={false}>
+                    <DrawerHeader>
+                        <DrawerTitle>Соглашение</DrawerTitle>
+                        <DrawerDescription>Закрыть можно только крестиком или кликнув вне зоны.</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <p class="text-sm text-muted-foreground">
+                            Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Вдали
+                            от всех живут они в буквенных домах на берегу Семантика большого языкового океана.
+                        </p>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

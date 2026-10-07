@@ -1,0 +1,112 @@
+---
+import { cn } from "../../../lib/utils";
+import Button from "../Button.astro";
+import { XIcon } from "@lucide/astro";
+
+export interface Props {
+    showCloseButton?: boolean;
+    showSwipeHandle?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+
+const { showCloseButton = true, showSwipeHandle = true, class: className, ...rest } = Astro.props;
+---
+
+<template x-teleport="body">
+    <div
+        data-slot="drawer-portal"
+        x-cloak
+        x-bind:data-state="open ? 'open' : 'closed'"
+        x-on:keydown.escape.window="hide()"
+        class="fixed inset-0 z-50 data-[state=closed]:pointer-events-none"
+        x-bind:class="{
+            'flex items-end justify-center': direction === 'down',
+            'flex items-start justify-center': direction === 'up',
+            'flex items-center justify-start': direction === 'left',
+            'flex items-center justify-end': direction === 'right'
+        }"
+    >
+        <div
+            data-slot="drawer-overlay"
+            x-ref="overlay"
+            x-on:click="hide()"
+            x-bind:style="`opacity: ${open ? (1 - swipeProgress) : 0}; pointer-events: ${open ? 'auto' : 'none'};`"
+            class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+        >
+        </div>
+
+        <div
+            data-slot="drawer-content"
+            x-ref="panel"
+            x-bind:style="panelStyle"
+            x-bind:data-direction="direction"
+            class={cn(
+                "relative z-10 flex bg-popover text-popover-foreground shadow-2xl ring-1 ring-foreground/10 will-change-transform outline-none transition-all duration-300 ease-out",
+                "data-[state=closed]:pointer-events-none",
+                "data-[direction=down]:rounded-t-xl data-[direction=down]:max-h-[85vh] data-[direction=down]:w-full data-[direction=down]:max-w-lg",
+                "data-[direction=up]:rounded-b-xl data-[direction=up]:max-h-[85vh] data-[direction=up]:w-full data-[direction=up]:max-w-lg",
+                "data-[direction=left]:rounded-r-xl data-[direction=left]:h-full data-[direction=left]:max-w-sm",
+                "data-[direction=right]:rounded-l-xl data-[direction=right]:h-full data-[direction=right]:max-w-sm",
+                className,
+            )}
+            x-bind:class="{
+                'flex-col': direction === 'down',
+                'flex-col-reverse': direction === 'up',
+                'flex-row-reverse': direction === 'left',
+                'flex-row': direction === 'right',
+                
+                'translate-y-0': open && (direction === 'down' || direction === 'up'),
+                'translate-x-0': open && (direction === 'left' || direction === 'right'),
+                'translate-y-full': !open && direction === 'down',
+                '-translate-y-full': !open && direction === 'up',
+                '-translate-x-full': !open && direction === 'left',
+                'translate-x-full': !open && direction === 'right'
+            }"
+            {...rest}
+        >
+            {
+                showSwipeHandle && (
+                    <div
+                        data-slot="drawer-swipe-handle"
+                        x-on:pointerdown="startDrag($event)"
+                        x-on:pointermove.window="onDrag($event)"
+                        x-on:pointerup.window="endDrag()"
+                        class="flex shrink-0 cursor-grab touch-none active:cursor-grabbing"
+                        x-bind:class="{
+                        'flex-row justify-center items-center w-full py-3 px-4': direction === 'down' || direction === 'up',
+                        'flex-col justify-center items-center h-full py-4 px-3': direction === 'left' || direction === 'right'
+                    }"
+                    >
+                        <div
+                            class="bg-muted-foreground/30 rounded-full"
+                            x-bind:class="{
+                            'h-1.5 w-12': direction === 'down' || direction === 'up',
+                            'w-1.5 h-12': direction === 'left' || direction === 'right'
+                        }"
+                        />
+                    </div>
+                )
+            }
+
+            <!-- Убрали костыльный inner-div, просто отдаем слот! -->
+            <div class="flex flex-1 flex-col overflow-hidden">
+                <slot />
+            </div>
+
+            {
+                showCloseButton && (
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        class="absolute top-2 right-2"
+                        x-on:click="hide()"
+                        aria-label="Close"
+                    >
+                        <XIcon class="size-4" />
+                    </Button>
+                )
+            }
+        </div>
+    </div>
+</template>

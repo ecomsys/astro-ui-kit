@@ -1,0 +1,171 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselPrevious,
+    CarouselNext,
+    CarouselPagination,
+} from "../../components/ui/carousel";
+
+// 1. Базовые данные (Добавили 6 слайдов, чтобы loop работал на десктопе!)
+const basicData = [
+    { text: "Слайд 1", color: "border-red-500" },
+    { text: "Слайд 2", color: "border-blue-500" },
+    { text: "Слайд 3", color: "border-green-500" },
+    { text: "Слайд 4", color: "border-yellow-500" },
+    { text: "Слайд 5", color: "border-purple-500" },
+    { text: "Слайд 6", color: "border-pink-500" },
+];
+
+const loopData = [
+    { text: "Слайд 1", color: "border-purple-500" },
+    { text: "Слайд 2", color: "border-pink-500" },
+    { text: "Слайд 3", color: "border-orange-500" },
+];
+
+// 2. Настройки каруселей
+const basicOpts = { loop: true };
+const basicConfig = {
+    slidesPerView: 1.2,
+    gap: 16,
+    breakpoints: { 768: { slidesPerView: 2.5, gap: 24 }, 1024: { slidesPerView: 3.5, gap: 32 } },
+};
+
+const loopOpts = { loop: false };
+const loopConfig = { slidesPerView: 1.5, gap: 16, breakpoints: { 768: { slidesPerView: 2.5, gap: 24 } } };
+
+// 3. Генерация кода для табов (автоматически!)
+const basicCode = `import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselPagination } from '../../components/ui/carousel';
+
+<Carousel 
+  opts={${JSON.stringify(basicOpts)}} 
+  slidesPerView={${basicConfig.slidesPerView}} 
+  gap={${basicConfig.gap}} 
+  breakpoints={${JSON.stringify(basicConfig.breakpoints)}}
+>
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold">Зацикленная карусель</h2>
+    <div class="flex gap-2"><CarouselPrevious /><CarouselNext /></div>
+  </div>
+
+  <div class="relative h-48">
+    <CarouselContent>
+      ${basicData.map((item) => `<CarouselItem><div class="border-2 ${item.color} rounded-xl h-full flex items-center justify-center bg-card">${item.text}</div></CarouselItem>`).join("\n      ")}
+    </CarouselContent>
+  </div>
+  <CarouselPagination class="justify-center mt-4" />
+</Carousel>`;
+
+const loopCode = `import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselPagination } from '../../components/ui/carousel';
+
+<Carousel 
+  opts={${JSON.stringify(loopOpts)}} 
+  slidesPerView={${loopConfig.slidesPerView}} 
+  gap={${loopConfig.gap}} 
+  breakpoints={${JSON.stringify(loopConfig.breakpoints)}}
+>
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold">Без зацикливания</h2>
+    <div class="flex gap-2"><CarouselPrevious /><CarouselNext /></div>
+  </div>
+
+  <div class="relative h-48">
+    <CarouselContent>
+      ${loopData.map((item) => `<CarouselItem><div class="border-2 ${item.color} rounded-xl h-full flex items-center justify-center bg-card">${item.text}</div></CarouselItem>`).join("\n      ")}
+    </CarouselContent>
+  </div>
+  <CarouselPagination class="justify-center mt-4" />
+</Carousel>`;
+---
+
+<DashboardLayout title="Carousel">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Carousel</h1>
+            <p class="text-muted-foreground text-lg">
+                Слайдер на базе Embla Carousel. Поддерживает свайп мышкой и пальцем, дробные слайды (slidesPerView),
+                адаптивность через breakpoints и зацикливание (loop).
+            </p>
+        </div>
+
+        <!-- 1. ЗАЦИКЛЕННАЯ КАРУСЕЛЬ (С АДАПТИВОМ) -->
+        <ComponentDoc
+            title="Зацикленная (Loop + Breakpoints)"
+            description="Крутится по кругу. ВАЖНО: Для работы loop количество слайдов должно быть строго больше, чем slidesPerView! Иначе движок отключит цикл."
+            code={basicCode}
+        >
+            <div class="w-full">
+                <Carousel
+                    opts={basicOpts}
+                    slidesPerView={basicConfig.slidesPerView}
+                    gap={basicConfig.gap}
+                    breakpoints={basicConfig.breakpoints}
+                >
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold">Зацикленная (Отступы и Loop работают)</h2>
+                        <div class="flex gap-2"><CarouselPrevious /><CarouselNext /></div>
+                    </div>
+
+                    <div class="relative h-48">
+                        <CarouselContent>
+                            {
+                                basicData.map((item) => (
+                                    <CarouselItem>
+                                        <div
+                                            class={`border-2 ${item.color} rounded-xl h-full flex items-center justify-center bg-card font-medium`}
+                                        >
+                                            {item.text}
+                                        </div>
+                                    </CarouselItem>
+                                ))
+                            }
+                        </CarouselContent>
+                    </div>
+                    <CarouselPagination class="justify-center mt-4" />
+                </Carousel>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ОБЫЧНАЯ КАРУСЕЛЬ (БЕЗ LOOP) -->
+        <ComponentDoc
+            title="Без зацикливания (No Loop)"
+            description="Если слайдов мало, или не нужен цикл — используйте loop: false. Последний слайд жестко упрется в правый край."
+            code={loopCode}
+        >
+            <div class="w-full">
+                <Carousel
+                    opts={loopOpts}
+                    slidesPerView={loopConfig.slidesPerView}
+                    gap={loopConfig.gap}
+                    breakpoints={loopConfig.breakpoints}
+                >
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold">Без зацикливания (Нет правого отступа)</h2>
+                        <div class="flex gap-2"><CarouselPrevious /><CarouselNext /></div>
+                    </div>
+
+                    <div class="relative h-48">
+                        <CarouselContent>
+                            {
+                                loopData.map((item) => (
+                                    <CarouselItem>
+                                        <div
+                                            class={`border-2 ${item.color} rounded-xl h-full flex items-center justify-center bg-card font-medium`}
+                                        >
+                                            {item.text}
+                                        </div>
+                                    </CarouselItem>
+                                ))
+                            }
+                        </CarouselContent>
+                    </div>
+                    <CarouselPagination class="justify-center mt-4" />
+                </Carousel>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

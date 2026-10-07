@@ -1,0 +1,89 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Skeleton from "../../components/ui/Skeleton.astro";
+
+const basicCode = `import Skeleton from '../../components/ui/Skeleton.astro';
+
+<div class="flex flex-col gap-2">
+  <Skeleton class="h-4 w-64" />
+  <Skeleton class="h-4 w-52" />
+  <Skeleton class="h-8 w-8 rounded-full" />
+</div>`;
+
+const profileCode = `import Skeleton from '../../components/ui/Skeleton.astro';
+
+<div class="flex items-center gap-4">
+  <Skeleton class="size-12 rounded-full" />
+  <div class="flex flex-col gap-2">
+    <Skeleton class="h-4 w-64" />
+    <Skeleton class="h-4 w-52" />
+  </div>
+</div>`;
+
+const cardCode = `import Skeleton from '../../components/ui/Skeleton.astro';
+
+<div class="flex flex-col gap-3 w-full max-w-sm">
+  <Skeleton class="h-40 w-full rounded-xl" />
+  <div class="flex flex-col gap-2">
+    <Skeleton class="h-4 w-full" />
+    <Skeleton class="h-4 w-full" />
+  </div>
+</div>`;
+---
+
+<DashboardLayout title="Skeleton">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Skeleton</h1>
+            <p class="text-muted-foreground text-lg">
+                Заглушки для отображения состояния загрузки контента. Помогают избежать резких скачков верстки при
+                долгом ожидании данных с сервера.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЕ БЛОКИ -->
+        <ComponentDoc
+            title="Базовые блоки"
+            description="Просто серые мигающие прямоугольники и круги. Размеры задаются через классы Tailwind (rem)."
+            code={basicCode}
+        >
+            <div class="flex flex-col gap-2">
+                <Skeleton class="h-4 w-64" />
+                <Skeleton class="h-4 w-52" />
+                <Skeleton class="h-8 w-8 rounded-full" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ЗАГЛУШКА ПРОФИЛЯ -->
+        <ComponentDoc
+            title="Карточка профиля"
+            description="Имитация загрузки аватара и текстовых строк рядом с ним."
+            code={profileCode}
+        >
+            <div class="flex items-center gap-4">
+                <Skeleton class="size-12 rounded-full" />
+                <div class="flex flex-col gap-2">
+                    <Skeleton class="h-4 w-64" />
+                    <Skeleton class="h-4 w-52" />
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ЗАГЛУШКА КАРТОЧКИ -->
+        <ComponentDoc
+            title="Карточка товара/статьи"
+            description="Имитация загрузки картинки вверху и текста внизу. Классический лоадер для интернет-магазинов и блогов."
+            code={cardCode}
+        >
+            <div class="flex flex-col gap-3 w-full max-w-sm">
+                <Skeleton class="h-40 w-full rounded-xl" />
+                <div class="flex flex-col gap-2">
+                    <Skeleton class="h-4 w-full" />
+                    <Skeleton class="h-4 w-full" />
+                </div>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

@@ -1,0 +1,156 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "../../components/ui/collapsible";
+import Button from "../../components/ui/Button.astro";
+import { ChevronDown } from "@lucide/astro";
+
+const basicCode = `import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../../components/ui/collapsible';
+import Button from '../../components/ui/Button.astro';
+
+<Collapsible class="w-full max-w-sm">
+  <div class="flex items-center justify-between">
+    <h4 class="text-sm font-semibold">Детали заказа #12345</h4>
+    <CollapsibleTrigger>
+      <Button variant="ghost" size="sm">
+        Подробнее
+      </Button>
+    </CollapsibleTrigger>
+  </div>
+  
+  <div class="text-sm text-muted-foreground mt-2">
+    Заказ оформлен 12 октября. Ожидается доставка 15 октября.
+  </div>
+  
+  <CollapsibleContent class="border rounded-md p-4 mt-2 space-y-2">
+    <p class="text-sm font-medium">Состав заказа:</p>
+    <ul class="text-sm text-muted-foreground list-disc pl-5">
+      <li>Футболка черная (2 шт)</li>
+      <li>Кроссовки 42 размера (1 пара)</li>
+      <li>Шапка бини (1 шт)</li>
+    </ul>
+  </CollapsibleContent>
+</Collapsible>`;
+
+const openCode = `import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../../components/ui/collapsible';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Пропс open={true} разворачивает блок при загрузке страницы -->
+<Collapsible open={true} class="w-full max-w-sm">
+  <div class="flex items-center justify-between">
+    <h4 class="text-sm font-semibold">Правила сообщества</h4>
+    <CollapsibleTrigger>
+      <!-- Магия Alpine.js: x-text меняет текст кнопки в зависимости от состояния open -->
+      <Button variant="outline" size="sm" x-text="open ? 'Свернуть' : 'Развернуть'">Свернуть</Button>
+    </CollapsibleTrigger>
+  </div>
+  
+  <CollapsibleContent class="text-sm text-muted-foreground mt-2">
+    <p>1. Уважайте других участников.</p>
+    <p>2. Запрещен спам и реклама.</p>
+    <p>3. Соблюдайте тематику чата.</p>
+  </CollapsibleContent>
+</Collapsible>`;
+
+const iconCode = `import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../../components/ui/collapsible';
+import { ChevronDown } from '@lucide/astro';
+
+<!-- Магия Alpine.js: :class="open ? 'rotate-180' : ''" переворачивает иконку -->
+<Collapsible class="w-full max-w-sm">
+  <CollapsibleTrigger class="flex w-full items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors">
+    <span class="text-sm font-semibold">Расширенные настройки</span>
+    <ChevronDown class="size-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" />
+  </CollapsibleTrigger>
+  
+  <CollapsibleContent class="text-sm text-muted-foreground mt-2 px-4">
+    <p>Здесь находятся скрытые расширенные настройки системы. Вы можете изменить их в любой момент, нажав на стрелочку выше.</p>
+  </CollapsibleContent>
+</Collapsible>`;
+---
+
+<DashboardLayout title="Collapsible">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Collapsible</h1>
+            <p class="text-muted-foreground text-lg">
+                Простой компонент для сворачивания и разворачивания контента. Использует Alpine.js для плавной анимации
+                высоты. Внутрь CollapsibleTrigger можно вкладывать любые элементы, например Кнопки или иконки.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ СВОРАЧИВАЛКА -->
+        <ComponentDoc
+            title="Базовое использование"
+            description="Кнопка-триггер скрывает и показывает дополнительный контент."
+            code={basicCode}
+        >
+            <Collapsible class="w-full max-w-sm">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-semibold">Детали заказа #12345</h4>
+                    <CollapsibleTrigger>
+                        <Button variant="ghost" size="sm"> Подробнее </Button>
+                    </CollapsibleTrigger>
+                </div>
+
+                <div class="text-sm text-muted-foreground mt-2">
+                    Заказ оформлен 12 октября. Ожидается доставка 15 октября.
+                </div>
+
+                <CollapsibleContent class="border rounded-md p-4 mt-2 space-y-2">
+                    <p class="text-sm font-medium">Состав заказа:</p>
+                    <ul class="text-sm text-muted-foreground list-disc pl-5">
+                        <li>Футболка черная (2 шт)</li>
+                        <li>Кроссовки 42 размера (1 пара)</li>
+                        <li>Шапка бини (1 шт)</li>
+                    </ul>
+                </CollapsibleContent>
+            </Collapsible>
+        </ComponentDoc>
+
+        <!-- 2. ОТКРЫТЫЙ ПО УМОЛЧАНИЮ -->
+        <ComponentDoc
+            title="Открытый по умолчанию"
+            description="Используйте пропс open={true}, чтобы блок был развернут сразу. Текст кнопки меняется через x-text."
+            code={openCode}
+        >
+            <Collapsible open={true} class="w-full max-w-sm">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-sm font-semibold">Правила сообщества</h4>
+                    <CollapsibleTrigger>
+                        <Button variant="outline" size="sm" x-text="open ? 'Свернуть' : 'Развернуть'">Свернуть</Button>
+                    </CollapsibleTrigger>
+                </div>
+
+                <CollapsibleContent class="text-sm text-muted-foreground mt-2">
+                    <p>1. Уважайте других участников.</p>
+                    <p>2. Запрещен спам и реклама.</p>
+                    <p>3. Соблюдайте тематику чата.</p>
+                </CollapsibleContent>
+            </Collapsible>
+        </ComponentDoc>
+
+        <!-- 3. СО СТРЕЛКОЧКОЙ (ИКОНКА) -->
+        <ComponentDoc
+            title="С иконкой-стрелочкой"
+            description="Частый кейс: весь блок — триггер. При клике стрелочка переворачивается на 180 градусов."
+            code={iconCode}
+        >
+            <Collapsible class="w-full max-w-sm">
+                <CollapsibleTrigger
+                    class="flex w-full items-center justify-between p-4 border rounded-lg hover:bg-muted transition-colors"
+                >
+                    <span class="text-sm font-semibold">Расширенные настройки</span>
+                    <ChevronDown class="size-4 transition-transform duration-200" :class="open ? 'rotate-180' : ''" />
+                </CollapsibleTrigger>
+
+                <CollapsibleContent class="text-sm text-muted-foreground mt-2 px-4">
+                    <p>
+                        Здесь находятся скрытые расширенные настройки системы. Вы можете изменить их в любой момент,
+                        нажав на стрелочку выше.
+                    </p>
+                </CollapsibleContent>
+            </Collapsible>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

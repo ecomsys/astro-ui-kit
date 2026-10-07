@@ -1,0 +1,16 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    open?: boolean; // <--- ОБЯЗАТЕЛЬНО ДОБАВЬ ЭТОТ ПРОПС
+    [key: string]: any;
+}
+
+const { class: className, open = false, ...rest } = Astro.props;
+---
+
+<!-- Прокидываем open в состояние Alpine -->
+<div x-data={`{ open: ${open} }`} x-data-slot="accordion-item" class={cn("not-last:border-b", className)} {...rest}>
+    <slot />
+</div>

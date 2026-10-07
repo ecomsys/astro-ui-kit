@@ -1,0 +1,84 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import DatePicker from "../../components/ui/DatePicker.astro";
+
+const startCode = `import DatePicker from '../../components/ui/DatePicker.astro';
+
+<!-- По умолчанию matchWidth=false. Календарь имеет фиксированную ширину -->
+<DatePicker mode="single" align="start" />`;
+
+const rangeEndCode = `import DatePicker from '../../components/ui/DatePicker.astro';
+
+<DatePicker mode="range" align="end" placeholder="Выберите период" />`;
+
+const fullWidthCode = `import DatePicker from '../../components/ui/DatePicker.astro';
+
+<!-- matchWidth={true} заставляет календарь растягиваться под инпут -->
+<DatePicker mode="range" align="center" matchWidth={true} class="w-full" />`;
+
+const narrowCode = `import DatePicker from '../../components/ui/DatePicker.astro';
+
+<!-- matchWidth={true} + узкий контейнер. Календарь упрётся в min-width -->
+<DatePicker mode="single" align="center" matchWidth={true} class="w-full" />`;
+---
+
+<DashboardLayout title="Date Picker">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Date Picker</h1>
+            <p class="text-muted-foreground text-lg">
+                Выбор даты через всплывающий календарь. По умолчанию календарь имеет фиксированную ширину, но если
+                включить <code class="text-primary">matchWidth={"{true}"}</code>, он растянется на весь инпут (с защитой
+                от сжатия в гармошку).
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ (ФИКСИРОВАННАЯ ШИРИНА) -->
+        <ComponentDoc
+            title="Базовый (Фиксированная ширина)"
+            description="По умолчанию matchWidth выключен. Календарь выезжает строго 320px, инпут может быть любым."
+            code={startCode}
+        >
+            <div class="w-full max-w-sm py-8">
+                <DatePicker mode="single" align="start" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ДИАПАЗОН ДАТ -->
+        <ComponentDoc
+            title="Диапазон дат (Align End)"
+            description="mode='range' включает выбор периода. Окно закроется только когда выбраны обе даты."
+            code={rangeEndCode}
+        >
+            <div class="w-full max-w-sm py-8">
+                <DatePicker mode="range" align="end" placeholder="Выберите период" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. РАСТЯГИВАНИЕ НА ВЕСЬ КОНТЕЙНЕР -->
+        <ComponentDoc
+            title="Во всю ширину (matchWidth={true})"
+            description="Если передать matchWidth={true}, инпут растянется на весь родителя, и календарь растянется вместе с ним!"
+            code={fullWidthCode}
+        >
+            <div class="w-full max-w-[26rem] py-8">
+                <DatePicker mode="range" align="center" matchWidth={true} class="w-full" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ОГРАНИЧЕНИЕ МИНИМАЛЬНОЙ ШИРИНЫ -->
+        <ComponentDoc
+            title="Узкий инпут (Anti-Accordion)"
+            description="Если инпут очень узкий, а matchWidth включен, календарь упрется в свою минимальную ширину (320px) и не даст себя сжать."
+            code={narrowCode}
+        >
+            <div class="flex justify-center py-8">
+                <div class="w-40">
+                    <DatePicker mode="single" align="center" matchWidth={true} class="w-full" />
+                </div>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

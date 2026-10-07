@@ -1,0 +1,32 @@
+---
+import { cn } from "../../../lib/utils";
+import { ChevronDownIcon } from "@lucide/astro";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+
+const triggerClasses =
+    "group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50";
+---
+
+<button
+    type="button"
+    x-ref="trigger"
+    x-on:click="toggle()"
+    x-bind:aria-expanded="open.toString()"
+    x-bind:class="open ? 'bg-muted' : ''"
+    class={cn(triggerClasses, "group", className)}
+    data-slot="navigation-menu-trigger"
+    {...rest}
+>
+    <slot />
+    <ChevronDownIcon
+        class="relative top-[0.0625rem] ml-1 size-3 transition-transform duration-300 group-aria-expanded/navigation-menu-trigger:rotate-180"
+        x-bind:class="open ? 'rotate-180' : ''"
+        aria-hidden="true"
+    />
+</button>

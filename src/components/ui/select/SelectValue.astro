@@ -1,0 +1,17 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    placeholder?: string;
+    class?: string;
+    [key: string]: any;
+}
+
+const { placeholder = "", class: className, ...rest } = Astro.props;
+---
+
+<span
+    data-slot="select-value"
+    class={cn("flex flex-1 items-center gap-1.5 text-left [&>svg]:size-4 [&>svg]:rounded-sm", className)}
+    x-html={`selectedLabel || '${placeholder}'`}
+    {...rest}></span>

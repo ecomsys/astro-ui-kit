@@ -1,0 +1,23 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    defaultValue?: string;
+    name?: string;
+    class?: string;
+    [key: string]: any;
+}
+
+const { defaultValue = "", name, class: className, ...rest } = Astro.props;
+---
+
+<div
+    role="radiogroup"
+    x-data={`{ selectedValue: '${defaultValue}' }`}
+    data-slot="radio-group"
+    class={cn("grid w-full gap-2", className)}
+    {...rest}
+>
+    {name && <input type="hidden" x-model="selectedValue" name={name} />}
+    <slot />
+</div>

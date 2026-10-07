@@ -1,0 +1,22 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    align?: "start" | "end";
+    variant?: "default" | "ghost";
+    class?: string;
+    [key: string]: any;
+}
+
+const { align = "start", variant = "default", class: className, ...rest } = Astro.props;
+---
+
+<div
+    data-slot="message"
+    data-align={align}
+    data-variant={variant}
+    class={cn("group/message relative flex w-full min-w-0 gap-2 text-sm data-[align=end]:flex-row-reverse", className)}
+    {...rest}
+>
+    <slot />
+</div>

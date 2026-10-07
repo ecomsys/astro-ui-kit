@@ -1,0 +1,72 @@
+---
+import { Popover, PopoverTrigger, PopoverContent } from "./popover";
+import Calendar from "./calendar/Calendar.astro";
+import Input from "./Input.astro";
+import { Calendar as CalendarIcon } from "@lucide/astro";
+
+export interface Props {
+    mode?: "single" | "range";
+    align?: "start" | "center" | "end";
+    placeholder?: string;
+    matchWidth?: boolean; // <--- Наш новый пропс
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    mode = "single",
+    align = "start",
+    placeholder = "Выберите дату...",
+    matchWidth = false,
+    class: className,
+} = Astro.props;
+
+const safePlaceholder = placeholder.replace(/'/g, "\\'");
+
+const singleHandler = `
+  date = $event.detail;
+  formattedDate = date ? date.toLocaleDateString('ru-RU') : '${safePlaceholder}';
+  if (date) open = false;
+`;
+
+const rangeHandler = `
+  startDate = $event.detail.start;
+  endDate = $event.detail.end;
+  const s = startDate ? startDate.toLocaleDateString('ru-RU') : '...';
+  const en = endDate ? endDate.toLocaleDateString('ru-RU') : '...';
+  formattedDate = s + ' — ' + en;
+  if (startDate && endDate) open = false;
+`;
+
+// Динамически высчитываем классы контента
+// Если matchWidth=true -> тянется, но не меньше 20rem (минимальная читаемая ширина)
+// Если matchWidth=false -> фиксированная ширина 20rem (как раньше)
+const contentWidthClass = matchWidth ? "w-auto p-0 min-w-[20rem]" : "w-[20rem] p-0";
+---
+
+<div
+    x-data={`{
+    date: null,
+    startDate: null,
+    endDate: null,
+    formattedDate: '${safePlaceholder}'
+  }`}
+    class={className}
+>
+    <!-- Передаём matchWidth из DatePicker прямо в Popover -->
+    <Popover align={align} matchWidth={matchWidth} class="w-full">
+        <PopoverTrigger class="w-full">
+            <div class="relative w-full">
+                <Input x-bind:value="formattedDate" readonly class="cursor-pointer pl-9" />
+                <CalendarIcon
+                    class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none"
+                />
+            </div>
+        </PopoverTrigger>
+
+        <!-- Подставляем динамический класс -->
+        <PopoverContent class={contentWidthClass}>
+            <Calendar mode={mode} x-on:date-select={singleHandler} x-on:range-select={rangeHandler} />
+        </PopoverContent>
+    </Popover>
+</div>

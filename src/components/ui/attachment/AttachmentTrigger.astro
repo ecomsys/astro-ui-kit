@@ -1,0 +1,23 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    href?: string;
+    type?: "button" | "submit" | "reset";
+    class?: string;
+    [key: string]: any;
+}
+
+const { href, type = "button", class: className, ...rest } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+    href={href ? href : undefined}
+    type={!href ? type : undefined}
+    data-slot="attachment-trigger"
+    class={cn("absolute inset-0 z-10 outline-none", className)}
+    {...rest}
+>
+    <slot />
+</Tag>

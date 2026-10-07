@@ -1,0 +1,17 @@
+---
+export interface Props {
+    id: string;
+    config: Record<string, any>;
+}
+const { id, config } = Astro.props;
+
+const css = Object.entries(config)
+    .map(([key, val]) => {
+        const color = val.theme?.light || val.color;
+        return color ? `--color-${key}: ${color};` : null;
+    })
+    .filter(Boolean)
+    .join("\n");
+---
+
+<style is:inline set:html={`[data-chart="${id}"] { ${css} }`}></style>

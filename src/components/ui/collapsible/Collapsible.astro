@@ -1,0 +1,14 @@
+---
+export interface Props {
+    open?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+
+const { open = false, class: className, ...rest } = Astro.props;
+---
+
+<!-- Прокидываем значение пропса open в состояние Alpine -->
+<div x-data={`{ open: ${open} }`} data-slot="collapsible" class={className} {...rest}>
+    <slot />
+</div>

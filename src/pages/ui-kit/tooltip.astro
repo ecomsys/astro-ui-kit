@@ -1,0 +1,139 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Tooltip, TooltipTrigger, TooltipContent } from "../../components/ui/tooltip";
+import Button from "../../components/ui/Button.astro";
+import { HelpCircle } from "@lucide/astro";
+
+const basicCode = `import { Tooltip, TooltipTrigger, TooltipContent } from '../../components/ui/tooltip';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex justify-center py-8">
+  <Tooltip>
+    <TooltipTrigger>
+      <Button variant="outline">Наведи на меня</Button>
+    </TooltipTrigger>
+    <TooltipContent>Это простая подсказка!</TooltipContent>
+  </Tooltip>
+</div>`;
+
+const sidesCode = `import { Tooltip, TooltipTrigger, TooltipContent } from '../../components/ui/tooltip';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex flex-wrap gap-4 justify-center py-12">
+  <Tooltip>
+    <TooltipTrigger><Button variant="outline">Сверху</Button></TooltipTrigger>
+    <TooltipContent>Подсказка сверху</TooltipContent>
+  </Tooltip>
+  <Tooltip side="bottom">
+    <TooltipTrigger><Button variant="outline">Снизу</Button></TooltipTrigger>
+    <TooltipContent>Подсказка снизу</TooltipContent>
+  </Tooltip>
+  <Tooltip side="left">
+    <TooltipTrigger><Button variant="outline">Слева</Button></TooltipTrigger>
+    <TooltipContent>Подсказка слева</TooltipContent>
+  </Tooltip>
+  <Tooltip side="right">
+    <TooltipTrigger><Button variant="outline">Справа</Button></TooltipTrigger>
+    <TooltipContent>Подсказка справа</TooltipContent>
+  </Tooltip>
+</div>`;
+
+const offsetCode = `import { Tooltip, TooltipTrigger, TooltipContent } from '../../components/ui/tooltip';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex flex-wrap gap-8 justify-center py-12">
+  <Tooltip>
+    <TooltipTrigger><Button variant="outline">Отступ 4px</Button></TooltipTrigger>
+    <TooltipContent>Близко</TooltipContent>
+  </Tooltip>
+  <Tooltip sideOffset={20}>
+    <TooltipTrigger><Button variant="outline">Отступ 20px</Button></TooltipTrigger>
+    <TooltipContent>Далеко</TooltipContent>
+  </Tooltip>
+</div>`;
+
+const iconCode = `import { Tooltip, TooltipTrigger, TooltipContent } from '../../components/ui/tooltip';
+import Button from '../../components/ui/Button.astro';
+import { HelpCircle } from '@lucide/astro';
+
+<div class="flex justify-center py-8">
+  <Tooltip side="right">
+    <TooltipTrigger>
+      <Button variant="ghost" size="icon">
+        <HelpCircle class="size-4" />
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent>Нажмите сюда для помощи</TooltipContent>
+  </Tooltip>
+</div>`;
+---
+
+<DashboardLayout title="Tooltip">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Tooltip</h1>
+            <p class="text-muted-foreground text-lg">Всплывающая подсказка при наведении курсора.</p>
+        </div>
+
+        <ComponentDoc title="Базовый тултип" description="Появляется при наведении мышки." code={basicCode}>
+            <div class="flex justify-center py-8">
+                <Tooltip>
+                    <TooltipTrigger><Button variant="outline">Наведи на меня</Button></TooltipTrigger>
+                    <TooltipContent>Это простая подсказка!</TooltipContent>
+                </Tooltip>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Все стороны (Sides)" description="Пропс side для выбора стороны выезда." code={sidesCode}>
+            <div class="flex flex-wrap gap-4 justify-center py-12">
+                <Tooltip
+                    ><TooltipTrigger><Button variant="outline">Сверху</Button></TooltipTrigger><TooltipContent
+                        >Подсказка сверху</TooltipContent
+                    ></Tooltip
+                >
+                <Tooltip side="bottom"
+                    ><TooltipTrigger><Button variant="outline">Снизу</Button></TooltipTrigger><TooltipContent
+                        >Подсказка снизу</TooltipContent
+                    ></Tooltip
+                >
+                <Tooltip side="left"
+                    ><TooltipTrigger><Button variant="outline">Слева</Button></TooltipTrigger><TooltipContent
+                        >Подсказка слева</TooltipContent
+                    ></Tooltip
+                >
+                <Tooltip side="right"
+                    ><TooltipTrigger><Button variant="outline">Справа</Button></TooltipTrigger><TooltipContent
+                        >Подсказка справа</TooltipContent
+                    ></Tooltip
+                >
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Отступ (sideOffset)" description="Пропс sideOffset отдаляет тултип." code={offsetCode}>
+            <div class="flex flex-wrap gap-8 justify-center py-12">
+                <Tooltip
+                    ><TooltipTrigger><Button variant="outline">Отступ 4px</Button></TooltipTrigger><TooltipContent
+                        >Близко</TooltipContent
+                    ></Tooltip
+                >
+                <Tooltip sideOffset={20}
+                    ><TooltipTrigger><Button variant="outline">Отступ 20px</Button></TooltipTrigger><TooltipContent
+                        >Далеко</TooltipContent
+                    ></Tooltip
+                >
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Тултип для иконки" description="Классический юзкейс." code={iconCode}>
+            <div class="flex justify-center py-8">
+                <Tooltip side="right">
+                    <TooltipTrigger
+                        ><Button variant="ghost" size="icon"><HelpCircle class="size-4" /></Button></TooltipTrigger
+                    >
+                    <TooltipContent>Нажмите сюда для помощи</TooltipContent>
+                </Tooltip>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

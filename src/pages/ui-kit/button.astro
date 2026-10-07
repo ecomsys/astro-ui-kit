@@ -1,0 +1,156 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Button from "../../components/ui/Button.astro";
+import { ChevronRight, Download, Trash2, Loader2, Plus, Mail } from "@lucide/astro";
+
+const variantsCode = `import Button from '../../components/ui/Button.astro';
+
+<Button variant="default">Default</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>`;
+
+const sizesCode = `import Button from '../../components/ui/Button.astro';
+
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+<Button size="icon"><Plus class="size-4" /></Button>`;
+
+const iconsCode = `import Button from '../../components/ui/Button.astro';
+import { Download, ChevronRight, Mail } from '@lucide/astro';
+
+<Button>
+  <Download class="size-4" />
+  Скачать
+</Button>
+
+<Button variant="outline">
+  Далее
+  <ChevronRight class="size-4" />
+</Button>
+
+<Button variant="ghost" size="icon">
+  <Mail class="size-4" />
+</Button>`;
+
+const linksCode = `import Button from '../../components/ui/Button.astro';
+
+<!-- Кнопка автоматически рендерится как <a> -->
+<Button href="/docs">Внутренняя ссылка</Button>
+
+<!-- Внешние ссылки открываются в новой вкладке -->
+<Button href="https://github.com" variant="secondary">
+  GitHub
+</Button>`;
+
+const statesCode = `import Button from '../../components/ui/Button.astro';
+import { Loader2 } from '@lucide/astro';
+
+<!-- Отключенная кнопка -->
+<Button disabled>Неактивно</Button>
+
+<!-- Кнопка загрузки (с анимацией) -->
+<Button disabled>
+  <Loader2 class="size-4 animate-spin" />
+  Загрузка...
+</Button>`;
+---
+
+<DashboardLayout title="Button">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Button</h1>
+            <p class="text-muted-foreground text-lg">
+                Кнопка — это базовый элемент взаимодействия. Поддерживает различные варианты, размеры, иконки, а также
+                может работать как ссылка (<code class="text-sm bg-muted px-1.5 py-0.5 rounded">&lt;a&gt;</code>).
+            </p>
+        </div>
+
+        <!-- 1. ВАРИАНТЫ -->
+        <ComponentDoc
+            title="Варианты (Variants)"
+            description="Разные визуальные стили для разных контекстов."
+            code={variantsCode}
+        >
+            <div class="flex flex-wrap gap-4 items-center">
+                <Button variant="default">Default</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="destructive">Destructive</Button>
+                <Button variant="outline">Outline</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="link">Link</Button>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗМЕРЫ -->
+        <ComponentDoc title="Размеры (Sizes)" description="Управление высотой и отступами кнопки." code={sizesCode}>
+            <div class="flex flex-wrap gap-4 items-center">
+                <Button size="sm">Small</Button>
+                <Button size="default">Default</Button>
+                <Button size="lg">Large</Button>
+                <Button size="icon">
+                    <Plus class="size-4" />
+                </Button>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ИКОНКИ -->
+        <ComponentDoc
+            title="С иконками"
+            description="Используйте иконки из lucide-astro для улучшения UX. Отступы рассчитаются автоматически."
+            code={iconsCode}
+        >
+            <div class="flex flex-wrap gap-4 items-center">
+                <Button>
+                    <Download class="size-4" />
+                    Скачать
+                </Button>
+
+                <Button variant="outline">
+                    Далее
+                    <ChevronRight class="size-4" />
+                </Button>
+
+                <Button variant="ghost" size="icon">
+                    <Mail class="size-4" />
+                </Button>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ССЫЛКИ -->
+        <ComponentDoc
+            title="Как ссылка (Links)"
+            description="Передайте пропс href, и кнопка автоматически превратится в тег <a>. Внешние ссылки открываются в новой вкладке."
+            code={linksCode}
+        >
+            <div class="flex flex-wrap gap-4 items-center">
+                <Button href="/docs">Внутренняя ссылка</Button>
+                <Button href="https://github.com" variant="secondary"> GitHub </Button>
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. СОСТОЯНИЯ -->
+        <ComponentDoc
+            title="Состояния (States)"
+            description="Неактивные кнопки и кнопки с индикатором загрузки."
+            code={statesCode}
+        >
+            <div class="flex flex-wrap gap-4 items-center">
+                <Button disabled>Неактивно</Button>
+                <Button variant="secondary" disabled>
+                    <Trash2 class="size-4" />
+                    Удалить
+                </Button>
+                <Button disabled>
+                    <Loader2 class="size-4 animate-spin" />
+                    Загрузка...
+                </Button>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

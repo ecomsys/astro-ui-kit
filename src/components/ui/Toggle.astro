@@ -1,0 +1,54 @@
+---
+import { cn } from "../../lib/utils";
+
+export interface Props {
+    variant?: "default" | "outline" | "ghost";
+    size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
+    pressed?: boolean;
+    disabled?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    variant = "default",
+    size = "default",
+    pressed = false,
+    disabled = false,
+    class: className,
+    ...rest
+} = Astro.props;
+
+const baseClasses =
+    "group/toggle inline-flex items-center justify-center gap-1 rounded-lg text-sm font-medium whitespace-nowrap transition-all outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[0.25rem] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted aria-pressed:text-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+
+const variants = {
+    default: "bg-transparent hover:bg-muted",
+    outline: "border border-input bg-transparent hover:bg-muted",
+    ghost: "bg-transparent hover:bg-muted",
+};
+
+const sizes = {
+    default: "h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+    sm: "h-7 min-w-7 rounded-[min(var(--radius-md), 0.75rem)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+    lg: "h-9 min-w-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
+    icon: "size-8 p-0",
+    "icon-sm": "size-7 p-0",
+    "icon-lg": "size-9 p-0",
+};
+
+const computedClasses = cn(baseClasses, variants[variant], sizes[size], className);
+---
+
+<button
+    type="button"
+    x-data={`{ pressed: ${pressed} }`}
+    x-on:click="pressed = !pressed"
+    x-bind:aria-pressed="pressed.toString()"
+    data-slot="toggle"
+    class={computedClasses}
+    disabled={disabled}
+    {...rest}
+>
+    <slot />
+</button>

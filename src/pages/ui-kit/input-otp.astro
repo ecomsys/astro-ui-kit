@@ -1,0 +1,200 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "../../components/ui/input-otp";
+import { CheckCircle2, Loader2 } from "@lucide/astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import { InputOTP, InputOTPGroup, InputOTPSlot } from '../../components/ui/input-otp';
+
+<div class="flex justify-center py-8" x-data="{ otp: '' }" x-on:otp-change="otp = $event.detail">
+  <div class="flex flex-col gap-4 items-center">
+    <InputOTP maxLength={6}>
+      <InputOTPGroup>
+        <InputOTPSlot index={0} />
+        <InputOTPSlot index={1} />
+        <InputOTPSlot index={2} />
+        <InputOTPSlot index={3} />
+        <InputOTPSlot index={4} />
+        <InputOTPSlot index={5} />
+      </InputOTPGroup>
+    </InputOTP>
+    <p class="text-sm text-muted-foreground">
+      Введенный код: <span class="font-bold text-primary" x-text="otp"></span>
+    </p>
+  </div>
+</div>`;
+
+const separatorCode = `import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '../../components/ui/input-otp';
+
+<div class="flex justify-center py-8">
+  <InputOTP maxLength={6}>
+    <InputOTPGroup>
+      <InputOTPSlot index={0} />
+      <InputOTPSlot index={1} />
+      <InputOTPSlot index={2} />
+    </InputOTPGroup>
+    <InputOTPSeparator />
+    <InputOTPGroup>
+      <InputOTPSlot index={3} />
+      <InputOTPSlot index={4} />
+      <InputOTPSlot index={5} />
+    </InputOTPGroup>
+  </InputOTP>
+</div>`;
+
+const autoSubmitCode = `import { InputOTP, InputOTPGroup, InputOTPSlot } from '../../components/ui/input-otp';
+import { CheckCircle2, Loader2 } from '@lucide/astro';
+
+<div class="flex justify-center py-8">
+  <div class="flex flex-col gap-6 items-center" x-data="{ 
+    otp: '', isLoading: false, isVerified: false,
+    verify(val) {
+      this.otp = val;
+      if (val.length < 6) { this.isVerified = false; this.isLoading = false; return; }
+      this.isLoading = true;
+      setTimeout(() => { this.isLoading = false; this.isVerified = true; }, 1500);
+    }
+  }">
+    <div x-show="!isLoading && !isVerified" class="flex flex-col gap-4 items-center">
+      <InputOTP maxLength={6} x-on:otp-change="verify($event.detail)">
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={2} />
+          <InputOTPSlot index={3} />
+          <InputOTPSlot index={4} />
+          <InputOTPSlot index={5} />
+        </InputOTPGroup>
+      </InputOTP>
+      <p class="text-xs text-muted-foreground">Код применится автоматически</p>
+    </div>
+    <div x-show="isLoading" x-cloak class="flex flex-col items-center gap-3 py-4">
+      <Loader2 class="size-8 animate-spin text-primary" />
+      <p class="text-sm text-muted-foreground">Проверка кода...</p>
+    </div>
+    <div x-show="isVerified" x-cloak class="flex flex-col items-center gap-2 py-4">
+      <CheckCircle2 class="size-12 text-green-500" />
+      <p class="text-lg font-medium text-green-600">Телефон подтвержден!</p>
+    </div>
+  </div>
+</div>`;
+
+const formCode = `import { InputOTP, InputOTPGroup, InputOTPSlot } from '../../components/ui/input-otp';
+import Button from '../../components/ui/Button.astro';
+
+<form @submit.prevent="alert('Код: ' + new FormData($event.target).get('otp'))" class="flex flex-col gap-6 items-center">
+  <InputOTP maxLength={6} name="otp">
+    <InputOTPGroup>
+      <InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} />
+      <InputOTPSlot index={3} /><InputOTPSlot index={4} /><InputOTPSlot index={5} />
+    </InputOTPGroup>
+  </InputOTP>
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Input OTP">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Input OTP</h1>
+            <p class="text-muted-foreground text-lg">Поле для ввода одноразовых паролей (OTP) из СМС.</p>
+        </div>
+
+        <ComponentDoc
+            title="Базовый ввод"
+            description="Событие x-on:otp-change отдает строку с кодом."
+            code={basicCode}
+        >
+            <div class="flex justify-center py-8" x-data="{ otp: '' }" x-on:otp-change="otp = $event.detail">
+                <div class="flex flex-col gap-4 items-center">
+                    <InputOTP maxLength={6}>
+                        <InputOTPGroup>
+                            <InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} /><InputOTPSlot
+                                index={3}
+                            /><InputOTPSlot index={4} /><InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                    </InputOTP>
+                    <p class="text-sm text-muted-foreground">
+                        Введенный код: <span class="font-bold text-primary" x-text="otp"></span>
+                    </p>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="С разделителем"
+            description="InputOTPSeparator разбивает код на группы."
+            code={separatorCode}
+        >
+            <div class="flex justify-center py-8">
+                <InputOTP maxLength={6}>
+                    <InputOTPGroup
+                        ><InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} /></InputOTPGroup
+                    >
+                    <InputOTPSeparator />
+                    <InputOTPGroup
+                        ><InputOTPSlot index={3} /><InputOTPSlot index={4} /><InputOTPSlot index={5} /></InputOTPGroup
+                    >
+                </InputOTP>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Авто-отправка кода"
+            description="Когда введены все 6 цифр, скрипт сам вызывает verify()."
+            code={autoSubmitCode}
+        >
+            <div class="flex justify-center py-8">
+                <div
+                    class="flex flex-col gap-6 items-center"
+                    x-data="{ otp: '', isLoading: false, isVerified: false, verify(val) { this.otp = val; if (val.length < 6) { this.isVerified = false; this.isLoading = false; return; } this.isLoading = true; setTimeout(() => { this.isLoading = false; this.isVerified = true; }, 1500); } }"
+                >
+                    <div x-show="!isLoading && !isVerified" class="flex flex-col gap-4 items-center">
+                        <InputOTP maxLength={6} x-on:otp-change="verify($event.detail)">
+                            <InputOTPGroup
+                                ><InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot
+                                    index={2}
+                                /><InputOTPSlot index={3} /><InputOTPSlot index={4} /><InputOTPSlot
+                                    index={5}
+                                /></InputOTPGroup
+                            >
+                        </InputOTP>
+                        <p class="text-xs text-muted-foreground">Код применится автоматически</p>
+                    </div>
+                    <div x-show="isLoading" x-cloak class="flex flex-col items-center gap-3 py-4">
+                        <Loader2 class="size-8 animate-spin text-primary" /><p class="text-sm text-muted-foreground">
+                            Проверка кода...
+                        </p>
+                    </div>
+                    <div x-show="isVerified" x-cloak class="flex flex-col items-center gap-2 py-4">
+                        <CheckCircle2 class="size-12 text-green-500" /><p class="text-lg font-medium text-green-600">
+                            Телефон подтвержден!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- НОВЫЙ ПРИМЕР С ФОРМОЙ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Просто передай пропс name, и скрытый инпут отправит код на сервер."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Код: ' + new FormData($event.target).get('otp'))"
+                class="flex flex-col gap-6 items-center w-full max-w-xs"
+            >
+                <InputOTP maxLength={6} name="otp">
+                    <InputOTPGroup>
+                        <InputOTPSlot index={0} /><InputOTPSlot index={1} /><InputOTPSlot index={2} /><InputOTPSlot
+                            index={3}
+                        /><InputOTPSlot index={4} /><InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                </InputOTP>
+                <Button type="submit" class="w-full">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

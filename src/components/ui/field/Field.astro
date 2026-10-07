@@ -1,0 +1,30 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    orientation?: "vertical" | "horizontal" | "responsive";
+    invalid?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+const { orientation = "vertical", invalid, class: className, ...rest } = Astro.props;
+
+const baseClasses = "group/field flex w-full gap-2 data-[invalid=true]:text-destructive";
+const orientations = {
+    vertical: "flex-col *:w-full [&>.sr-only]:w-auto",
+    horizontal:
+        "flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-[0.0625rem]",
+    responsive:
+        "flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-[0.0625rem]",
+};
+---
+
+<div
+    role="group"
+    data-slot="field"
+    data-orientation={orientation}
+    data-invalid={invalid ? "true" : undefined}
+    class={cn(baseClasses, orientations[orientation], className)}
+    {...rest}
+>
+    <slot />
+</div>

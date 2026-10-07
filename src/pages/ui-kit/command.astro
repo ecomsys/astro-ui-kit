@@ -1,0 +1,105 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    CommandDialog,
+    CommandInput,
+    CommandList,
+    CommandEmpty,
+    CommandGroup,
+    CommandItem,
+    CommandShortcut,
+} from "../../components/ui/command";
+import Button from "../../components/ui/Button.astro";
+import { User, Settings, CreditCard, LogOut, Home, FileText, Search } from "@lucide/astro";
+
+const basicCode = `import { CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut } from '../../components/ui/command';
+import Button from '../../components/ui/Button.astro';
+import { User, Settings, CreditCard, LogOut, Home, FileText, Search } from '@lucide/astro';
+
+<div x-data>
+  <Button x-on:click="$store.command.toggle()">Открыть палитру (Ctrl+K)</Button>
+  
+  <CommandDialog>
+    <div slot="content">
+      <CommandInput placeholder="Поиск по сайту..." />
+      <CommandList>
+        <CommandEmpty>Ничего не найдено.</CommandEmpty>
+        
+        <CommandGroup heading="Профиль">
+          <CommandItem><User /> Профиль <CommandShortcut>⌘P</CommandShortcut></CommandItem>
+          <CommandItem><Settings /> Настройки <CommandShortcut>⌘S</CommandShortcut></CommandItem>
+          <CommandItem variant="destructive"><LogOut /> Выйти <CommandShortcut>⌘Q</CommandShortcut></CommandItem>
+        </CommandGroup>
+
+        <CommandGroup heading="Переходы">
+          <CommandItem><Home /> На главную</CommandItem>
+          <CommandItem><FileText /> Документация</CommandItem>
+          <CommandItem><Github /> GitHub</CommandItem>
+        </CommandGroup>
+
+        <CommandGroup heading="Действия">
+          <CommandItem><Search /> Искать в Google</CommandItem>
+          <CommandItem><CreditCard /> Оплатить подписку</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </div>
+  </CommandDialog>
+</div>`;
+---
+
+<DashboardLayout title="Command">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Command</h1>
+            <p class="text-muted-foreground text-lg">
+                Командная палитра для быстрого поиска и выполнения действий. Открывается глобально по Ctrl+K (или слэшу
+                /). Управляется стрелками на клавиатуре.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ ПАЛИТРА -->
+        <ComponentDoc
+            title="Базовая палитра"
+            description="Кнопка для открытия. Внутри группы команд, горячие клавиши (CommandShortcut) и variant='destructive'. Попробуйте ввести 'выход' или '123'."
+            code={basicCode}
+        >
+            <div class="flex justify-center">
+                <div x-data>
+                    <Button x-on:click="$store.command.toggle()">Открыть палитру (Ctrl+K)</Button>
+
+                    <CommandDialog>
+                        <div slot="content">
+                            <CommandInput placeholder="Поиск по сайту..." />
+                            <CommandList>
+                                <CommandEmpty>Ничего не найдено.</CommandEmpty>
+
+                                <CommandGroup heading="Профиль">
+                                    <CommandItem><User /> Профиль <CommandShortcut>⌘P</CommandShortcut></CommandItem>
+                                    <CommandItem
+                                        ><Settings /> Настройки <CommandShortcut>⌘S</CommandShortcut></CommandItem
+                                    >
+                                    <CommandItem variant="destructive"
+                                        ><LogOut /> Выйти <CommandShortcut>⌘Q</CommandShortcut></CommandItem
+                                    >
+                                </CommandGroup>
+
+                                <CommandGroup heading="Переходы">
+                                    <CommandItem><Home /> На главную</CommandItem>
+                                    <CommandItem><FileText /> Документация</CommandItem>
+                                    <CommandItem>GitHub</CommandItem>
+                                </CommandGroup>
+
+                                <CommandGroup heading="Действия">
+                                    <CommandItem><Search /> Искать в Google</CommandItem>
+                                    <CommandItem><CreditCard /> Оплатить подписку</CommandItem>
+                                </CommandGroup>
+                            </CommandList>
+                        </div>
+                    </CommandDialog>
+                </div>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

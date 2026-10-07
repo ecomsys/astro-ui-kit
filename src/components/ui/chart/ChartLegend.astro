@@ -1,0 +1,12 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+
+<div class={cn("flex items-center justify-center gap-4 pt-3", className)} data-slot="chart-legend" {...rest}>
+    <slot />
+</div>

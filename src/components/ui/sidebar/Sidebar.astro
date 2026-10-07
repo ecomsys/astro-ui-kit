@@ -1,0 +1,73 @@
+---
+import "./styles.css";
+import { cn } from "../../../lib/utils";
+export interface Props {
+    side?: "left" | "right";
+    class?: string;
+    [key: string]: any;
+}
+const { side = "left", class: className, ...rest } = Astro.props;
+
+// Классы анимации только для мобилки
+const mobileEnterStart = side === "left" ? "-translate-x-full" : "translate-x-full";
+const mobileLeaveEnd = side === "left" ? "-translate-x-full" : "translate-x-full";
+---
+
+<!-- Десктоп версия (ВСЕГДА СЛЕВА) -->
+<div class="hidden md:flex peer" :data-state="state" data-slot="sidebar">
+    <div
+        class={cn(
+            "relative transition-[width] duration-200 ease-linear group-data-[state=collapsed]:w-[3rem] w-[16rem]",
+            className,
+        )}
+        data-slot="sidebar-gap"
+    >
+    </div>
+    <div
+        class={cn(
+            "fixed inset-y-0 z-10 hidden h-svh flex-col transition-[width] duration-200 ease-linear md:flex group-data-[state=collapsed]:w-[3rem] w-[16rem] bg-sidebar text-sidebar-foreground left-0 border-r",
+            className,
+        )}
+        data-slot="sidebar-container"
+        {...rest}
+    >
+        <div class="flex size-full flex-col" data-sidebar="sidebar" data-slot="sidebar-inner">
+            <slot />
+        </div>
+    </div>
+</div>
+
+<!-- Мобильная версия (Может выезжать слева или справа) -->
+<div x-show="open" x-cloak class="fixed inset-0 z-50 md:hidden">
+    <div
+        x-show="open"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 bg-black/50"
+        @click="open = false"
+    >
+    </div>
+
+    <div
+        x-show="open"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start={mobileEnterStart}
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end={mobileLeaveEnd}
+        class={cn(
+            "fixed inset-y-0 w-[18rem] bg-sidebar p-2 text-sidebar-foreground shadow-lg",
+            side === "left" ? "left-0" : "right-0",
+            className,
+        )}
+    >
+        <div class="flex size-full flex-col">
+            <slot />
+        </div>
+    </div>
+</div>

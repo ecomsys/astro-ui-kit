@@ -1,0 +1,40 @@
+---
+export interface Props {
+    breakpoint?: number;
+    designWidth?: number;
+}
+
+const { breakpoint = 1536, designWidth = 1920 } = Astro.props;
+---
+
+<script is:inline define:vars={{ breakpoint, designWidth }}>
+    (function () {
+        function updateViewport() {
+            const screenWidth = window.screen.width;
+            const dpr = window.devicePixelRatio || 1;
+            const realWidth = screenWidth / dpr;
+
+            const meta = document.querySelector('meta[name="viewport"]');
+            if (!meta) return;
+
+            // Адаптивный режим
+            if (realWidth < breakpoint) {
+                meta.setAttribute("content", "width=device-width, initial-scale=1");
+                return;
+            }
+
+            // Форсированный режим
+            const scale = realWidth / designWidth;
+            meta.setAttribute(
+                "content",
+                `width=${designWidth}, initial-scale=${scale}, maximum-scale=${scale}, user-scalable=no`,
+            );
+        }
+
+        // Выполняем сразу
+        updateViewport();
+
+        // На мобилках при повороте экрана пересчитываем
+        window.addEventListener("orientationchange", updateViewport);
+    })();
+</script>

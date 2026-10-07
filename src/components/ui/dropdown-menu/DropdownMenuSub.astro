@@ -1,0 +1,14 @@
+---
+const { ...rest } = Astro.props;
+---
+
+<div
+  x-data="{ subOpen: false }"
+  x-on:mouseover="subOpen = true"
+  x-on:mouseleave="subOpen = false"
+  class="relative"
+  data-slot="dropdown-menu-sub"
+  {...rest}
+>
+  <slot />
+</div>

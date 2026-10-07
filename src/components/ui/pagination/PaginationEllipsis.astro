@@ -1,0 +1,20 @@
+---
+import { cn } from "../../../lib/utils";
+import { MoreHorizontalIcon } from "@lucide/astro";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+
+<span
+    aria-hidden="true"
+    data-slot="pagination-ellipsis"
+    class={cn("flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4", className)}
+    {...rest}
+>
+    <MoreHorizontalIcon />
+    <span class="sr-only">More pages</span>
+</span>

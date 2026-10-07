@@ -1,0 +1,25 @@
+/*===========================================================================
+Sidebar scroll mini
+=============================================================================*/
+/* Кастомный скроллбар для Сайдбара */
+[data-slot="sidebar-content"] {
+    scrollbar-width: thin; /* Для Firefox */
+    scrollbar-color: var(--border) transparent;
+}
+
+[data-slot="sidebar-content"]::-webkit-scrollbar {
+    width: 0.375rem; /* Тонкая полоска 6px */
+}
+
+[data-slot="sidebar-content"]::-webkit-scrollbar-track {
+    background: transparent; /* Прозрачный фон */
+}
+
+[data-slot="sidebar-content"]::-webkit-scrollbar-thumb {
+    background-color: var(--border); /* Цвет ползунка */
+    border-radius: 0.25rem;
+}
+
+[data-slot="sidebar-content"]::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground); /* Темнеет при наведении */
+}

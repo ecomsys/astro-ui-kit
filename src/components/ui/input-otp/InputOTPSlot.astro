@@ -1,0 +1,33 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    index: number;
+    class?: string;
+    [key: string]: any;
+}
+
+const { index, class: className, ...rest } = Astro.props;
+---
+
+<div
+    :data-active={`activeIndex === ${index}`}
+    class={cn(
+        "relative flex size-9 items-center justify-center border-y border-r border-input bg-transparent text-sm transition-all outline-none first:rounded-l-lg first:border-l last:rounded-r-lg",
+        "data-[active=true]:z-20 data-[active=true]:border-ring data-[active=true]:ring-3 data-[active=true]:ring-ring/50",
+        "aria-invalid:border-destructive dark:bg-input/30",
+        className,
+    )}
+    data-slot="input-otp-slot"
+    {...rest}
+>
+    <!-- Символ -->
+    <span x-text={`slots[${index}]`}></span>
+
+    <!-- Мигающая каретка (показывается, если слот активен и пуст) -->
+    <template x-if={`activeIndex === ${index} && !slots[${index}]`}>
+        <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div class="h-4 w-px animate-caret-blink bg-foreground duration-1000"></div>
+        </div>
+    </template>
+</div>

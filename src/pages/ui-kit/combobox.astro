@@ -1,0 +1,139 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Combobox from "../../components/ui/combobox/Combobox.astro";
+import ComboboxContent from "../../components/ui/combobox/ComboboxContent.astro";
+
+const items = [
+    { value: "next", label: "Next.js" },
+    { value: "sveltekit", label: "SvelteKit" },
+    { value: "nuxt", label: "Nuxt.js" },
+    { value: "remix", label: "Remix" },
+    { value: "astro", label: "Astro" },
+];
+
+const singleCode = `import { Combobox, ComboboxContent } from '../../components/ui/combobox';
+
+<div x-data="{ myFramework: null }">
+  <!-- Слушаем x-on:select-change и кладем значение в myFramework -->
+  <Combobox 
+    items={items} 
+    placeholder="Выберите фреймворк..." 
+    x-on:select-change="myFramework = $event.detail"
+  >
+    <ComboboxContent />
+  </Combobox>
+  
+  <p class="mt-4 text-sm text-muted-foreground">
+    Выбранное значение: <span class="font-bold text-primary" x-text="myFramework || 'Пусто'"></span>
+  </p>
+</div>`;
+
+const multipleCode = `import { Combobox, ComboboxContent } from '../../components/ui/combobox';
+
+<div x-data="{ myFrameworks: [] }">
+  <!-- Для multiple событие отдает массив значений -->
+  <Combobox 
+    items={items} 
+    multiple={true} 
+    placeholder="Выберите фреймворки..." 
+    x-on:select-change="myFrameworks = $event.detail"
+  >
+    <ComboboxContent />
+  </Combobox>
+  
+  <p class="mt-4 text-sm text-muted-foreground">
+    Выбранные значения: <span class="font-bold text-primary" x-text="myFrameworks.length ? myFrameworks.join(', ') : 'Пусто'"></span>
+  </p>
+</div>`;
+
+const formCode = `import { Combobox, ComboboxContent } from '../../components/ui/combobox';
+
+<!-- Просто навешиваем name="framework" и всё улетит на сервер! -->
+<form @submit.prevent="alert('Отправлено на сервер: ' + new FormData($event.target).get('framework'))">
+  <Combobox name="framework" items={items} placeholder="Выберите..." class="w-full">
+    <ComboboxContent />
+  </Combobox>
+  <button type="submit" class="mt-4 w-full bg-primary text-primary-foreground py-2 rounded-lg">
+    Отправить форму
+  </button>
+</form>`;
+---
+
+<DashboardLayout title="Combobox">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Combobox</h1>
+            <p class="text-muted-foreground text-lg">
+                Выпадающий список с поиском. Поддерживает фильтрацию на лету, одиночный и множественный выбор, чипсы
+                (chips), а также легкое получение значений через события или скрытые инпуты для форм.
+            </p>
+        </div>
+
+        <!-- 1. ОДИНОЧНЫЙ ВЫБОР + ALPINE -->
+        <ComponentDoc
+            title="Одиночный выбор (Alpine State)"
+            description="Как получить значение в Alpine. Используй x-on:select-change, чтобы поймать value."
+            code={singleCode}
+        >
+            <div class="w-full max-w-sm py-8" x-data="{ myFramework: null }">
+                <Combobox
+                    items={items}
+                    placeholder="Выберите фреймворк..."
+                    x-on:select-change="myFramework = $event.detail"
+                    class="w-full max-w-sm"
+                >
+                    <ComboboxContent />
+                </Combobox>
+
+                <p class="mt-4 text-sm text-muted-foreground">
+                    Выбранное значение: <span class="font-bold text-primary" x-text="myFramework || 'Пусто'"></span>
+                </p>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. МНОЖЕСТВЕННЫЙ ВЫБОР + ALPINE -->
+        <ComponentDoc
+            title="Множественный выбор (Multiple + Chips)"
+            description="multiple=true включает чипсы. В $event.detail прилетает массив значений (например ['next', 'astro'])."
+            code={multipleCode}
+        >
+            <div class="w-full max-w-sm py-8" x-data="{ myFrameworks: [] }">
+                <Combobox
+                    items={items}
+                    multiple={true}
+                    placeholder="Выберите фреймворки..."
+                    x-on:select-change="myFrameworks = $event.detail"
+                    class="w-full max-w-sm"
+                >
+                    <ComboboxContent />
+                </Combobox>
+
+                <p class="mt-4 text-sm text-muted-foreground">
+                    Выбранные значения: <span
+                        class="font-bold text-primary"
+                        x-text="myFrameworks.length ? myFrameworks.join(', ') : 'Пусто'"></span>
+                </p>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ИСПОЛЬЗОВАНИЕ В ФОРМЕ -->
+        <ComponentDoc
+            title="Отправка в форму (HTML Form)"
+            description="Просто передай пропс name, и компонент сам создаст скрытый input. Значение улетит на сервер при сабмите."
+            code={formCode}
+        >
+            <div class="w-full max-w-sm py-8">
+                <form @submit.prevent="alert('Отправлено на сервер: ' + new FormData($event.target).get('framework'))">
+                    <Combobox name="framework" items={items} placeholder="Выберите фреймворк..." class="w-full">
+                        <ComboboxContent />
+                    </Combobox>
+                    <button type="submit" class="mt-4 w-full bg-primary text-primary-foreground py-2 rounded-lg">
+                        Отправить форму
+                    </button>
+                </form>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

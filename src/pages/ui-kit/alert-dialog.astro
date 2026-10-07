@@ -1,0 +1,155 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "../../components/ui/alert-dialog";
+import Button from "../../components/ui/Button.astro";
+import { Trash2, AlertTriangle } from "@lucide/astro";
+
+// 1. Базовое подтверждение
+const basicCode = `import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '../../components/ui/alert-dialog';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex justify-center">
+  <AlertDialog>
+    <AlertDialogTrigger>
+      <Button variant="outline">Удалить файл</Button>
+    </AlertDialogTrigger>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
+        <AlertDialogDescription>Это действие нельзя отменить. Файл будет удален навсегда.</AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>
+          <Button variant="outline">Отмена</Button>
+        </AlertDialogCancel>
+        <AlertDialogAction>
+          <Button>Удалить</Button>
+        </AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+</div>`;
+
+// 2. Удаление аккаунта (Destructive)
+const destructiveCode = `import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '../../components/ui/alert-dialog';
+import Button from '../../components/ui/Button.astro';
+import { Trash2 } from '@lucide/astro';
+
+<div class="flex justify-center">
+  <AlertDialog>
+    <AlertDialogTrigger>
+      <Button variant="destructive"><Trash2 class="size-4" /> Удалить аккаунт</Button>
+    </AlertDialogTrigger>
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>Удалить аккаунт навсегда?</AlertDialogTitle>
+        <AlertDialogDescription>
+          <div class="flex items-start gap-3">
+            <AlertTriangle class="size-5 text-destructive shrink-0 mt-0.5" />
+            <span>Это действие удалит все ваши данные и файлы. Восстановить доступ будет невозможно.</span>
+          </div>
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel>
+          <Button variant="outline">Отмена</Button>
+        </AlertDialogCancel>
+        <AlertDialogAction>
+          <Button variant="destructive">Да, удалить аккаунт</Button>
+        </AlertDialogAction>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+</div>`;
+---
+
+<DashboardLayout title="Alert Dialog">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Alert Dialog</h1>
+            <p class="text-muted-foreground text-lg">
+                Модальное окно для подтверждения критических действий. В отличие от обычного Dialog, его нельзя закрыть
+                кликом по фону — пользователь обязан выбрать одну из кнопок.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВОЕ ПОДТВЕРЖДЕНИЕ -->
+        <ComponentDoc
+            title="Базовое подтверждение"
+            description="Классическое окно с вопросом. Обратите внимание: клик по затемненному фону ничего не закроет."
+            code={basicCode}
+        >
+            <div class="flex justify-center">
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button variant="outline">Удалить файл</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
+                            <AlertDialogDescription
+                                >Это действие нельзя отменить. Файл будет удален навсегда.</AlertDialogDescription
+                            >
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>
+                                <Button variant="outline">Отмена</Button>
+                            </AlertDialogCancel>
+                            <AlertDialogAction>
+                                <Button>Удалить</Button>
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. УДАЛЕНИЕ АККАУНТА (DESTRUCTIVE) -->
+        <ComponentDoc
+            title="Удаление аккаунта (Destructive)"
+            description="Используйте variant='destructive' для кнопок, которые запускают опасные процессы. Внутри описания можно разместить иконку-предупреждение."
+            code={destructiveCode}
+        >
+            <div class="flex justify-center">
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button variant="destructive"><Trash2 class="size-4" /> Удалить аккаунт</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Удалить аккаунт навсегда?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                <div class="flex items-start gap-3">
+                                    <AlertTriangle class="size-5 text-destructive shrink-0 mt-0.5" />
+                                    <span
+                                        >Это действие удалит все ваши данные и файлы. Восстановить доступ будет
+                                        невозможно.</span
+                                    >
+                                </div>
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>
+                                <Button variant="outline">Отмена</Button>
+                            </AlertDialogCancel>
+                            <AlertDialogAction>
+                                <Button variant="destructive">Да, удалить аккаунт</Button>
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

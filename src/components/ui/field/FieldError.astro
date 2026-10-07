@@ -1,0 +1,32 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    errors?: Array<{ message?: string } | undefined>;
+    class?: string;
+    [key: string]: any;
+}
+const { errors = [], class: className, ...rest } = Astro.props;
+
+const uniqueErrors = [...new Map(errors.map((error) => [error?.message, error])).values()];
+---
+
+{
+    uniqueErrors.length > 0 && (
+        <div
+            role="alert"
+            data-slot="field-error"
+            class={cn("text-sm font-normal text-destructive", className)}
+            {...rest}
+        >
+            {uniqueErrors.length === 1 ? (
+                uniqueErrors[0]?.message
+            ) : (
+                <ul class="ml-4 flex list-disc flex-col gap-1">
+                    {uniqueErrors.map((error) => (
+                        <li>{error?.message}</li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    )
+}

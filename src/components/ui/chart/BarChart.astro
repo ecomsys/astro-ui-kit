@@ -1,0 +1,70 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    data: Array<Record<string, any>>;
+    index: string;
+    category: string;
+    orientation?: "vertical" | "horizontal";
+    height?: number;
+    padding?: number;
+    barGap?: number;
+    breakpoints?: Record<number, { height?: number; padding?: number; barGap?: number }>;
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    data = [],
+    index,
+    category,
+    orientation = "vertical",
+    height = 200,
+    padding = 40,
+    barGap = 20,
+    breakpoints = {},
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<div
+    x-data="barChart()"
+    data-chart-data={JSON.stringify(data)}
+    data-index={index}
+    data-category={category}
+    data-orientation={orientation}
+    data-height={height}
+    data-padding={padding}
+    data-bargap={barGap}
+    data-breakpoints={JSON.stringify(breakpoints)}
+    :style="`height: ${config.height/16}rem;`"
+    class={cn("relative w-full", className)}
+    data-slot="bar-chart"
+    {...rest}
+>
+    <div x-ref="container" class="w-full h-full"></div>
+
+    <template x-teleport="body">
+        <div
+            x-ref="tooltip"
+            x-show="ttVisible"
+            x-cloak
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            style="position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; transform: translate(-6.5rem, -6.5rem);"
+            class="min-w-32 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl will-change-transform"
+            data-slot="chart-tooltip"
+        >
+            <div class="flex items-center gap-2 font-medium">
+                <span class="size-2.5 rounded-sm" :style="`background-color: ${ttColor}`"></span>
+                <span x-text="ttLabel"></span>
+            </div>
+            <div class="mt-1 font-mono text-base font-bold tabular-nums" x-text="ttValue"></div>
+        </div>
+    </template>
+</div>

@@ -1,0 +1,175 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { RadioGroup, RadioGroupItem } from "../../components/ui/radio-group";
+import Label from "../../components/ui/Label.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+import Label from '../../components/ui/Label.astro';
+
+<div x-data="{ role: 'user' }" x-on:select-change="role = $event.detail">
+  <RadioGroup defaultValue="user">
+    <div class="flex items-center gap-3">
+      <RadioGroupItem value="admin" id="r1" />
+      <Label for="r1">Администратор</Label>
+    </div>
+    <div class="flex items-center gap-3">
+      <RadioGroupItem value="user" id="r2" />
+      <Label for="r2">Пользователь</Label>
+    </div>
+  </RadioGroup>
+  
+  <p class="mt-4 text-sm text-muted-foreground">
+    Выбранная роль: <span class="font-bold text-primary" x-text="role"></span>
+  </p>
+</div>`;
+
+const sizesCode = `import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+
+<RadioGroup defaultValue="1" class="flex items-center gap-6">
+  <RadioGroupItem value="1" class="size-3" />
+  <RadioGroupItem value="2" class="size-4" />
+  <RadioGroupItem value="3" class="size-5" />
+</RadioGroup>`;
+
+const colorsCode = `import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+
+<RadioGroup defaultValue="blue" class="flex items-center gap-6">
+  <!-- Меняем только border-* и text-* (внутренний кружок унаследует цвет) -->
+  <RadioGroupItem value="red" class="size-5 data-[checked=true]:border-red-500 data-[checked=true]:text-red-500" />
+  <RadioGroupItem value="blue" class="size-5 data-[checked=true]:border-blue-500 data-[checked=true]:text-blue-500" />
+  <RadioGroupItem value="green" class="size-5 data-[checked=true]:border-green-500 data-[checked=true]:text-green-500" />
+</RadioGroup>`;
+
+const formCode = `import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+import Label from '../../components/ui/Label.astro';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Просто навешиваем name="role" и всё улетит на сервер! -->
+<form @submit.prevent="alert('Роль: ' + new FormData($event.target).get('role'))" class="flex flex-col gap-4 w-full max-w-sm">
+  <RadioGroup name="role" defaultValue="user">
+    <div class="flex items-center gap-3">
+      <RadioGroupItem value="admin" id="f-admin" />
+      <Label for="f-admin">Администратор</Label>
+    </div>
+    <div class="flex items-center gap-3">
+      <RadioGroupItem value="user" id="f-user" />
+      <Label for="f-user">Пользователь</Label>
+    </div>
+    <div class="flex items-center gap-3">
+      <RadioGroupItem value="guest" id="f-guest" disabled />
+      <Label for="f-guest">Гость (запрещено)</Label>
+    </div>
+  </RadioGroup>
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Radio Group">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Radio Group</h1>
+            <p class="text-muted-foreground text-lg">
+                Группа радио-кнопок для выбора одного варианта. Управляется клавиатурой (Пробел), поддерживает любые
+                размеры и цвета.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ ГРУППА -->
+        <ComponentDoc
+            title="Базовая группа"
+            description="Связка RadioGroupItem и Label. Событие x-on:select-change отдает выбранное значение (value)."
+            code={basicCode}
+        >
+            <div class="w-full max-w-sm" x-data="{ role: 'user' }" x-on:select-change="role = $event.detail">
+                <RadioGroup defaultValue="user">
+                    <div class="flex items-center gap-3 mb-3">
+                        <RadioGroupItem value="admin" id="r1" />
+                        <Label for="r1">Администратор</Label>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <RadioGroupItem value="user" id="r2" />
+                        <Label for="r2">Пользователь</Label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <RadioGroupItem value="guest" id="r3" disabled />
+                        <Label for="r3">Гость (запрещено)</Label>
+                    </div>
+                </RadioGroup>
+
+                <p class="mt-4 text-sm text-muted-foreground">
+                    Выбранная роль: <span class="font-bold text-primary" x-text="role"></span>
+                </p>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗМЕРЫ -->
+        <ComponentDoc
+            title="Размеры (Sizes)"
+            description="Базовый размер 16px (size-4). Внутренний кружок адаптируется автоматически (size-1/2)."
+            code={sizesCode}
+        >
+            <div class="flex justify-center py-8">
+                <RadioGroup defaultValue="2" class="flex items-center gap-8">
+                    <RadioGroupItem value="1" class="size-3" />
+                    <RadioGroupItem value="2" class="size-4" />
+                    <RadioGroupItem value="3" class="size-5" />
+                </RadioGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ЦВЕТА -->
+        <ComponentDoc
+            title="Свои цвета"
+            description="Прозрачный фон. Цвет рамки и внутреннего кружка переопределяется через border-* и text-*."
+            code={colorsCode}
+        >
+            <div class="flex justify-center py-8">
+                <RadioGroup defaultValue="blue" class="flex items-center gap-6">
+                    <RadioGroupItem
+                        value="red"
+                        class="size-5 data-[checked=true]:border-red-500 data-[checked=true]:text-red-500"
+                    />
+                    <RadioGroupItem
+                        value="blue"
+                        class="size-5 data-[checked=true]:border-blue-500 data-[checked=true]:text-blue-500"
+                    />
+                    <RadioGroupItem
+                        value="green"
+                        class="size-5 data-[checked=true]:border-green-500 data-[checked=true]:text-green-500"
+                    />
+                </RadioGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ОТПРАВКА В ФОРМУ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Просто передай пропс name, и компонент сам создаст скрытый input. Значение улетит на сервер при сабмите."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Роль: ' + new FormData($event.target).get('role'))"
+                class="flex flex-col gap-4 w-full max-w-sm"
+            >
+                <RadioGroup name="role" defaultValue="user">
+                    <div class="flex items-center gap-3 mb-3">
+                        <RadioGroupItem value="admin" id="f-admin" />
+                        <Label for="f-admin">Администратор</Label>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <RadioGroupItem value="user" id="f-user" />
+                        <Label for="f-user">Пользователь</Label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <RadioGroupItem value="guest" id="f-guest" disabled />
+                        <Label for="f-guest">Гость (запрещено)</Label>
+                    </div>
+                </RadioGroup>
+                <Button type="submit" class="w-full mt-2">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

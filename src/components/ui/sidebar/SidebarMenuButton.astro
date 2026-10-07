@@ -1,0 +1,49 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    isActive?: boolean;
+    href?: string;
+    variant?: "default" | "outline";
+    size?: "default" | "sm" | "lg";
+    class?: string;
+    [key: string]: any;
+}
+
+const { isActive = false, href, variant = "default", size = "default", class: className, ...rest } = Astro.props;
+
+const baseClasses =
+    "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none transition-[width,height,padding] group-data-[state=collapsed]:size-8! group-data-[state=collapsed]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate";
+const variants = {
+    default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+    outline:
+        "bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]",
+};
+const sizes = {
+    default: "h-8 text-sm",
+    sm: "h-7 text-xs",
+    lg: "h-12 text-sm group-data-[state=collapsed]:p-0!",
+};
+
+const computedClasses = cn(
+    baseClasses,
+    variants[variant],
+    sizes[size],
+    isActive && "bg-sidebar-accent font-medium text-sidebar-accent-foreground",
+    className,
+);
+
+// Динамический тег: если есть href — это ссылка, если нет — кнопка
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+    href={href ? href : undefined}
+    type={!href ? "button" : undefined}
+    class={computedClasses}
+    data-slot="sidebar-menu-button"
+    aria-current={isActive ? "page" : undefined}
+    {...rest}
+>
+    <slot />
+</Tag>

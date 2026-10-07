@@ -1,0 +1,14 @@
+---
+const { ...rest } = Astro.props;
+---
+
+<div
+    x-data="{ subOpen: false, subTimeout: null }"
+    x-on:mouseenter="clearTimeout(subTimeout); subOpen = true"
+    x-on:mouseleave="subTimeout = setTimeout(() => subOpen = false, 150)"
+    class="relative"
+    data-slot="context-menu-sub"
+    {...rest}
+>
+    <slot />
+</div>

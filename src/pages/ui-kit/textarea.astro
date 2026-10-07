@@ -1,0 +1,113 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Textarea from "../../components/ui/Textarea.astro";
+import Label from "../../components/ui/Label.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import Textarea from '../../components/ui/Textarea.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="message">Ваше сообщение</Label>
+  <Textarea id="message" placeholder="Напишите нам что-нибудь..."></Textarea>
+</div>`;
+
+const autoGrowCode = `import Textarea from '../../components/ui/Textarea.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="comment">Комментарий</Label>
+  <Textarea id="comment" placeholder="Начни печатать, и я вырасту вниз..."></Textarea>
+</div>`;
+
+const disabledCode = `import Textarea from '../../components/ui/Textarea.astro';
+
+<div class="w-full max-w-sm">
+  <Textarea placeholder="Это поле заблокировано" disabled></Textarea>
+</div>`;
+
+const errorCode = `import Textarea from '../../components/ui/Textarea.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="desc">Описание товара</Label>
+  <Textarea id="desc" placeholder="Слишком короткое описание" aria-invalid="true"></Textarea>
+</div>`;
+
+const formCode = `import Textarea from '../../components/ui/Textarea.astro';
+import Label from '../../components/ui/Label.astro';
+import Button from '../../components/ui/Button.astro';
+
+<form @submit.prevent="alert('Отзыв: ' + new FormData($event.target).get('review'))" class="flex flex-col gap-4 w-full max-w-sm">
+  <div class="flex flex-col gap-2">
+    <Label for="review">Ваш отзыв</Label>
+    <Textarea id="review" name="review" placeholder="Напишите отзыв..." required></Textarea>
+  </div>
+  <Button type="submit">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Textarea">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Textarea</h1>
+            <p class="text-muted-foreground text-lg">
+                Поле для ввода многострочного текста. Умеет автоматически растягиваться.
+            </p>
+        </div>
+
+        <ComponentDoc title="Базовое поле" description="Стандартная текстовая область с лейблом." code={basicCode}>
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="message">Ваше сообщение</Label>
+                <Textarea id="message" placeholder="Напишите нам что-нибудь..." />
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Автоматический рост"
+            description="Начни печатать длинный текст, и поле растянется."
+            code={autoGrowCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="comment">Комментарий</Label>
+                <Textarea id="comment" placeholder="Начни печатать, и я вырасту вниз..." />
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Отключенное состояние (Disabled)" description="Поле становится серым." code={disabledCode}>
+            <div class="w-full max-w-sm">
+                <Textarea placeholder="Это поле заблокировано" disabled />
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Состояние ошибки (Invalid)"
+            description="Атрибут aria-invalid='true' красит рамку в красный."
+            code={errorCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="desc">Описание товара</Label>
+                <Textarea id="desc" placeholder="Слишком короткое описание" aria-invalid="true" />
+            </div>
+        </ComponentDoc>
+
+        <!-- НОВЫЙ ПРИМЕР С ФОРМОЙ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Пример использования внутри формы. Данные легко достаются через FormData."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Отзыв: ' + new FormData($event.target).get('review'))"
+                class="flex flex-col gap-4 w-full max-w-sm"
+            >
+                <div class="flex flex-col gap-2">
+                    <Label for="review">Ваш отзыв</Label>
+                    <Textarea id="review" name="review" placeholder="Напишите отзыв..." required />
+                </div>
+                <Button type="submit">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

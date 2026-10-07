@@ -1,0 +1,107 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Label from "../../components/ui/Label.astro";
+import Input from "../../components/ui/Input.astro";
+import Checkbox from "../../components/ui/Checkbox.astro";
+
+const basicCode = `import Label from '../../components/ui/Label.astro';
+import Input from '../../components/ui/Input.astro';
+
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="username">Имя пользователя</Label>
+  <Input id="username" placeholder="ivan_dev" />
+</div>`;
+
+const requiredCode = `import Label from '../../components/ui/Label.astro';
+import Input from '../../components/ui/Input.astro';
+
+<!-- Добавляем красную звездочку для обязательных полей -->
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="email">
+    Email <span class="text-destructive">*</span>
+  </Label>
+  <Input id="email" type="email" required placeholder="m@example.com" />
+</div>`;
+
+const checkboxCode = `import Label from '../../components/ui/Label.astro';
+import Checkbox from '../../components/ui/Checkbox.astro';
+
+<!-- Клик по тексту переключает галочку -->
+<div class="flex items-center gap-3">
+  <Checkbox id="terms" />
+  <Label for="terms">Я принимаю условия соглашения</Label>
+</div>`;
+
+const disabledCode = `import Label from '../../components/ui/Label.astro';
+import Input from '../../components/ui/Input.astro';
+
+<!-- Класс peer-disabled:opacity-50 делает лейбл тусклым, когда инпут disabled -->
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="locked">Заблокированное поле</Label>
+  <Input id="locked" placeholder="Не доступно" disabled />
+</div>`;
+---
+
+<DashboardLayout title="Label">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Label</h1>
+            <p class="text-muted-foreground text-lg">
+                Семантический лейбл для полей ввода. Связывается с инпутом через for и id. Обеспечивает правильное
+                поведение клика и доступность (A11y).
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ ЛЕЙБЛ -->
+        <ComponentDoc
+            title="Базовая привязка"
+            description="Клик по тексту 'Имя пользователя' переведет фокус в инпут."
+            code={basicCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="username">Имя пользователя</Label>
+                <Input id="username" placeholder="ivan_dev" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ОБЯЗАТЕЛЬНОЕ ПОЛЕ -->
+        <ComponentDoc
+            title="Обязательное поле (Required)"
+            description="Частый кейс — добавить красную звездочку, чтобы показать, что поле обязательно для заполнения."
+            code={requiredCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="email">
+                    Email <span class="text-destructive">*</span>
+                </Label>
+                <Input id="email" type="email" required placeholder="m@example.com" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ПРИВЯЗКА К ЧЕКБОКСУ -->
+        <ComponentDoc
+            title="Привязка к Checkbox"
+            description="Лейблы работают не только с инпутами, но и с любыми другими элементами формы."
+            code={checkboxCode}
+        >
+            <div class="flex items-center gap-3">
+                <Checkbox id="terms" />
+                <Label for="terms">Я принимаю условия соглашения</Label>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ПОВЕДЕНИЕ ПРИ DISABLED -->
+        <ComponentDoc
+            title="Отключенное поле (Disabled)"
+            description="Наш лейбл автоматически реагирует на класс peer-disabled. Если инпут disabled, текст лейбла станет полупрозрачным."
+            code={disabledCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="locked">Заблокированное поле</Label>
+                <Input id="locked" placeholder="Не доступно" disabled class="peer" />
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

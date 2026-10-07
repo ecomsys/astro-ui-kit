@@ -1,0 +1,10 @@
+---
+export interface Props {
+    [key: string]: any;
+}
+const { ...rest } = Astro.props;
+---
+
+<li data-slot="pagination-item" {...rest}>
+    <slot />
+</li>

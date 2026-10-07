@@ -1,0 +1,21 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    defaultOpen?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+const { defaultOpen = true, class: className, ...rest } = Astro.props;
+---
+
+<div
+    x-data={`sidebar(${defaultOpen})`}
+    :data-state="isMobile ? 'expanded' : state"
+    :data-is-mobile="isMobile"
+    class={cn("group group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar", className)}
+    data-slot="sidebar-wrapper"
+    style="--sidebar-width: 16rem; --sidebar-width-icon: 3rem;"
+    {...rest}
+>
+    <slot />
+</div>

@@ -1,0 +1,109 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Progress, ProgressTrack, ProgressIndicator, ProgressLabel, ProgressValue } from "../../components/ui/progress";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import { Progress, ProgressTrack, ProgressIndicator } from '../../components/ui/progress';
+
+<!-- value принимает число от 0 до 100 -->
+<Progress value={50}>
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+</Progress>`;
+
+const labelCode = `import { Progress, ProgressTrack, ProgressIndicator, ProgressLabel, ProgressValue } from '../../components/ui/progress';
+
+<Progress value={75}>
+  <ProgressLabel>Загрузка файла</ProgressLabel>
+  <ProgressValue />
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+</Progress>`;
+
+const dynamicCode = `import { Progress, ProgressTrack, ProgressIndicator, ProgressLabel, ProgressValue } from '../../components/ui/progress';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Магия Alpine.js: x-data хранит значение, @click увеличивает его -->
+<div class="w-full max-w-sm" x-data="{ progress: 20 }">
+  <Progress :value="progress">
+    <ProgressLabel>Заполнение профиля</ProgressLabel>
+    <ProgressValue />
+    <ProgressTrack>
+      <ProgressIndicator />
+    </ProgressTrack>
+  </Progress>
+  
+  <Button class="mt-4" size="sm" @click="progress = Math.min(progress + 20, 100)">
+    Заполнить еще на 20%
+  </Button>
+</div>`;
+---
+
+<DashboardLayout title="Progress">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Progress</h1>
+            <p class="text-muted-foreground text-lg">
+                Индикатор выполнения задачи. Состоит из трека (ProgressTrack) и заполняющего элемента
+                (ProgressIndicator). Поддерживает подписи и реактивное управление через Alpine.js.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ ПРОГРЕСС -->
+        <ComponentDoc
+            title="Базовый прогресс"
+            description="Просто полоса, заполненная на 50%. Цвет берется из --primary."
+            code={basicCode}
+        >
+            <div class="w-full max-w-sm">
+                <Progress value={50}>
+                    <ProgressTrack>
+                        <ProgressIndicator />
+                    </ProgressTrack>
+                </Progress>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. С ПОДПИСЯМИ (LABEL И VALUE) -->
+        <ComponentDoc
+            title="С подписями"
+            description="ProgressLabel выводит текст слева, а ProgressValue — проценты справа."
+            code={labelCode}
+        >
+            <div class="w-full max-w-sm">
+                <Progress value={75}>
+                    <ProgressLabel>Загрузка файла</ProgressLabel>
+                    <ProgressValue />
+                    <ProgressTrack>
+                        <ProgressIndicator />
+                    </ProgressTrack>
+                </Progress>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ДИНАМИЧЕСКИЙ ПРОГРЕСС (ALPINE.JS) -->
+        <ComponentDoc
+            title="Динамический прогресс (Alpine.js)"
+            description="Реальный пример: значение прогресса хранится в x-data. Кнопка увеличивает его, и полоса плавно заполняется."
+            code={dynamicCode}
+        >
+            <div class="w-full max-w-sm" x-data="{ progress: 20 }">
+                <Progress :value="progress">
+                    <ProgressLabel>Заполнение профиля</ProgressLabel>
+                    <ProgressValue />
+                    <ProgressTrack>
+                        <ProgressIndicator />
+                    </ProgressTrack>
+                </Progress>
+
+                <Button class="mt-4" size="sm" @click="progress = Math.min(progress + 20, 100)">
+                    Заполнить еще на 20%
+                </Button>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

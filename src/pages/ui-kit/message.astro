@@ -1,0 +1,164 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    MessageGroup,
+    Message,
+    MessageAvatar,
+    MessageContent,
+    MessageHeader,
+    MessageFooter,
+} from "../../components/ui/message";
+import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
+import { Bot, User } from "@lucide/astro";
+
+const basicCode = `import { MessageGroup, Message, MessageAvatar, MessageContent, MessageHeader, MessageFooter } from '../../components/ui/message';
+import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+
+<MessageGroup>
+  <Message align="start">
+    <MessageAvatar>
+      <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+    </MessageAvatar>
+    <MessageContent>
+      <MessageHeader>AI Assistant</MessageHeader>
+      <div class="bg-card rounded-lg p-3 border">Привет! Чем могу помочь?</div>
+      <MessageFooter>12:30</MessageFooter>
+    </MessageContent>
+  </Message>
+</MessageGroup>`;
+
+const chatCode = `import { MessageGroup, Message, MessageAvatar, MessageContent, MessageHeader, MessageFooter } from '../../components/ui/message';
+import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+
+<MessageGroup>
+  <Message align="start">
+    <MessageAvatar>
+      <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+    </MessageAvatar>
+    <MessageContent>
+      <MessageHeader>AI Assistant</MessageHeader>
+      <div class="bg-card rounded-lg p-3 border">Привет! Чем могу помочь?</div>
+      <MessageFooter>12:30</MessageFooter>
+    </MessageContent>
+  </Message>
+  
+  <Message align="end">
+    <MessageAvatar>
+      <Avatar><AvatarFallback>Я</AvatarFallback></Avatar>
+    </MessageAvatar>
+    <MessageContent>
+      <MessageHeader>Вы</MessageHeader>
+      <div class="bg-primary text-primary-foreground rounded-lg p-3 border">Сгенерируй код на Astro</div>
+      <MessageFooter>12:31</MessageFooter>
+    </MessageContent>
+  </Message>
+</MessageGroup>`;
+
+const ghostCode = `import { MessageGroup, Message, MessageAvatar, MessageContent, MessageHeader, MessageFooter } from '../../components/ui/message';
+import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+
+<MessageGroup>
+  <Message align="start" variant="ghost">
+    <MessageAvatar>
+      <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+    </MessageAvatar>
+    <MessageContent>
+      <MessageHeader>AI Assistant</MessageHeader>
+      <div class="bg-transparent text-muted-foreground">Без рамок и фона (variant='ghost')</div>
+      <MessageFooter>12:30</MessageFooter>
+    </MessageContent>
+  </Message>
+</MessageGroup>`;
+---
+
+<DashboardLayout title="Message">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Message</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для отображения сообщений в чатах. Поддерживает аватары, заголовки (имя/время) и выравнивание
+                (align="start" для бота, align="end" для пользователя).
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВОЕ СООБЩЕНИЕ -->
+        <ComponentDoc
+            title="Базовое сообщение"
+            description="Сообщение от бота (align='start'). Содержит аватар, контент, хедер (имя) и футер (время)."
+            code={basicCode}
+        >
+            <div class="w-full max-w-md py-8">
+                <MessageGroup>
+                    <Message align="start">
+                        <MessageAvatar>
+                            <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+                        </MessageAvatar>
+                        <MessageContent>
+                            <MessageHeader>AI Assistant</MessageHeader>
+                            <div class="bg-card rounded-lg p-3 border">Привет! Чем могу помочь?</div>
+                            <MessageFooter>12:30</MessageFooter>
+                        </MessageContent>
+                    </Message>
+                </MessageGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ДИАЛОГ (БОТ И ПОЛЬЗОВАТЕЛЬ) -->
+        <ComponentDoc
+            title="Диалог в чате"
+            description="Пример переписки. Сообщения бота выравниваются по левому краю (start), сообщения пользователя — по правому (end)."
+            code={chatCode}
+        >
+            <div class="w-full max-w-md py-8">
+                <MessageGroup>
+                    <Message align="start">
+                        <MessageAvatar>
+                            <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+                        </MessageAvatar>
+                        <MessageContent>
+                            <MessageHeader>AI Assistant</MessageHeader>
+                            <div class="bg-card rounded-lg p-3 border">Привет! Чем могу помочь?</div>
+                            <MessageFooter>12:30</MessageFooter>
+                        </MessageContent>
+                    </Message>
+
+                    <Message align="end">
+                        <MessageAvatar>
+                            <Avatar><AvatarFallback>Я</AvatarFallback></Avatar>
+                        </MessageAvatar>
+                        <MessageContent>
+                            <MessageHeader>Вы</MessageHeader>
+                            <div class="bg-primary text-primary-foreground rounded-lg p-3 border">
+                                Сгенерируй код на Astro
+                            </div>
+                            <MessageFooter>12:31</MessageFooter>
+                        </MessageContent>
+                    </Message>
+                </MessageGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. GHOST VARIANT -->
+        <ComponentDoc
+            title="Вариант Ghost (Без рамок)"
+            description="Пропс variant='ghost' убирает отступы (px-3) у текста. Идеально для минималистичных чатов."
+            code={ghostCode}
+        >
+            <div class="w-full max-w-md py-8">
+                <MessageGroup>
+                    <Message align="start" variant="ghost">
+                        <MessageAvatar>
+                            <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+                        </MessageAvatar>
+                        <MessageContent>
+                            <MessageHeader>AI Assistant</MessageHeader>
+                            <div class="bg-transparent text-muted-foreground">Без рамок и фона (variant='ghost')</div>
+                            <MessageFooter>12:30</MessageFooter>
+                        </MessageContent>
+                    </Message>
+                </MessageGroup>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

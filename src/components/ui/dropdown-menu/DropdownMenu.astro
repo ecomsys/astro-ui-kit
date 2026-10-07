@@ -1,0 +1,25 @@
+---
+export interface Props {
+    trigger?: "click" | "hover";
+    side?: "top" | "bottom" | "left" | "right";
+    align?: "start" | "center" | "end";
+    sideOffset?: number;
+    class?: string;
+    [key: string]: any;
+}
+
+const { trigger = "click", side = "bottom", align = "start", sideOffset = 4, ...rest } = Astro.props;
+---
+
+<div
+    x-data={`dropdown('${trigger}', '${side}', '${align}', ${sideOffset})`}
+    x-on:keydown.escape.window="hide()"
+    x-on:scroll.window="forceHide()"
+    x-on:mouseenter="openMenu()"
+    x-on:mouseleave="closeMenu()"
+    class="relative inline-flex w-fit"
+    data-slot="dropdown-menu"
+    {...rest}
+>
+    <slot />
+</div>

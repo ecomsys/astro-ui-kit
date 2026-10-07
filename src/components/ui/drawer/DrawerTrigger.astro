@@ -1,0 +1,16 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<span
+    data-slot="drawer-trigger"
+    class={cn("inline-flex outline-none", className)}
+    x-on:click="show()"
+    x-on:keydown.enter.prevent="show()"
+    tabindex="0"
+    role="button"
+    {...rest}
+>
+    <slot />
+</span>

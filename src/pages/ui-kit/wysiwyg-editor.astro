@@ -1,0 +1,49 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import WysiwygEditor from "../../components/ui/wysiwyg-editor/WysiwygEditor.astro";
+
+// HTML, который будет загружен в редактор при старте
+const initialContent = `<h1>Привет, бро!</h1><p>Это наш собственный WYSIWYG редактор. Попробуйте выделить этот текст и нажать кнопки в тулбаре.</p><ul><li>Поддерживает <b>жирный</b>, <i>курсив</i>, <u>подчеркивание</u></li><li>Списки и цитаты</li></ul><p>А еще есть кнопка <code>&lt;/&gt;</code> для правки чистого HTML!</p>`;
+
+// Код для копирования
+const editorCode = `import WysiwygEditor from '../../components/ui/editor/WysiwygEditor.astro';
+
+const initialContent = \`<h1>Заголовок</h1><p>Текст статьи.</p>\`;
+
+<!-- 
+  Событие x-on:update генерируется при каждом изменении. 
+  В $event.detail лежит свежий HTML.
+-->
+<div x-data="{ html: initialContent }" x-on:update="html = $event.detail">
+  <WysiwygEditor content={initialContent} />
+  
+  <!-- Вывод сырого HTML для проверки -->
+  <pre class="mt-4 p-4 bg-muted rounded-md text-xs" x-text="html"></pre>
+</div>`;
+---
+
+<DashboardLayout title="WYSIWYG Editor">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">WYSIWYG Editor</h1>
+            <p class="text-muted-foreground text-lg">
+                Мощный текстовый редактор на базе Tiptap. Полностью кастомный UI на наших компонентах (кнопки,
+                поповеры). Поддерживает визуальное форматирование, вставку картинок, ссылок и режим редактирования
+                HTML-кода.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВОЕ ИСПОЛЬЗОВАНИЕ -->
+        <ComponentDoc
+            title="Базовое использование"
+            description="Редактор с предзаполненным контентом. Тулбар: история (Undo/Redo), форматирование, выравнивание, списки, ссылки (Popover), картинки (Popover) и режим HTML (</>)."
+            code={editorCode}
+        >
+            <div class="w-full max-w-full">
+                <WysiwygEditor content={initialContent} />
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

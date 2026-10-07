@@ -1,0 +1,84 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Calendar } from "../../components/ui/calendar";
+
+const singleCode = `import { Calendar } from '../../components/ui/calendar';
+
+<div x-data="{ chosenDate: null }">
+  <Calendar mode="single" x-on:date-select="chosenDate = $event.detail" />
+  
+  <p class="mt-4 text-sm text-muted-foreground">
+    Выбранная дата: <span class="font-bold text-primary" x-text="chosenDate ? chosenDate.toLocaleDateString('ru-RU') : 'Не выбрана'"></span>
+  </p>
+</div>`;
+
+const rangeCode = `import { Calendar } from '../../components/ui/calendar';
+
+<!-- Важно: используем x-on:range-select вместо @range-select для Astro -->
+<div x-data="{ start: null, end: null }">
+  <Calendar mode="range" x-on:range-select="start = $event.detail.start; end = $event.detail.end" />
+  
+  <p class="mt-4 text-sm text-muted-foreground">
+    Период: 
+    <span class="font-bold text-primary" x-text="start ? start.toLocaleDateString('ru-RU') : '...'"></span>
+    —
+    <span class="font-bold text-primary" x-text="end ? end.toLocaleDateString('ru-RU') : '...'"></span>
+  </p>
+</div>`;
+---
+
+<DashboardLayout title="Calendar">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Calendar</h1>
+            <p class="text-muted-foreground text-lg">
+                Календарь для выбора дат. Поддерживает одиночный выбор (Single) и выбор диапазона (Range). Написан на
+                чистом Alpine.js, без тяжелых библиотек.
+            </p>
+        </div>
+
+        <!-- 1. ВЫБОР ОДНОЙ ДАТЫ -->
+        <ComponentDoc
+            title="Выбор одной даты (Single)"
+            description="Простой календарь. При клике на день генерируется событие x-on:date-select."
+            code={singleCode}
+        >
+            <div class="flex justify-center">
+                <!-- Переименовали selectedDate в chosenDate -->
+                <div x-data="{ chosenDate: null }" class="flex flex-col items-center">
+                    <Calendar mode="single" x-on:date-select="chosenDate = $event.detail" />
+
+                    <p class="mt-4 text-sm text-muted-foreground">
+                        Выбранная дата: <span
+                            class="font-bold text-primary"
+                            x-text="chosenDate ? chosenDate.toLocaleDateString('ru-RU') : 'Не выбрана'"></span>
+                    </p>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ВЫБОР ДИАПАЗОНА (RANGE) -->
+        <ComponentDoc
+            title="Выбор диапазона (Range)"
+            description="Кликаешь первую дату (старт), затем вторую (конец). Дни между ними подсветятся. Событие x-on:range-select срабатывает на каждый клик."
+            code={rangeCode}
+        >
+            <div class="flex justify-center">
+                <div x-data="{ start: null, end: null }" class="flex flex-col items-center">
+                    <Calendar mode="range" x-on:range-select="start = $event.detail.start; end = $event.detail.end" />
+
+                    <p class="mt-4 text-sm text-muted-foreground">
+                        Период:
+                        <span class="font-bold text-primary" x-text="start ? start.toLocaleDateString('ru-RU') : '...'"
+                        ></span>
+                        —
+                        <span class="font-bold text-primary" x-text="end ? end.toLocaleDateString('ru-RU') : '...'"
+                        ></span>
+                    </p>
+                </div>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

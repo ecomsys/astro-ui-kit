@@ -1,0 +1,119 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../../components/ui/resizable";
+
+const horizontalCode = `import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '../../components/ui/resizable';
+
+<!-- 1. Горизонтальная группа -->
+<div class="w-full h-64 rounded-xl border overflow-hidden">
+    <ResizablePanelGroup orientation="horizontal">
+        <ResizablePanel class="bg-muted p-4">
+            <h3 class="font-medium">Сайдбар</h3>
+            <p class="text-sm text-muted-foreground mt-2">Потяните разделитель справа. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel class="bg-card p-4">
+            <h3 class="font-medium">Главный контент</h3>
+            <p class="text-sm text-muted-foreground mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </ResizablePanel>
+    </ResizablePanelGroup>
+</div>`;
+
+const verticalCode = `import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '../../components/ui/resizable';
+
+<!-- 2. Вертикальная группа -->
+<div class="w-full max-w-sm h-64 rounded-xl border overflow-hidden">
+    <ResizablePanelGroup orientation="vertical">
+        <ResizablePanel class="bg-muted p-4">
+            <h3 class="font-medium">Верхняя панель</h3>
+            <p class="text-sm text-muted-foreground mt-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel class="bg-card p-4">
+            <h3 class="font-medium">Нижняя панель</h3>
+            <p class="text-sm text-muted-foreground mt-2">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+        </ResizablePanel>
+    </ResizablePanelGroup>
+</div>`;
+---
+
+<DashboardLayout title="Resizable">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Resizable</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для создания панелей, размер которых может менять пользователь. Разделитель (ResizableHandle)
+                сам понимает свою ориентацию (вертикальная/горизонтальная) в зависимости от родителя.
+            </p>
+        </div>
+
+        <!-- 1. ГОРИЗОНТАЛЬНАЯ ГРУППА -->
+        <ComponentDoc
+            title="Горизонтальное разделение"
+            description="Две панели (Сайдбар и Контент). Потяните за разделитель мышкой, чтобы изменить их ширину. Текст наглядно покажет, как меняется место."
+            code={horizontalCode}
+        >
+            <div class="w-full h-64 rounded-xl border overflow-hidden">
+                <ResizablePanelGroup orientation="horizontal">
+                    <ResizablePanel class="bg-muted p-4">
+                        <h3 class="font-medium">Сайдбар</h3>
+                        <p class="text-sm text-muted-foreground mt-2">
+                            Потяните разделитель справа. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        </p>
+                    </ResizablePanel>
+
+                    <ResizableHandle withHandle />
+
+                    <ResizablePanel class="bg-card p-4">
+                        <h3 class="font-medium">Главный контент</h3>
+                        <p class="text-sm text-muted-foreground mt-2">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ВЕРТИКАЛЬНАЯ ГРУППА -->
+        <ComponentDoc
+            title="Вертикальное разделение"
+            description="Пропс orientation='vertical' делает панели стопкой. Бегунок автоматически станет горизонтальным."
+            code={verticalCode}
+        >
+            <div class="w-full max-w-sm h-64 rounded-xl border overflow-hidden">
+                <ResizablePanelGroup orientation="vertical">
+                    <ResizablePanel class="bg-muted p-4">
+                        <h3 class="font-medium">Верхняя панель</h3>
+                        <p class="text-sm text-muted-foreground mt-2">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                            laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
+                            architecto beatae vitae dicta sunt explicabo.
+                        </p>
+                    </ResizablePanel>
+
+                    <ResizableHandle withHandle />
+
+                    <ResizablePanel class="bg-card p-4">
+                        <h3 class="font-medium">Нижняя панель</h3>
+                        <p class="text-sm text-muted-foreground mt-2">
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                            consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
+                            est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+                        </p>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

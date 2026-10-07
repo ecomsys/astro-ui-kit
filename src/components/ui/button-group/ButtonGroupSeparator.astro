@@ -1,0 +1,22 @@
+---
+import { cn } from "../../../lib/utils";
+import Separator from "../Separator.astro";
+
+export interface Props {
+    orientation?: "horizontal" | "vertical";
+    class?: string;
+    [key: string]: any;
+}
+
+const { orientation = "vertical", class: className, ...rest } = Astro.props;
+---
+
+<Separator
+    data-slot="button-group-separator"
+    orientation={orientation}
+    class={cn(
+        "relative self-stretch bg-input data-horizontal:mx-px data-horizontal:w-auto data-vertical:my-px data-vertical:h-auto",
+        className,
+    )}
+    {...rest}
+/>

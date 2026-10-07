@@ -1,0 +1,60 @@
+---
+import { CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon, XIcon } from "@lucide/astro";
+
+export interface Props {
+    stacked?: boolean;
+    sound?: boolean;
+}
+
+const { stacked = true, sound = false } = Astro.props;
+---
+
+<!-- x-init включает звук в глобальном store -->
+<div x-data class="contents" x-init={`$store.toasts.soundEnabled = ${sound}`}>
+    <template x-teleport="body">
+        <div
+            x-data={`{ isHovered: false, stacked: ${stacked} }`}
+            @mouseenter="isHovered = true"
+            @mouseleave="isHovered = false"
+            class="fixed bottom-0 right-0 z-[100] flex w-full max-w-sm flex-col-reverse items-end p-4 sm:bottom-4 sm:right-4 sm:p-0"
+            :class="stacked ? 'gap-0' : 'gap-2'"
+            data-sonner-toaster
+        >
+            <template x-for="(toast, index) in [...$store.toasts.items].reverse()" :key="toast.id">
+                <div
+                    x-show="true"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="transform translate-x-full opacity-0"
+                    x-transition:enter-end="transform translate-x-0 opacity-100"
+                    x-transition:leave="transition ease-in duration-200 absolute right-4 bottom-4"
+                    x-transition:leave-start="transform translate-x-0 opacity-100 scale-100"
+                    x-transition:leave-end="transform translate-x-full opacity-0 scale-90"
+                    class="group/toast relative flex w-full items-start gap-3 rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/10 transition-all duration-300 origin-bottom-right"
+                    :style="`z-index: ${100 - index}; ${stacked ? `margin-bottom: ${!isHovered && index > 0 ? '-16px' : '8px'}; ${!isHovered && index > 0 ? 'transform: scale(0.95); opacity: 0.9;' : ''}` : ''}`"
+                    data-sonner-toast
+                >
+                    <CircleCheckIcon x-show="toast.type === 'success'" class="size-5 shrink-0 text-green-500" />
+                    <InfoIcon x-show="toast.type === 'info'" class="size-5 shrink-0 text-blue-500" />
+                    <TriangleAlertIcon x-show="toast.type === 'warning'" class="size-5 shrink-0 text-yellow-500" />
+                    <OctagonXIcon x-show="toast.type === 'error'" class="size-5 shrink-0 text-destructive" />
+                    <Loader2Icon
+                        x-show="toast.type === 'loading'"
+                        class="size-5 shrink-0 animate-spin text-muted-foreground"
+                    />
+
+                    <div class="flex-1 pt-0.5">
+                        <p class="text-sm font-medium" x-text="toast.message"></p>
+                    </div>
+
+                    <button
+                        x-on:click="$store.toasts.remove(toast.id)"
+                        class="absolute top-2 right-2 rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-muted group-hover/toast:opacity-100"
+                        aria-label="Close"
+                    >
+                        <XIcon class="size-4" />
+                    </button>
+                </div>
+            </template>
+        </div>
+    </template>
+</div>

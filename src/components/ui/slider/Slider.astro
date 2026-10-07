@@ -1,0 +1,58 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    defaultValue?: number | number[];
+    min?: number;
+    max?: number;
+    step?: number;
+    name?: string; // <--- Добавили пропс для форм
+    class?: string;
+    [key: string]: any;
+}
+
+const { defaultValue = [0], min = 0, max = 100, step = 1, name, class: className, ...rest } = Astro.props;
+
+const initialValues = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
+const isArray = JSON.stringify(initialValues);
+---
+
+<div
+    x-data={`slider(${isArray}, ${min}, ${max}, ${step})`}
+    x-on:pointermove.window="drag($event)"
+    x-on:pointerup.window="endDrag()"
+    class={cn("relative flex w-full touch-none select-none data-[disabled]:opacity-50", className)}
+    data-slot="slider"
+    {...rest}
+>
+    <!-- Трек (линия) -->
+    <div
+        x-ref="track"
+        data-slot="slider-track"
+        class="relative h-1 w-full grow overflow-hidden rounded-full bg-muted self-center"
+    >
+        <!-- Индикатор (заполненная часть) -->
+        <div data-slot="slider-range" class="absolute h-full bg-primary" :style="getRangeStyle()"></div>
+    </div>
+
+    <!-- Ползунки (Thumbs) -->
+    <template x-for="(value, index) in values" :key="index">
+        <div
+            data-slot="slider-thumb"
+            class="absolute top-1/2 block size-3 shrink-0 -translate-x-1/2 -translate-y-1/2 cursor-grab rounded-full border border-ring bg-background ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-none active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+            :style="getThumbStyle(index)"
+            x-on:pointerdown="startDrag(index, $event)"
+            role="slider"
+            :aria-valuenow="value"
+            :aria-valuemin="min"
+            :aria-valuemax="max"
+            tabindex="0"
+        >
+        </div>
+    </template>
+
+    <!-- СКРЫТЫЙ ИНПУТ ДЛЯ ОТПРАВКИ В ФОРМУ -->
+    {name && (
+        <input type="hidden" name={name} :value="values.join(',')" />
+    )}
+</div>

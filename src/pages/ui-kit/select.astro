@@ -1,0 +1,288 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectLabel,
+    SelectSeparator,
+} from "../../components/ui/select";
+import Button from "../../components/ui/Button.astro";
+
+// Вспомогательная функция для флагов в примере
+const flag = (code: string) =>
+    `<span class="fi fi-${code} inline-block w-4 h-3 rounded-[0.125rem] align-middle"></span>`;
+const ruLabel = `${flag("ru")} Россия`;
+const byLabel = `${flag("by")} Беларусь`;
+const usLabel = `${flag("us")} США`;
+
+const basicCode = `import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../components/ui/select';
+
+<Select defaultLabel="Выберите фрукт...">
+  <SelectTrigger class="w-48">
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="apple" label="Яблоко">Яблоко</SelectItem>
+    <SelectItem value="banana" label="Банан">Банан</SelectItem>
+  </SelectContent>
+</Select>`;
+
+const groupCode = `import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem, SelectGroup, SelectLabel, SelectSeparator } from '../../components/ui/select';
+
+<Select defaultLabel="Выберите город...">
+  <SelectTrigger class="w-56">
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Европа</SelectLabel>
+      <SelectItem value="msk" label="Москва">Москва</SelectItem>
+      <SelectItem value="spb" label="Санкт-Петербург">Санкт-Петербург</SelectItem>
+    </SelectGroup>
+    <SelectSeparator />
+    <SelectGroup>
+      <SelectLabel>Азия</SelectLabel>
+      <SelectItem value="nsk" label="Новосибирск">Новосибирск</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>`;
+
+const htmlCode = `// ВАЖНО: Для флагов установите пакет: npm install flag-icons
+// И добавьте в src/styles/global.css: @import 'flag-icons/css/flag-icons.min.css';
+
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../components/ui/select';
+
+const flag = (code: string) => \`\`<span class="fi fi-\${code} inline-block w-4 h-3 rounded-[0.125rem] align-middle"></span>\`\`;
+const ruLabel = \`\${flag('ru')} Россия\`;
+const byLabel = \`\${flag('by')} Беларусь\`\`;
+
+<!-- Обязательно передаем HTML строку в defaultLabel и в label -->
+<Select defaultValue="ru" defaultLabel={ruLabel}>
+  <SelectTrigger class="w-48">
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="ru" label={ruLabel}>
+      <Fragment set:html={flag('ru')} />
+      <span>Россия</span>
+    </SelectItem>
+    <SelectItem value="by" label={byLabel}>
+      <Fragment set:html={flag('by')} />
+      <span>Беларусь</span>
+    </SelectItem>
+  </SelectContent>
+</Select>`;
+
+const emojisCode = `import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../components/ui/select';
+
+<!-- Эмодзи работают прямо из коробки, так как это текст -->
+<Select defaultValue="active" defaultLabel="✅ Активен">
+  <SelectTrigger size="sm" class="w-48">
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="active" label="✅ Активен">✅ Активен</SelectItem>
+    <SelectItem value="pending" label="⏳ В ожидании">⏳ В ожидании</SelectItem>
+    <SelectItem value="archived" label="📦 В архиве" disabled>📦 В архиве (недоступно)</SelectItem>
+  </SelectContent>
+</Select>`;
+
+const dynamicCode = `import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../components/ui/select';
+
+<!-- Ловим событие x-on:select-change (избегаем имени 'select', чтобы не конфликтовать с нативным) -->
+<div class="flex flex-col gap-4 w-full max-w-xs" x-data="{ role: 'user' }">
+  <Select defaultValue="user" defaultLabel="Пользователь" x-on:select-change="role = $event.detail">
+    <SelectTrigger>
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="admin" label="Администратор">Администратор</SelectItem>
+      <SelectItem value="user" label="Пользователь">Пользователь</SelectItem>
+      <SelectItem value="guest" label="Гость">Гость</SelectItem>
+    </SelectContent>
+  </Select>
+  
+  <div class="text-sm text-muted-foreground">
+    Выбранная роль: <span class="font-bold text-primary" x-text="role"></span>
+  </div>
+</div>`;
+
+const formCode = `import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../../components/ui/select';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Просто навешиваем name="fruit" и всё улетит на сервер! -->
+<form @submit.prevent="alert('Фрукт: ' + new FormData($event.target).get('fruit'))" class="flex flex-col gap-4 w-full max-w-xs">
+  <Select defaultValue="apple" defaultLabel="Яблоко" name="fruit">
+    <SelectTrigger>
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="apple" label="Яблоко">Яблоко</SelectItem>
+      <SelectItem value="banana" label="Банан">Банан</SelectItem>
+    </SelectContent>
+  </Select>
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Select">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Select</h1>
+            <p class="text-muted-foreground text-lg">
+                Выпадающий список с поддержкой телепорта, умного позиционирования, группировок, кастомного HTML (иконки,
+                флаги) и отправки данных в формы.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ СПИСОК -->
+        <ComponentDoc
+            title="Базовый список"
+            description="Простой выпадающий список. В SelectItem обязательно передавайте value и label."
+            code={basicCode}
+        >
+            <div class="flex justify-center">
+                <Select defaultLabel="Выберите фрукт...">
+                    <SelectTrigger class="w-48">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="apple" label="Яблоко">Яблоко</SelectItem>
+                        <SelectItem value="banana" label="Банан">Банан</SelectItem>
+                        <SelectItem value="orange" label="Апельсин">Апельсин</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. С ГРУППИРОВКОЙ -->
+        <ComponentDoc
+            title="Группировка и разделители"
+            description="Используйте SelectGroup и SelectLabel для логического объединения пунктов."
+            code={groupCode}
+        >
+            <div class="flex justify-center">
+                <Select defaultLabel="Выберите город...">
+                    <SelectTrigger class="w-56">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Европа</SelectLabel>
+                            <SelectItem value="msk" label="Москва">Москва</SelectItem>
+                            <SelectItem value="spb" label="Санкт-Петербург">Санкт-Петербург</SelectItem>
+                        </SelectGroup>
+                        <SelectSeparator />
+                        <SelectGroup>
+                            <SelectLabel>Азия</SelectLabel>
+                            <SelectItem value="nsk" label="Новосибирск">Новосибирск</SelectItem>
+                            <SelectItem value="vlk" label="Владивосток">Владивосток</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ИКОНКИ И ФЛАГИ (КАСТОМНЫЙ HTML) -->
+        <ComponentDoc
+            title="Иконки и HTML (Flags)"
+            description="Селект умеет рендерить HTML! Требуется установка пакета: npm install flag-icons. Код включает инструкции по импорту стилей."
+            code={htmlCode}
+        >
+            <div class="flex justify-center">
+                <Select defaultValue="ru" defaultLabel={ruLabel}>
+                    <SelectTrigger class="w-48">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="ru" label={ruLabel}>
+                            <Fragment set:html={flag("ru")} />
+                            <span>Россия</span>
+                        </SelectItem>
+                        <SelectItem value="by" label={byLabel}>
+                            <Fragment set:html={flag("by")} />
+                            <span>Беларусь</span>
+                        </SelectItem>
+                        <SelectItem value="us" label={usLabel}>
+                            <Fragment set:html={flag("us")} />
+                            <span>США</span>
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ЭМОДЗИ И СОСТОЯНИЯ -->
+        <ComponentDoc
+            title="Эмодзи и Disabled"
+            description="Эмодзи работают из коробки. Показываем разные статусы с заблокированным пунктом."
+            code={emojisCode}
+        >
+            <div class="flex justify-center">
+                <Select defaultValue="active" defaultLabel="✅ Активен">
+                    <SelectTrigger size="sm" class="w-48">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="active" label="✅ Активен">✅ Активен</SelectItem>
+                        <SelectItem value="pending" label="⏳ В ожидании">⏳ В ожидании</SelectItem>
+                        <SelectItem value="archived" label="📦 В архиве" disabled>📦 В архиве (недоступно)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. ДИНАМИЧЕСКИЙ ВЫВОД -->
+        <ComponentDoc
+            title="Вывод значения на экран"
+            description="Реальный пример: ловим событие x-on:select-change через Alpine.js и меняем данные на странице."
+            code={dynamicCode}
+        >
+            <div class="flex flex-col gap-4 w-full max-w-xs" x-data="{ role: 'user' }">
+                <Select defaultValue="user" defaultLabel="Пользователь" x-on:select-change="role = $event.detail">
+                    <SelectTrigger>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="admin" label="Администратор">Администратор</SelectItem>
+                        <SelectItem value="user" label="Пользователь">Пользователь</SelectItem>
+                        <SelectItem value="guest" label="Гость">Гость</SelectItem>
+                    </SelectContent>
+                </Select>
+
+                <div class="text-sm text-muted-foreground">
+                    Выбранная роль: <span class="font-bold text-primary" x-text="role"></span>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 6. ОТПРАВКА В ФОРМУ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Просто передай пропс name, и компонент создаст скрытый input. Значение улетит на сервер при сабмите."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Фрукт: ' + new FormData($event.target).get('fruit'))"
+                class="flex flex-col gap-4 w-full max-w-xs"
+            >
+                <Select defaultValue="apple" defaultLabel="Яблоко" name="fruit">
+                    <SelectTrigger>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="apple" label="Яблоко">Яблоко</SelectItem>
+                        <SelectItem value="banana" label="Банан">Банан</SelectItem>
+                    </SelectContent>
+                </Select>
+                <Button type="submit" class="w-full mt-2">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

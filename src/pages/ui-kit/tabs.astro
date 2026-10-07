@@ -1,0 +1,167 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../components/ui/tabs";
+import { User, Settings, CreditCard } from "@lucide/astro";
+
+const basicCode = `import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
+
+<Tabs defaultValue="account">
+  <TabsList>
+    <TabsTrigger value="account">Аккаунт</TabsTrigger>
+    <TabsTrigger value="password">Пароль</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">
+    Настройки аккаунта. Меняй имя, почту и фото профиля.
+  </TabsContent>
+  <TabsContent value="password">
+    Смени пароль, чтобы сделать аккаунт безопаснее.
+  </TabsContent>
+</Tabs>`;
+
+const lineCode = `import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
+
+<Tabs defaultValue="overview">
+  <TabsList variant="line">
+    <TabsTrigger value="overview">Обзор</TabsTrigger>
+    <TabsTrigger value="analytics">Аналитика</TabsTrigger>
+    <TabsTrigger value="settings">Настройки</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">Общая информация по проекту.</TabsContent>
+  <TabsContent value="analytics">Графики и цифры.</TabsContent>
+  <TabsContent value="settings">Глубокие настройки проекта.</TabsContent>
+</Tabs>`;
+
+const iconsCode = `import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
+import { User, Settings, CreditCard } from '@lucide/astro';
+
+<Tabs defaultValue="profile">
+  <TabsList>
+    <TabsTrigger value="profile"><User class="size-4" /> Профиль</TabsTrigger>
+    <TabsTrigger value="billing"><CreditCard class="size-4" /> Биллинг</TabsTrigger>
+    <TabsTrigger value="settings"><Settings class="size-4" /> Настройки</TabsTrigger>
+  </TabsList>
+  <TabsContent value="profile">Данные профиля пользователя.</TabsContent>
+  <TabsContent value="billing">История платежей и карты.</TabsContent>
+  <TabsContent value="settings">Настройки интерфейса и уведомлений.</TabsContent>
+</Tabs>`;
+
+const defaultValueCode = `import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
+
+<!-- Используйте defaultValue, чтобы открыть нужную вкладку при загрузке -->
+<Tabs defaultValue="tab2">
+  <TabsList>
+    <TabsTrigger value="tab1">Первая</TabsTrigger>
+    <TabsTrigger value="tab2">Вторая (открыта)</TabsTrigger>
+    <TabsTrigger value="tab3">Третья</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab1">Контент первой вкладки.</TabsContent>
+  <TabsContent value="tab2">Контент второй вкладки. Она открыта по умолчанию!</TabsContent>
+  <TabsContent value="tab3">Контент третьей вкладки.</TabsContent>
+</Tabs>`;
+---
+
+<DashboardLayout title="Tabs">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Tabs</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для переключения между разными разделами контента. Поддерживает два визуальных варианта
+                (default и line) и иконки.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЕ ВКЛАДКИ -->
+        <ComponentDoc
+            title="Базовые вкладки"
+            description="Стандартный вид. Используйте пропс defaultValue для выбора открытой вкладки по умолчанию."
+            code={basicCode}
+        >
+            <Tabs defaultValue="account" class="w-full max-w-md">
+                <TabsList>
+                    <TabsTrigger value="account">Аккаунт</TabsTrigger>
+                    <TabsTrigger value="password">Пароль</TabsTrigger>
+                </TabsList>
+                <TabsContent value="account" class="mt-4 text-sm text-muted-foreground">
+                    Настройки аккаунта. Меняй имя, почту и фото профиля.
+                </TabsContent>
+                <TabsContent value="password" class="mt-4 text-sm text-muted-foreground">
+                    Смени пароль, чтобы сделать аккаунт безопаснее.
+                </TabsContent>
+            </Tabs>
+        </ComponentDoc>
+
+        <!-- 2. ВАРИАНТ С ПОДЧЕРКИВАНИЕМ (LINE) -->
+        <ComponentDoc
+            title="С подчеркиванием (Line)"
+            description="Минималистичный вариант. Добавьте пропс variant='line' в TabsList."
+            code={lineCode}
+        >
+            <Tabs defaultValue="overview" class="w-full max-w-md">
+                <TabsList variant="line">
+                    <TabsTrigger value="overview">Обзор</TabsTrigger>
+                    <TabsTrigger value="analytics">Аналитика</TabsTrigger>
+                    <TabsTrigger value="settings">Настройки</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" class="mt-4 text-sm text-muted-foreground">
+                    Общая информация по проекту.
+                </TabsContent>
+                <TabsContent value="analytics" class="mt-4 text-sm text-muted-foreground">
+                    Графики и цифры.
+                </TabsContent>
+                <TabsContent value="settings" class="mt-4 text-sm text-muted-foreground">
+                    Глубокие настройки проекта.
+                </TabsContent>
+            </Tabs>
+        </ComponentDoc>
+
+        <!-- 3. С ИКОНКАМИ -->
+        <ComponentDoc
+            title="С иконками"
+            description="Вкладки прекрасно работают с иконками из lucide-astro. Отступы рассчитаются автоматически."
+            code={iconsCode}
+        >
+            <Tabs defaultValue="profile" class="w-full max-w-md">
+                <TabsList>
+                    <TabsTrigger value="profile"><User class="size-4" /> Профиль</TabsTrigger>
+                    <TabsTrigger value="billing"><CreditCard class="size-4" /> Биллинг</TabsTrigger>
+                    <TabsTrigger value="settings"><Settings class="size-4" /> Настройки</TabsTrigger>
+                </TabsList>
+                <TabsContent value="profile" class="mt-4 text-sm text-muted-foreground">
+                    Данные профиля пользователя.
+                </TabsContent>
+                <TabsContent value="billing" class="mt-4 text-sm text-muted-foreground">
+                    История платежей и карты.
+                </TabsContent>
+                <TabsContent value="settings" class="mt-4 text-sm text-muted-foreground">
+                    Настройки интерфейса и уведомлений.
+                </TabsContent>
+            </Tabs>
+        </ComponentDoc>
+
+        <!-- 4. ПРЕДВЫБОР ВКЛАДКИ -->
+        <ComponentDoc
+            title="Предвыбор (Default Value)"
+            description="Пример того, как с помощью defaultValue открыть вторую вкладку при загрузке страницы."
+            code={defaultValueCode}
+        >
+            <Tabs defaultValue="tab2" class="w-full max-w-md">
+                <TabsList>
+                    <TabsTrigger value="tab1">Первая</TabsTrigger>
+                    <TabsTrigger value="tab2">Вторая (открыта)</TabsTrigger>
+                    <TabsTrigger value="tab3">Третья</TabsTrigger>
+                </TabsList>
+                <TabsContent value="tab1" class="mt-4 text-sm text-muted-foreground">
+                    Контент первой вкладки.
+                </TabsContent>
+                <TabsContent value="tab2" class="mt-4 text-sm text-muted-foreground">
+                    Контент второй вкладки. Она открыта по умолчанию!
+                </TabsContent>
+                <TabsContent value="tab3" class="mt-4 text-sm text-muted-foreground">
+                    Контент третьей вкладки.
+                </TabsContent>
+            </Tabs>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

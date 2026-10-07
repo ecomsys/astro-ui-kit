@@ -1,0 +1,19 @@
+---
+import { Loader2 } from "@lucide/astro";
+import { cn } from "../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<Loader2
+    data-slot="spinner"
+    role="status"
+    aria-label="Loading"
+    class={cn("size-4 animate-spin", className)}
+    {...rest}
+/>

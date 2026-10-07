@@ -1,0 +1,177 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Field,
+    FieldLabel,
+    FieldDescription,
+    FieldContent,
+    FieldError,
+    FieldGroup,
+    FieldSet,
+    FieldLegend,
+} from "../../components/ui/field";
+import Input from "../../components/ui/Input.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import { Field, FieldLabel, FieldDescription } from '../../components/ui/field';
+import Input from '../../components/ui/Input.astro';
+
+<div class="w-full max-w-sm">
+  <Field>
+    <FieldLabel for="email">Email</FieldLabel>
+    <Input id="email" type="email" placeholder="m@example.com" />
+    <FieldDescription>Мы никогда не передадим ваш email третьим лицам.</FieldDescription>
+  </Field>
+</div>`;
+
+const horizontalCode = `import { Field, FieldLabel, FieldContent, FieldDescription } from '../../components/ui/field';
+import Input from '../../components/ui/Input.astro';
+
+<div class="w-full max-w-lg">
+  <Field orientation="horizontal">
+    <FieldLabel for="username">Имя пользователя</FieldLabel>
+    <FieldContent>
+      <Input id="username" placeholder="ivan_dev" />
+      <FieldDescription>Только латинские буквы и цифры.</FieldDescription>
+    </FieldContent>
+  </Field>
+</div>`;
+
+const errorCode = `import { Field, FieldLabel, FieldError } from '../../components/ui/field';
+import Input from '../../components/ui/Input.astro';
+
+<div class="w-full max-w-sm">
+  <Field invalid={true}>
+    <FieldLabel for="password">Пароль</FieldLabel>
+    <Input id="password" type="password" placeholder="******" aria-invalid="true" />
+    <FieldError errors={[{ message: "Пароль должен содержать минимум 8 символов" }]} />
+  </Field>
+</div>`;
+
+const groupCode = `import { FieldSet, FieldLegend, FieldGroup, Field, FieldLabel } from '../../components/ui/field';
+import Input from '../../components/ui/Input.astro';
+
+<div class="w-full max-w-md">
+  <FieldSet>
+    <FieldLegend variant="label">Личные данные</FieldLegend>
+    <FieldGroup>
+      <Field>
+        <FieldLabel for="firstname">Имя</FieldLabel>
+        <Input id="firstname" placeholder="Иван" />
+      </Field>
+      <Field>
+        <FieldLabel for="lastname">Фамилия</FieldLabel>
+        <Input id="lastname" placeholder="Иванов" />
+      </Field>
+    </FieldGroup>
+  </FieldSet>
+</div>`;
+
+const formCode = `import { Field, FieldLabel, FieldError } from '../../components/ui/field';
+import Input from '../../components/ui/Input.astro';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Форма с ошибкой и алертом -->
+<form @submit.prevent="alert('Отправлено! Пароль: ' + new FormData($event.target).get('password'))" class="flex flex-col gap-6 w-full max-w-sm">
+  <Field invalid={true}>
+    <FieldLabel for="password">Пароль</FieldLabel>
+    <Input id="password" name="password" type="password" placeholder="******" aria-invalid="true" required />
+    <FieldError errors={[{ message: "Пароль должен содержать минимум 8 символов" }]} />
+  </Field>
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Field">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Field</h1>
+            <p class="text-muted-foreground text-lg">Умная обертка для форм.</p>
+        </div>
+
+        <ComponentDoc
+            title="Базовое поле"
+            description="Label, Input и Description выстраиваются в колонку с идеальными отступами."
+            code={basicCode}
+        >
+            <div class="w-full max-w-sm">
+                <Field>
+                    <FieldLabel for="email">Email</FieldLabel>
+                    <Input id="email" type="email" placeholder="m@example.com" />
+                    <FieldDescription>Мы никогда не передадим ваш email третьим лицам.</FieldDescription>
+                </Field>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Горизонтальное поле" description="Пропс orientation='horizontal'." code={horizontalCode}>
+            <div class="w-full max-w-lg">
+                <Field orientation="horizontal">
+                    <FieldLabel for="username">Имя пользователя</FieldLabel>
+                    <FieldContent>
+                        <Input id="username" placeholder="ivan_dev" />
+                        <FieldDescription>Только латинские буквы и цифры.</FieldDescription>
+                    </FieldContent>
+                </Field>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Состояние ошибки (Invalid)" description="Пропс invalid={true}." code={errorCode}>
+            <div class="w-full max-w-sm">
+                <Field invalid={true}>
+                    <FieldLabel for="password">Пароль</FieldLabel>
+                    <Input id="password" type="password" placeholder="******" aria-invalid="true" />
+                    <FieldError errors={[{ message: "Пароль должен содержать минимум 8 символов" }]} />
+                </Field>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Группировка (FieldSet)" description="Семантическая группировка полей." code={groupCode}>
+            <div class="w-full max-w-md">
+                <FieldSet>
+                    <FieldLegend variant="label">Личные данные</FieldLegend>
+                    <FieldGroup>
+                        <Field
+                            ><FieldLabel for="firstname">Имя</FieldLabel><Input
+                                id="firstname"
+                                placeholder="Иван"
+                            /></Field
+                        >
+                        <Field
+                            ><FieldLabel for="lastname">Фамилия</FieldLabel><Input
+                                id="lastname"
+                                placeholder="Иванов"
+                            /></Field
+                        >
+                    </FieldGroup>
+                </FieldSet>
+            </div>
+        </ComponentDoc>
+
+        <!-- НОВЫЙ ПРИМЕР С ФОРМОЙ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Поле с ошибкой внутри формы. При сабмите данные улетают в FormData, а ошибка отображается визуально."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Отправлено! Пароль: ' + new FormData($event.target).get('password'))"
+                class="flex flex-col gap-6 w-full max-w-sm"
+            >
+                <Field invalid={true}>
+                    <FieldLabel for="password">Пароль</FieldLabel>
+                    <Input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="******"
+                        aria-invalid="true"
+                        required
+                    />
+                    <FieldError errors={[{ message: "Пароль должен содержать минимум 8 символов" }]} />
+                </Field>
+                <Button type="submit" class="w-full">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

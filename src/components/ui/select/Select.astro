@@ -1,0 +1,43 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    defaultValue?: string;
+    defaultLabel?: string;
+    side?: "top" | "bottom" | "left" | "right";
+    align?: "start" | "center" | "end";
+    sideOffset?: number;
+    name?: string; // <--- Добавили пропс для форм
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    defaultValue = "",
+    defaultLabel = "Выберите...",
+    side = "bottom",
+    align = "start",
+    sideOffset = 4,
+    name, // <--- Извлекли
+    class: className,
+    ...rest
+} = Astro.props;
+
+const safeDefault = defaultValue.replace(/'/g, "\\'");
+const safeLabel = defaultLabel.replace(/'/g, "\\'");
+const safeSide = side.replace(/'/g, "\\'");
+const safeAlign = align.replace(/'/g, "\\'");
+---
+
+<div
+    x-data={`select('${safeDefault}', '${safeLabel}', '${safeSide}', '${safeAlign}', ${sideOffset})`}
+    x-on:keydown.escape.window="hide()"
+    class={className}
+    data-slot="select"
+    {...rest}
+>
+    <!-- СКРЫТЫЙ ИНПУТ ДЛЯ ОТПРАВКИ В ФОРМУ -->
+    {name && <input type="hidden" name={name} x-model="selectedValue" />}
+
+    <slot />
+</div>

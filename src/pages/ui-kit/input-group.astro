@@ -1,0 +1,106 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupButton,
+    InputGroupText,
+} from "../../components/ui/input-group";
+import { Search, Eye, EyeOff, Globe } from "@lucide/astro";
+
+const searchCode = `import { InputGroup, InputGroupAddon, InputGroupInput } from '../../components/ui/input-group';
+import { Search } from '@lucide/astro';
+
+<div class="w-full max-w-sm">
+  <InputGroup>
+    <InputGroupAddon align="inline-start">
+      <Search class="size-4" />
+    </InputGroupAddon>
+    <InputGroupInput placeholder="Поиск..." />
+  </InputGroup>
+</div>`;
+
+const urlCode = `import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupButton, InputGroupText } from '../../components/ui/input-group';
+import { Globe } from '@lucide/astro';
+
+<div class="w-full max-w-sm">
+  <InputGroup>
+    <InputGroupAddon align="inline-start">
+      <InputGroupText>https://</InputGroupText>
+    </InputGroupAddon>
+    <InputGroupInput placeholder="mysite.com" />
+    <InputGroupAddon align="inline-end">
+      <InputGroupButton size="icon-sm">
+        <Globe class="size-4" />
+      </InputGroupButton>
+    </InputGroupAddon>
+  </InputGroup>
+</div>`;
+
+const passwordCode = `import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupButton } from '../../components/ui/input-group';
+import { Eye, EyeOff } from '@lucide/astro';
+
+<div class="w-full max-w-sm" x-data="{ visible: false }">
+  <InputGroup>
+    <InputGroupInput :type="visible ? 'text' : 'password'" placeholder="Введите пароль" class="pr-10" />
+    <InputGroupAddon align="inline-end">
+      <InputGroupButton size="icon-sm" x-on:click="visible = !visible">
+        <Eye x-show="!visible" class="size-4" />
+        <EyeOff x-show="visible" x-cloak class="size-4" />
+      </InputGroupButton>
+    </InputGroupAddon>
+  </InputGroup>
+</div>`;
+---
+
+<DashboardLayout title="Input Group">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Input Group</h1>
+            <p class="text-muted-foreground text-lg">
+                Обертка для инпутов, позволяющая добавлять иконки, текст или кнопки внутри поля.
+            </p>
+        </div>
+
+        <ComponentDoc title="С иконкой слева" description="InputGroupAddon с иконкой." code={searchCode}>
+            <div class="w-full max-w-sm">
+                <InputGroup>
+                    <InputGroupAddon align="inline-start"><Search class="size-4" /></InputGroupAddon>
+                    <InputGroupInput placeholder="Поиск..." />
+                </InputGroup>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="С текстом и кнопкой" description="InputGroupText и InputGroupButton." code={urlCode}>
+            <div class="w-full max-w-sm">
+                <InputGroup>
+                    <InputGroupAddon align="inline-start"><InputGroupText>https://</InputGroupText></InputGroupAddon>
+                    <InputGroupInput placeholder="mysite.com" />
+                    <InputGroupAddon align="inline-end"
+                        ><InputGroupButton size="icon-sm"><Globe class="size-4" /></InputGroupButton></InputGroupAddon
+                    >
+                </InputGroup>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Поле пароля (Show/Hide)"
+            description="Кнопка-глазик для переключения видимости пароля."
+            code={passwordCode}
+        >
+            <div class="w-full max-w-sm" x-data="{ visible: false }">
+                <InputGroup>
+                    <InputGroupInput :type="visible ? 'text' : 'password'" placeholder="Введите пароль" class="pr-10" />
+                    <InputGroupAddon align="inline-end">
+                        <InputGroupButton size="icon-sm" x-on:click="visible = !visible">
+                            <Eye x-show="!visible" class="size-4" />
+                            <EyeOff x-show="visible" x-cloak class="size-4" />
+                        </InputGroupButton>
+                    </InputGroupAddon>
+                </InputGroup>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

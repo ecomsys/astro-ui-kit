@@ -1,0 +1,22 @@
+---
+import { cn } from "../../../lib/utils";
+import Button from "../Button.astro";
+import { PanelLeftIcon } from "@lucide/astro";
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+
+<Button
+    variant="ghost"
+    size="icon-sm"
+    class={cn(className)}
+    x-on:click="toggleSidebar()"
+    data-slot="sidebar-trigger"
+    {...rest}
+>
+    <PanelLeftIcon />
+    <span class="sr-only">Toggle Sidebar</span>
+</Button>

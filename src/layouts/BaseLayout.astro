@@ -1,0 +1,40 @@
+---
+import "../styles/global.css";
+import Toaster from "../components/ui/sonner/Toaster.astro";
+
+// ИМПОРТИРУЕМ НАШИ МОДУЛИ
+import AutoRem from "../components/system/AutoRem.astro";
+import Viewport from "../components/system/Viewport.astro";
+
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+
+        <!-- Скрипт антифликер: применяет тему ДО того, как страница отрисуется -->
+        <script is:inline>
+            const theme =
+                localStorage.getItem("theme") ||
+                (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            if (theme === "dark") document.documentElement.classList.add("dark");
+        </script>
+        <!-- ПОДКЛЮЧАЕМ АВТО-REM И VIEWPORT КАК КОМПОНЕНТЫ -->
+        <AutoRem baseSiteWidth={1536} baseFontSize={16} />
+        <Viewport breakpoint={1536} designWidth={1920} />
+    </head>
+    <body class="bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300">
+        <slot />
+
+        <!-- Добавляем Toaster -->
+        <Toaster sound={true} />
+    </body>
+</html>

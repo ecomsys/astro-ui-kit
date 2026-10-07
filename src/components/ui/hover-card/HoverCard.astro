@@ -1,0 +1,34 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    side?: "top" | "bottom" | "left" | "right";
+    align?: "start" | "center" | "end";
+    sideOffset?: number;
+    delay?: number; // <--- Добавили
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    side = "bottom",
+    align = "center",
+    sideOffset = 4,
+    delay = 200, // <--- Добавили
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<div
+    x-data={`hoverCard('${side}', '${align}', ${sideOffset}, ${delay})`}
+    x-on:mouseenter="show()"
+    x-on:mouseleave="hide()"
+    x-on:keydown.escape.window="forceHide()"
+    x-on:scroll.window="forceHide()"
+    class={cn("relative inline-flex w-fit", className)}
+    data-slot="hover-card"
+    {...rest}
+>
+    <slot />
+</div>

@@ -1,0 +1,40 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    value: string;
+    disabled?: boolean;
+    class?: string;
+    indicatorClass?: string;
+    [key: string]: any;
+}
+
+const { value, disabled = false, class: className, indicatorClass, ...rest } = Astro.props;
+
+const baseClasses =
+    "group/radio-group-item peer relative flex aspect-square size-4 shrink-0 rounded-full border border-input outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40";
+
+const activeClasses = "data-[checked=true]:border-primary data-[checked=true]:text-primary";
+---
+
+<button
+    type="button"
+    role="radio"
+    x-on:click={`selectedValue = '${value}'; $dispatch('select-change', '${value}')`}
+    x-bind:aria-checked={`selectedValue === '${value}'`}
+    x-bind:data-checked={`selectedValue === '${value}' ? 'true' : 'false'`}
+    class={cn(baseClasses, activeClasses, className)}
+    data-slot="radio-group-item"
+    disabled={disabled}
+    tabindex="0"
+    {...rest}
+>
+    <span
+        data-slot="radio-group-indicator"
+        class="flex items-center justify-center w-full h-full"
+        x-show={`selectedValue === '${value}'`}
+        x-cloak
+    >
+        <span class={cn("rounded-full bg-current size-1/2", indicatorClass)}></span>
+    </span>
+</button>

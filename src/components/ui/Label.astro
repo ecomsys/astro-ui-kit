@@ -1,0 +1,19 @@
+---
+import { cn } from "../../lib/utils";
+
+export interface Props {
+  class?: string;
+  [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+
+const baseClasses =
+  "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50";
+
+const computedClasses = cn(baseClasses, className);
+---
+
+<label data-slot="label" class={computedClasses} {...rest}>
+  <slot />
+</label>

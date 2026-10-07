@@ -1,0 +1,8 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<h2 data-slot="drawer-title" class={cn("text-lg font-semibold text-foreground", className)} {...rest}>
+    <slot />
+</h2>

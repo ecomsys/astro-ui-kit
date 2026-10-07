@@ -1,0 +1,38 @@
+---
+import { cn } from "../../../lib/utils";
+import ScrollBar from "./ScrollBar.astro";
+
+export interface Props {
+    hover?: boolean;
+    horizontal?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+
+const { hover = false, horizontal = false, class: className, ...rest } = Astro.props;
+---
+
+<div
+    x-data="scrollArea()"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
+    @mousemove.window="onDrag($event)"
+    @mouseup.window="stopDrag()"
+    @touchmove.window="onDrag($event)"
+    @touchend.window="stopDrag()"
+    class={cn("relative overflow-hidden group", className)}
+    data-slot="scroll-area"
+    {...rest}
+>
+    <div
+        x-ref="viewport"
+        @scroll="onScroll()"
+        class="h-full w-full overflow-auto rounded-[inherit] outline-none focus-visible:ring-[0.25rem] focus-visible:ring-ring/50 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        data-slot="scroll-area-viewport"
+    >
+        <slot />
+    </div>
+
+    <ScrollBar orientation="vertical" hover={hover} />
+    {horizontal && <ScrollBar orientation="horizontal" hover={hover} />}
+</div>

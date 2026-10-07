@@ -1,0 +1,27 @@
+---
+import { cn } from "../../../lib/utils";
+import Button from "../Button.astro";
+
+export interface Props {
+    href?: string;
+    isActive?: boolean;
+    size?: "default" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
+    class?: string;
+    [key: string]: any;
+}
+
+const { href = "#", isActive = false, size = "icon", class: className, ...rest } = Astro.props;
+---
+
+<Button
+    href={href}
+    variant={isActive ? "outline" : "ghost"}
+    size={size}
+    aria-current={isActive ? "page" : undefined}
+    data-slot="pagination-link"
+    data-active={isActive ? "true" : undefined}
+    class={cn(className)}
+    {...rest}
+>
+    <slot />
+</Button>

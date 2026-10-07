@@ -1,0 +1,107 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Kbd, KbdGroup } from "../../components/ui/kbd";
+
+const basicCode = `import { Kbd } from '../../components/ui/kbd';
+
+<div class="flex flex-wrap gap-2">
+  <Kbd>Shift</Kbd>
+  <Kbd>Ctrl</Kbd>
+  <Kbd>Alt</Kbd>
+  <Kbd>Esc</Kbd>
+  <Kbd>Tab</Kbd>
+</div>`;
+
+const groupCode = `import { Kbd, KbdGroup } from '../../components/ui/kbd';
+
+<!-- KbdGroup объединяет клавиши с правильными отступами -->
+<div class="flex flex-wrap gap-4">
+  <KbdGroup>
+    <Kbd>Ctrl</Kbd>
+    <Kbd>K</Kbd>
+  </KbdGroup>
+
+  <KbdGroup>
+    <Kbd>Shift</Kbd>
+    <Kbd>Alt</Kbd>
+    <Kbd>Delete</Kbd>
+  </KbdGroup>
+</div>`;
+
+const usageCode = `import { Kbd, KbdGroup } from '../../components/ui/kbd';
+
+<!-- Классический пункт меню с горячими клавишами справа -->
+<div class="flex items-center justify-between p-2 border rounded-md w-64">
+  <span class="text-sm font-medium">Открыть поиск</span>
+  <KbdGroup>
+    <Kbd>Ctrl</Kbd>
+    <Kbd>K</Kbd>
+  </KbdGroup>
+</div>`;
+---
+
+<DashboardLayout title="Kbd">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Kbd</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для отображения клавиш клавиатуры и горячих клавиш (shortcuts). Используйте KbdGroup для
+                объединения клавиш в комбинации.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЕ КЛАВИШИ -->
+        <ComponentDoc
+            title="Базовые клавиши"
+            description="Отдельные клавиши. Идеально подходят для обозначения модификаторов и отдельных кнопок."
+            code={basicCode}
+        >
+            <div class="flex flex-wrap gap-2">
+                <Kbd>Shift</Kbd>
+                <Kbd>Ctrl</Kbd>
+                <Kbd>Alt</Kbd>
+                <Kbd>Esc</Kbd>
+                <Kbd>Tab</Kbd>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. КОМБИНАЦИИ (ГРУППЫ) -->
+        <ComponentDoc
+            title="Комбинации (KbdGroup)"
+            description="Используйте KbdGroup, чтобы объединить несколько клавиш в один шорткат. Отступы рассчитаются автоматически."
+            code={groupCode}
+        >
+            <div class="flex flex-wrap gap-4">
+                <KbdGroup>
+                    <Kbd>Ctrl</Kbd>
+                    <Kbd>K</Kbd>
+                </KbdGroup>
+
+                <KbdGroup>
+                    <Kbd>Shift</Kbd>
+                    <Kbd>Alt</Kbd>
+                    <Kbd>Delete</Kbd>
+                </KbdGroup>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ПРИМЕР ИСПОЛЬЗОВАНИЯ В МЕНЮ -->
+        <ComponentDoc
+            title="Пример использования"
+            description="Часто применяется в выпадающих меню (Dropdown) или командной палитре (Command) для подсказки шортката."
+            code={usageCode}
+        >
+            <div class="flex justify-center">
+                <div class="flex items-center justify-between p-2 border rounded-md w-64 bg-card">
+                    <span class="text-sm font-medium">Открыть поиск</span>
+                    <KbdGroup>
+                        <Kbd>Ctrl</Kbd>
+                        <Kbd>K</Kbd>
+                    </KbdGroup>
+                </div>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

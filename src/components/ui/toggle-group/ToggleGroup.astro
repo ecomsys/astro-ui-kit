@@ -1,0 +1,62 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    type?: "single" | "multiple";
+    defaultValue?: string | string[];
+    orientation?: "horizontal" | "vertical";
+    spacing?: number;
+    variant?: "default" | "outline";
+    size?: "default" | "sm" | "lg";
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    type = "single",
+    defaultValue = type === "multiple" ? [] : "",
+    orientation = "horizontal",
+    spacing = 2,
+    variant = "default",
+    size = "default",
+    class: className,
+    ...rest
+} = Astro.props;
+
+// Форматируем defaultValue для вставки в JS-строку Alpine
+const defaultValStr = type === "multiple" ? JSON.stringify(defaultValue) : `'${defaultValue}'`;
+---
+
+<div
+    x-data={`{
+    type: '${type}',
+    selected: ${defaultValStr},
+    toggle(value) {
+      if (this.type === 'multiple') {
+        if (this.selected.includes(value)) {
+          this.selected = this.selected.filter(v => v !== value);
+        } else {
+          this.selected.push(value);
+        }
+      } else {
+        this.selected = this.selected === value ? '' : value;
+      }
+    },
+    isSelected(value) {
+      return this.type === 'multiple' ? this.selected.includes(value) : this.selected === value;
+    }
+  }`}
+    data-slot="toggle-group"
+    data-variant={variant}
+    data-size={size}
+    data-spacing={spacing}
+    data-orientation={orientation}
+    style={`--gap: ${spacing}`}
+    class={cn(
+        "group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch",
+        className,
+    )}
+    {...rest}
+>
+    <slot />
+</div>

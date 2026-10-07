@@ -1,0 +1,123 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from "../../components/ui/empty";
+import Button from "../../components/ui/Button.astro";
+import { SearchX, ShoppingCart, ArrowRight } from "@lucide/astro";
+
+const basicCode = `import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '../../components/ui/empty';
+
+<Empty>
+  <EmptyHeader>
+    <EmptyTitle>Результаты не найдены</EmptyTitle>
+    <EmptyDescription>
+      Мы не смогли найти то, что вы искали. Попробуйте изменить запрос.
+    </EmptyDescription>
+  </EmptyHeader>
+</Empty>`;
+
+const iconCode = `import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '../../components/ui/empty';
+import { SearchX } from '@lucide/astro';
+
+<!-- Используйте EmptyMedia с variant="icon", чтобы иконка лежала в красивом сером квадратике -->
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <SearchX />
+    </EmptyMedia>
+    <EmptyTitle>Поиск не дал результатов</EmptyTitle>
+    <EmptyDescription>Попробуйте использовать другие ключевые слова или очистить фильтры.</EmptyDescription>
+  </EmptyHeader>
+</Empty>`;
+
+const cartCode = `import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription, EmptyContent } from '../../components/ui/empty';
+import Button from '../../components/ui/Button.astro';
+import { ShoppingCart, ArrowRight } from '@lucide/astro';
+
+<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <ShoppingCart />
+    </EmptyMedia>
+    <EmptyTitle>Ваша корзина пуста</EmptyTitle>
+    <EmptyDescription>Добавьте товары из каталога, чтобы оформить заказ.</EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button>Перейти в каталог <ArrowRight class="size-4" /></Button>
+  </EmptyContent>
+</Empty>`;
+---
+
+<DashboardLayout title="Empty">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Empty</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для отображения пустых состояний (нет данных, пустой поиск, пустая корзина). Состоит из
+                иконки, заголовка, описания и кнопок действия.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ EMPTY -->
+        <ComponentDoc
+            title="Базовый"
+            description="Простой текстовый блок. Используется, когда не хватает места для больших иконок."
+            code={basicCode}
+        >
+            <div class="w-full max-w-md border rounded-lg p-4 bg-card">
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyTitle>Результаты не найдены</EmptyTitle>
+                        <EmptyDescription>
+                            Мы не смогли найти то, что вы искали. Попробуйте изменить запрос.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. С ИКОНКОЙ (VARIANT="ICON") -->
+        <ComponentDoc
+            title="С иконкой"
+            description="EmptyMedia с пропсом variant='icon' кладет иконку в аккуратный серый квадрат (size-8, bg-muted)."
+            code={iconCode}
+        >
+            <div class="w-full max-w-md border rounded-lg p-4 bg-card">
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <SearchX />
+                        </EmptyMedia>
+                        <EmptyTitle>Поиск не дал результатов</EmptyTitle>
+                        <EmptyDescription
+                            >Попробуйте использовать другие ключевые слова или очистить фильтры.</EmptyDescription
+                        >
+                    </EmptyHeader>
+                </Empty>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ПУСТАЯ КОРЗИНА (С КНОПКОЙ) -->
+        <ComponentDoc
+            title="С кнопкой действия (Call to Action)"
+            description="Реальный пример: пустая корзина. Кнопка кладется в EmptyContent, чтобы получить правильные отступы."
+            code={cartCode}
+        >
+            <div class="w-full max-w-md border rounded-lg p-4 bg-card">
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <ShoppingCart />
+                        </EmptyMedia>
+                        <EmptyTitle>Ваша корзина пуста</EmptyTitle>
+                        <EmptyDescription>Добавьте товары из каталога, чтобы оформить заказ.</EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button>Перейти в каталог <ArrowRight class="size-4" /></Button>
+                    </EmptyContent>
+                </Empty>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

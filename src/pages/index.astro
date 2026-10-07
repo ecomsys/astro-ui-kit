@@ -1,0 +1,392 @@
+---
+import DashboardLayout from "../layouts/DashboardLayout.astro";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/card";
+import Badge from "../components/ui/Badge.astro";
+import { ArrowRight, Rocket } from "@lucide/astro";
+
+// Импортируем иконки для карточек
+import {
+    Square,
+    SquareStack,
+    Tag,
+    User,
+    Minus,
+    Loader,
+    Command,
+    LoaderCircle,
+    TrendingUp,
+    RectangleHorizontal,
+    TextCursorInput,
+    AlignLeft,
+    Paperclip,
+    Baseline,
+    FormInput,
+    WrapText,
+    CheckSquare,
+    ToggleLeft,
+    CircleDot,
+    SlidersHorizontal,
+    ChevronDown,
+    Search,
+    ChevronDownSquare,
+    KeyRound,
+    PanelTop,
+    Slash,
+    ChevronsRight,
+    Menu,
+    MenuSquare,
+    ChevronsUpDown,
+    PanelTopOpen,
+    ShieldAlert,
+    PanelRight,
+    PanelBottom,
+    MessageSquareDot,
+    MousePointerClick,
+    MousePointer,
+    SquareMousePointer,
+    BellRing,
+    AlertCircle,
+    Table,
+    Inbox,
+    ToggleRight,
+    Rows3,
+    Combine,
+    Scroll,
+    Move,
+    MessageCircle,
+    MessageSquare,
+    Calendar,
+    BarChart3,
+    GalleryHorizontalEnd,
+    FileText,
+} from "@lucide/astro";
+
+// Карта иконок для рендера
+const iconMap = {
+    Square,
+    SquareStack,
+    Tag,
+    User,
+    Minus,
+    Loader,
+    Command,
+    LoaderCircle,
+    TrendingUp,
+    RectangleHorizontal,
+    TextCursorInput,
+    AlignLeft,
+    Paperclip,
+    Baseline,
+    FormInput,
+    WrapText,
+    CheckSquare,
+    ToggleLeft,
+    CircleDot,
+    SlidersHorizontal,
+    ChevronDown,
+    Search,
+    ChevronDownSquare,
+    KeyRound,
+    PanelTop,
+    Slash,
+    ChevronsRight,
+    Menu,
+    MenuSquare,
+    ChevronsUpDown,
+    PanelTopOpen,
+    ShieldAlert,
+    PanelRight,
+    PanelBottom,
+    MessageSquareDot,
+    MousePointerClick,
+    MousePointer,
+    SquareMousePointer,
+    BellRing,
+    AlertCircle,
+    Table,
+    Inbox,
+    ToggleRight,
+    Rows3,
+    Combine,
+    Scroll,
+    Move,
+    MessageCircle,
+    MessageSquare,
+    Calendar,
+    BarChart3,
+    GalleryHorizontalEnd,
+    FileText,
+};
+
+// Полный список компонентов с описаниями и иконками
+const navGroups = [
+    {
+        title: "Базовые",
+        items: [
+            {
+                href: "/ui-kit/button",
+                label: "Button",
+                desc: "Кнопки с поддержкой ссылок, иконок и вариантов.",
+                icon: "Square",
+            },
+            { href: "/ui-kit/card", label: "Card", desc: "Карточки для группировки контента.", icon: "SquareStack" },
+            { href: "/ui-kit/badge", label: "Badge", desc: "Плашки для статусов и меток.", icon: "Tag" },
+            { href: "/ui-kit/avatar", label: "Avatar", desc: "Аватарки пользователей и группы.", icon: "User" },
+            { href: "/ui-kit/separator", label: "Separator", desc: "Линии-разделители.", icon: "Minus" },
+            { href: "/ui-kit/skeleton", label: "Skeleton", desc: "Заглушки при загрузке данных.", icon: "Loader" },
+            { href: "/ui-kit/kbd", label: "Kbd", desc: "Отображение горячих клавиш.", icon: "Command" },
+            { href: "/ui-kit/spinner", label: "Spinner", desc: "Крутящийся индикатор загрузки.", icon: "LoaderCircle" },
+            { href: "/ui-kit/progress", label: "Progress", desc: "Полоса выполнения задачи.", icon: "TrendingUp" },
+            {
+                href: "/ui-kit/aspect-ratio",
+                label: "Aspect Ratio",
+                desc: "Контейнер для сохранения пропорций.",
+                icon: "RectangleHorizontal",
+            },
+        ],
+    },
+    {
+        title: "Формы",
+        items: [
+            {
+                href: "/ui-kit/input",
+                label: "Input & Forms",
+                desc: "Поля ввода, лейблы и текстареа.",
+                icon: "TextCursorInput",
+            },
+            {
+                href: "/ui-kit/attachment",
+                label: "Attachment",
+                desc: "Поле для загрузки медиа вложений",
+                icon: "Paperclip",
+            },
+            { href: "/ui-kit/textarea", label: "Textarea", desc: "Многострочное поле ввода.", icon: "AlignLeft" },
+            { href: "/ui-kit/label", label: "Label", desc: "Подписи к полям ввода.", icon: "Baseline" },
+            {
+                href: "/ui-kit/field",
+                label: "Field",
+                desc: "Обертка над инпутами (Label + Input + Error).",
+                icon: "FormInput",
+            },
+            { href: "/ui-kit/input-group", label: "Input Group", desc: "Инпуты с иконками внутри.", icon: "WrapText" },
+            { href: "/ui-kit/checkbox", label: "Checkbox", desc: "Галочки выбора.", icon: "CheckSquare" },
+            { href: "/ui-kit/switch", label: "Switch", desc: "Тумблеры Вкл/Выкл.", icon: "ToggleLeft" },
+            { href: "/ui-kit/radio-group", label: "Radio Group", desc: "Радио-кнопки.", icon: "CircleDot" },
+            { href: "/ui-kit/slider", label: "Slider", desc: "Ползунки выбора значений.", icon: "SlidersHorizontal" },
+            { href: "/ui-kit/select", label: "Select", desc: "Кастомные выпадающие списки.", icon: "ChevronDown" },
+            {
+                href: "/ui-kit/combobox",
+                label: "Combobox",
+                desc: "Выпадающий список с поиском и чипсами.",
+                icon: "Search",
+            },
+            {
+                href: "/ui-kit/native-select",
+                label: "Native Select",
+                desc: "Стилизованный нативный <select>.",
+                icon: "ChevronDownSquare",
+            },
+            { href: "/ui-kit/input-otp", label: "Input OTP", desc: "Ввод кода из СМС по ячейкам.", icon: "KeyRound" },
+        ],
+    },
+    {
+        title: "Навигация",
+        items: [
+            { href: "/ui-kit/tabs", label: "Tabs", desc: "Переключаемые вкладки.", icon: "PanelTop" },
+            {
+                href: "/ui-kit/accordion",
+                label: "Accordion",
+                desc: "Раскрывающиеся списки (FAQ).",
+                icon: "ChevronDownSquare",
+            },
+            { href: "/ui-kit/breadcrumb", label: "Breadcrumb", desc: "Хлебные крошки для SEO.", icon: "Slash" },
+            { href: "/ui-kit/pagination", label: "Pagination", desc: "Постраничная навигация.", icon: "ChevronsRight" },
+            {
+                href: "/ui-kit/navigation-menu",
+                label: "Navigation Menu",
+                desc: "Мега-меню для шапки сайта.",
+                icon: "Menu",
+            },
+            { href: "/ui-kit/menubar", label: "Menubar", desc: "Меню как в Photoshop/VS Code.", icon: "MenuSquare" },
+            {
+                href: "/ui-kit/collapsible",
+                label: "Collapsible",
+                desc: "Простая сворачивалка контента.",
+                icon: "ChevronsUpDown",
+            },
+        ],
+    },
+    {
+        title: "Оверлеи",
+        items: [
+            { href: "/ui-kit/dialog", label: "Dialog", desc: "Модальные окна.", icon: "PanelTopOpen" },
+            {
+                href: "/ui-kit/alert-dialog",
+                label: "Alert Dialog",
+                desc: "Окно подтверждения (нельзя закрыть по клику вне).",
+                icon: "ShieldAlert",
+            },
+            { href: "/ui-kit/sheet", label: "Sheet", desc: "Выезжающие панели сбоку.", icon: "PanelRight" },
+            { href: "/ui-kit/drawer", label: "Drawer", desc: "Выезжающие драйверы.", icon: "PanelBottom" },
+            {
+                href: "/ui-kit/popover",
+                label: "Popover",
+                desc: "Всплывающие окна с контентом.",
+                icon: "MessageSquareDot",
+            },
+            { href: "/ui-kit/tooltip", label: "Tooltip", desc: "Подсказки при наведении.", icon: "MousePointerClick" },
+            {
+                href: "/ui-kit/hover-card",
+                label: "Hover Card",
+                desc: "Карточки профиля при наведении.",
+                icon: "MousePointer",
+            },
+            {
+                href: "/ui-kit/context-menu",
+                label: "Context Menu",
+                desc: "Меню по правой кнопке мыши.",
+                icon: "SquareMousePointer",
+            },
+            { href: "/ui-kit/sonner", label: "Sonner (Toasts)", desc: "Всплывающие уведомления.", icon: "BellRing" },
+        ],
+    },
+    {
+        title: "Отображение",
+        items: [
+            { href: "/ui-kit/alert", label: "Alert", desc: "Блоки с предупреждениями.", icon: "AlertCircle" },
+            { href: "/ui-kit/table", label: "Table", desc: "Стилизованные таблицы.", icon: "Table" },
+            { href: "/ui-kit/empty", label: "Empty", desc: 'Заглушки "Ничего не найдено".', icon: "Inbox" },
+            { href: "/ui-kit/toggle", label: "Toggle", desc: "Кнопка-переключатель (залипает).", icon: "ToggleRight" },
+            {
+                href: "/ui-kit/toggle-group",
+                label: "Toggle Group",
+                desc: "Группа кнопок-переключателей.",
+                icon: "Rows3",
+            },
+            { href: "/ui-kit/button-group", label: "Button Group", desc: "Склеенные группы кнопок.", icon: "Combine" },
+            { href: "/ui-kit/scroll-area", label: "Scroll Area", desc: "Кастомный скроллбар.", icon: "Scroll" },
+            { href: "/ui-kit/resizable", label: "Resizable", desc: "Изменяемые панели.", icon: "Move" },
+            { href: "/ui-kit/message", label: "Message", desc: "Сообщения для чатов и AI.", icon: "MessageCircle" },
+            { href: "/ui-kit/bubble", label: "Bubble", desc: "Пузыри сообщений для чатов.", icon: "MessageSquare" },
+        ],
+    },
+    {
+        title: "Комплексные",
+        items: [
+            { href: "/ui-kit/command", label: "Command", desc: "Палитра команд (Ctrl+K).", icon: "Command" },
+            { href: "/ui-kit/calendar", label: "Calendar", desc: "Календарь выбора дат.", icon: "Calendar" },
+            { href: "/ui-kit/date-picker", label: "Date Picker", desc: "Дата-пикер", icon: "Calendar" },
+            { href: "/ui-kit/charts", label: "Charts", desc: "Графики (Bar, Line, Donut).", icon: "BarChart3" },
+            {
+                href: "/ui-kit/carousel",
+                label: "Carousel",
+                desc: "Слайдеры с поддержкой свайпа.",
+                icon: "GalleryHorizontalEnd",
+            },
+            {
+                href: "/ui-kit/wysiwyg-editor",
+                label: "WYSIWYG Editor",
+                desc: "Текстовый редактор контента.",
+                icon: "FileText",
+            },
+        ],
+    },
+];
+
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
+const preparedNavGroups = navGroups.map((group) => ({
+    ...group,
+    items: group.items.map((item) => ({
+        ...item,
+        href: `${BASE}${item.href}`,
+    })),
+}));
+---
+
+<DashboardLayout title="Главная">
+    <!-- Обертка с x-cloak, чтобы скрыть элементы до инициализации Alpine -->
+    <div class="flex flex-col gap-12" x-data x-cloak>
+        <!-- ПРИВЕТСТВИЕ (скрывается при поиске) -->
+        <div
+            class="border rounded-xl p-6 md:p-8 bg-card shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 transition-opacity"
+            x-show="!$store.search.query"
+            style="display: flex;"
+        >
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Astro UI Kit</h1>
+                    <Badge variant="outline" class="text-xs">v1.0.0</Badge>
+                </div>
+                <p class="text-muted-foreground max-w-2xl text-sm md:text-base">
+                    Полноценная библиотека компонентов на Astro, Tailwind v4 и Alpine.js. Адаптивная, темная тема, ноль
+                    React-рантайма.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-2 shrink-0">
+                <span class="px-3 py-1 text-xs rounded-md bg-muted flex items-center gap-1 text-muted-foreground"
+                    ><Rocket class="size-3" /> Astro</span
+                >
+                <span class="px-3 py-1 text-xs rounded-md bg-muted text-muted-foreground">Tailwind v4</span>
+                <span class="px-3 py-1 text-xs rounded-md bg-muted text-muted-foreground">Alpine.js</span>
+            </div>
+        </div>
+
+        <!-- СЕТКА КОМПОНЕНТОВ ПО ГРУППАМ -->
+        {
+            preparedNavGroups.map((group) => (
+                <section
+                    class="flex flex-col gap-4"
+                    x-data={`{ items: ${JSON.stringify(group.items)} }`}
+                    x-show="!$store.search.query || items.some(i => (i.label + ' ' + i.desc).toLowerCase().includes($store.search.query.toLowerCase()))"
+                >
+                    <h2 class="text-xl font-semibold text-muted-foreground border-b pb-2" x-text="`${group.title}`">
+                        {group.title}
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {group.items.map((item, index) => {
+                            const Icon = iconMap[item.icon as keyof typeof iconMap];
+                            return (
+                                <a
+                                    href={item.href}
+                                    class="group block hover:scale-[1.02] transition-transform"
+                                    x-show={`!$store.search.query || (items[${index}].label + ' ' + items[${index}].desc).toLowerCase().includes($store.search.query.toLowerCase())`}
+                                >
+                                    <Card class="h-full hover:border-primary hover:shadow-md transition-all">
+                                        <CardHeader>
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-3">
+                                                    {Icon && (
+                                                        <Icon class="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                                    )}
+                                                    <CardTitle class="text-lg">{item.label}</CardTitle>
+                                                </div>
+                                                <ArrowRight class="size-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                            </div>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p class="text-sm text-muted-foreground">{item.desc}</p>
+                                        </CardContent>
+                                    </Card>
+                                </a>
+                            );
+                        })}
+                    </div>
+                </section>
+            ))
+        }
+
+        <!-- ЗАГЛУШКА "НИЧЕГО НЕ НАЙДЕНО" -->
+        <div
+            class="flex flex-col items-center justify-center py-20 text-center border border-dashed rounded-xl"
+            x-show=`$store.search.query && !document.querySelectorAll('section[x-show] [x-show]:not([style*="display:none"])').length`
+            style="display: none;"
+        >
+            <Inbox class="size-12 text-muted-foreground mb-4" />
+            <h3 class="text-xl font-semibold mb-2">Ничего не найдено</h3>
+            <p class="text-muted-foreground">
+                По запросу "<span x-text="$store.search.query" class="font-medium text-foreground"></span>" компонентов
+                нет.
+            </p>
+        </div>
+    </div>
+</DashboardLayout>

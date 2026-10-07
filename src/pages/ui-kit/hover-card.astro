@@ -1,0 +1,142 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "../../components/ui/hover-card";
+import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
+import Button from "../../components/ui/Button.astro";
+import { CalendarDays } from "@lucide/astro";
+
+const basicCode = `import { HoverCard, HoverCardTrigger, HoverCardContent } from '../../components/ui/hover-card';
+
+<div class="flex justify-center py-8">
+  Наведи на профиль: 
+  <HoverCard>
+    <HoverCardTrigger>
+      <a href="#" class="text-primary underline underline-offset-4 hover:opacity-80 ml-1">@virgo_ui</a>
+    </HoverCardTrigger>
+    <HoverCardContent>
+      <div class="flex flex-col gap-1">
+        <h4 class="text-sm font-semibold">@virgo_ui</h4>
+        <p class="text-sm text-muted-foreground">Официальный аккаунт UI-кита.</p>
+      </div>
+    </HoverCardContent>
+  </HoverCard>
+</div>`;
+
+const profileCode = `import { HoverCard, HoverCardTrigger, HoverCardContent } from '../../components/ui/hover-card';
+import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
+import Button from '../../components/ui/Button.astro';
+import { CalendarDays } from '@lucide/astro';
+
+<div class="flex justify-center py-8">
+  Наведи на имя: 
+  <HoverCard>
+    <HoverCardTrigger>
+      <a href="#" class="text-primary underline underline-offset-4 hover:opacity-80 ml-1">Иван Иванов</a>
+    </HoverCardTrigger>
+    <HoverCardContent class="w-72">
+      <div class="flex justify-between space-x-4">
+        <Avatar>
+          <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="Иван Иванов" />
+          <AvatarFallback>ИВ</AvatarFallback>
+        </Avatar>
+        <div class="space-y-1 flex-1">
+          <h4 class="text-sm font-semibold">Иван Иванов</h4>
+          <span class="text-xs text-muted-foreground">@ivan_dev</span>
+          <p class="text-sm">Фронтенд-разработчик. Пишу про Astro, Tailwind и Alpine.js.</p>
+          <Button size="xs" class="mt-2 w-full">Подписаться</Button>
+        </div>
+      </div>
+      <div class="flex items-center pt-3 mt-3 border-t text-xs text-muted-foreground">
+        <CalendarDays class="size-3 mr-2" />
+        Регистрация: 12 октября 2023
+      </div>
+    </HoverCardContent>
+  </HoverCard>
+</div>`;
+
+const sidesCode = `import { HoverCard, HoverCardTrigger, HoverCardContent } from '../../components/ui/hover-card';
+import Button from '../../components/ui/Button.astro';
+
+<div class="flex flex-wrap gap-4 justify-center py-12">
+  <HoverCard side="top">
+    <HoverCardTrigger><Button variant="outline">Сверху</Button></HoverCardTrigger>
+    <HoverCardContent>Карточка сверху</HoverCardContent>
+  </HoverCard>
+  <HoverCard side="bottom" align="start">
+    <HoverCardTrigger><Button variant="outline">Снизу (Старт)</Button></HoverCardTrigger>
+    <HoverCardContent>Карточка снизу слева</HoverCardContent>
+  </HoverCard>
+</div>`;
+---
+
+<DashboardLayout title="Hover Card">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Hover Card</h1>
+            <p class="text-muted-foreground text-lg">Всплывающая карточка с богатым контентом при наведении.</p>
+        </div>
+
+        <ComponentDoc title="Базовая карточка" description="Появляется при наведении на ссылку." code={basicCode}>
+            <div class="flex justify-center py-8">
+                Наведи на профиль: <HoverCard>
+                    <HoverCardTrigger
+                        ><a href="#" class="text-primary underline underline-offset-4 hover:opacity-80 ml-1"
+                            >@virgo_ui</a
+                        ></HoverCardTrigger
+                    >
+                    <HoverCardContent>
+                        <div class="flex flex-col gap-1">
+                            <h4 class="text-sm font-semibold">@virgo_ui</h4>
+                            <p class="text-sm text-muted-foreground">Официальный аккаунт UI-кита.</p>
+                        </div>
+                    </HoverCardContent>
+                </HoverCard>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Профиль пользователя" description="Классический кейс из соцсетей." code={profileCode}>
+            <div class="flex justify-center py-8">
+                Наведи на имя: <HoverCard>
+                    <HoverCardTrigger
+                        ><a href="#" class="text-primary underline underline-offset-4 hover:opacity-80 ml-1"
+                            >Иван Иванов</a
+                        ></HoverCardTrigger
+                    >
+                    <HoverCardContent class="w-72">
+                        <div class="flex justify-between space-x-4">
+                            <Avatar
+                                ><AvatarImage src="https://i.pravatar.cc/150?img=12" alt="Иван Иванов" /><AvatarFallback
+                                    >ИВ</AvatarFallback
+                                ></Avatar
+                            >
+                            <div class="space-y-1 flex-1">
+                                <h4 class="text-sm font-semibold">Иван Иванов</h4>
+                                <span class="text-xs text-muted-foreground">@ivan_dev</span>
+                                <p class="text-sm">Фронтенд-разработчик. Пишу про Astro, Tailwind и Alpine.js.</p>
+                                <Button size="xs" class="mt-2 w-full">Подписаться</Button>
+                            </div>
+                        </div>
+                        <div class="flex items-center pt-3 mt-3 border-t text-xs text-muted-foreground">
+                            <CalendarDays class="size-3 mr-2" /> Регистрация: 12 октября 2023
+                        </div>
+                    </HoverCardContent>
+                </HoverCard>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Стороны и выравнивание" description="Пропсы side и align." code={sidesCode}>
+            <div class="flex flex-wrap gap-4 justify-center py-12">
+                <HoverCard side="top"
+                    ><HoverCardTrigger><Button variant="outline">Сверху</Button></HoverCardTrigger><HoverCardContent
+                        >Карточка сверху</HoverCardContent
+                    ></HoverCard
+                >
+                <HoverCard side="bottom" align="start"
+                    ><HoverCardTrigger><Button variant="outline">Снизу (Старт)</Button></HoverCardTrigger
+                    ><HoverCardContent>Карточка снизу слева</HoverCardContent></HoverCard
+                >
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

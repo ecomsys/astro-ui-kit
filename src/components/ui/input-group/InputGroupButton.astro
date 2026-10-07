@@ -1,0 +1,31 @@
+---
+import { cn } from "../../../lib/utils";
+import Button from "../Button.astro";
+
+export interface Props {
+    type?: "button" | "submit" | "reset";
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+    size?: "xs" | "sm" | "icon-xs" | "icon-sm";
+    class?: string;
+    [key: string]: any;
+}
+
+const { type = "button", variant = "ghost", size = "xs", class: className, ...rest } = Astro.props;
+
+const sizeClasses = {
+    xs: "h-6 gap-1 rounded-[calc(var(--radius)-0.25rem)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
+    sm: "",
+    "icon-xs": "size-6 rounded-[calc(var(--radius)-0.25rem)] p-0 has-[>svg]:p-0",
+    "icon-sm": "size-8 p-0 has-[>svg]:p-0",
+};
+---
+
+<Button
+    type={type}
+    data-size={size}
+    variant={variant}
+    class={cn("flex items-center gap-2 text-sm shadow-none", sizeClasses[size], className)}
+    {...rest}
+>
+    <slot />
+</Button>

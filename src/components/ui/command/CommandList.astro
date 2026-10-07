@@ -1,0 +1,21 @@
+---
+import { cn } from "../../../lib/utils";
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { class: className, ...rest } = Astro.props;
+---
+
+<!-- max-h-[60vh] ограничивает высоту списка, остальное скроллится внутри -->
+<div
+    x-ref="list"
+    class={cn(
+        "max-h-[25rem] overflow-y-auto p-2 outline-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+        className,
+    )}
+    data-slot="command-list"
+    {...rest}
+>
+    <slot />
+</div>

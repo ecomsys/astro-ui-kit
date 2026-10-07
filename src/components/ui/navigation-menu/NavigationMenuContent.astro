@@ -1,0 +1,35 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<template x-teleport="body">
+    <div
+        x-ref="content"
+        x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="transform opacity-0 scale-95"
+        x-transition:enter-end="transform opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="transform opacity-100 scale-100"
+        x-transition:leave-end="transform opacity-0 scale-95"
+        x-on:mouseenter="show()"
+        x-on:mouseleave="hide()"
+        style="position: fixed; top: 0; left: 0; z-index: 9999; visibility: hidden;"
+        class={cn(
+            "w-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-none",
+            className,
+        )}
+        data-slot="navigation-menu-content"
+        {...rest}
+    >
+        <slot />
+    </div>
+</template>

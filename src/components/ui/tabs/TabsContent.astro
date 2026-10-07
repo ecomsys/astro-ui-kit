@@ -1,0 +1,21 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+  value: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const { value, class: className, ...rest } = Astro.props;
+---
+
+<div
+  data-slot="tabs-content"
+  x-show={`activeTab === '${value}'`}
+  x-cloak
+  class={cn("flex-1 text-sm outline-none", className)}
+  {...rest}
+>
+  <slot />
+</div>

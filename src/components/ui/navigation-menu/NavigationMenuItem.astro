@@ -1,0 +1,26 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    side?: "top" | "bottom" | "left" | "right";
+    align?: "start" | "center" | "end";
+    sideOffset?: number;
+    fullWidth?: boolean; // <--- Добавили
+    class?: string;
+    [key: string]: any;
+}
+
+const { side = "bottom", align = "start", sideOffset = 8, fullWidth = false, class: className, ...rest } = Astro.props;
+---
+
+<li
+    x-data={`navMenu('${side}', '${align}', ${sideOffset}, ${fullWidth})`}
+    x-on:mouseenter="show()"
+    x-on:mouseleave="hide()"
+    x-on:keydown.escape.window="forceHide()"
+    class={cn("relative", className)}
+    data-slot="navigation-menu-item"
+    {...rest}
+>
+    <slot />
+</li>

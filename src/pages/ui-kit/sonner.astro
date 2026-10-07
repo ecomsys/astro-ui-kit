@@ -1,0 +1,99 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import Button from '../../components/ui/Button.astro';
+
+<!-- Для вызова используем Alpine Store: $store.toasts.show(message, type) -->
+<div class="flex flex-wrap gap-3">
+  <Button x-on:click="$store.toasts.show('Данные успешно сохранены!', 'success')">Успех</Button>
+  <Button variant="destructive" x-on:click="$store.toasts.show('Не удалось удалить файл.', 'error')">Ошибка</Button>
+</div>`;
+
+const typesCode = `import Button from '../../components/ui/Button.astro';
+
+<div class="flex flex-wrap gap-3">
+  <Button x-on:click="$store.toasts.show('Данные успешно сохранены!', 'success')">Успех</Button>
+  <Button variant="destructive" x-on:click="$store.toasts.show('Не удалось удалить файл.', 'error')">Ошибка</Button>
+  <Button variant="outline" x-on:click="$store.toasts.show('Скоро закончится место на диске.', 'warning')">Предупреждение</Button>
+  <Button variant="secondary" x-on:click="$store.toasts.show('Обновление 2.0 доступно.', 'info')">Инфо</Button>
+  <Button variant="ghost" x-on:click="$store.toasts.show('Идет загрузка на сервер...', 'loading')">Загрузка</Button>
+</div>`;
+
+const stackedCode = `import Button from '../../components/ui/Button.astro';
+
+<!-- Быстро кликни по этой кнопке 3-4 раза подряд, чтобы увидеть, как тосты складываются в стопку -->
+<div class="flex justify-center">
+  <Button x-on:click="$store.toasts.show('Новое уведомление ' + Math.floor(Math.random() * 100), 'info')">
+    Создать 3 уведомления
+  </Button>
+</div>`;
+---
+
+<DashboardLayout title="Sonner (Toaster)">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Sonner (Toaster)</h1>
+            <p class="text-muted-foreground text-lg">
+                Всплывающие уведомления в правом нижнем углу. Работают через Alpine Store ($store.toasts.show).
+                Поддерживают звуки (Web Audio API), складывание в стопку (Stacked) и автоматическое исчезновение.
+            </p>
+            <p class="text-sm text-muted-foreground mt-2">
+                <strong>Важно:</strong> Чтобы уведомления работали на всех страницах, компонент <code
+                    class="bg-muted px-1.5 py-0.5 rounded">&lt;Toaster sound={true} /&gt;</code
+                > должен быть добавлен в ваш базовый Layout.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ ВЫЗОВ -->
+        <ComponentDoc
+            title="Базовый вызов"
+            description="Используйте $store.toasts.show('Текст', 'Тип') для вызова уведомления. Доступные типы: success, error, warning, info, loading."
+            code={basicCode}
+        >
+            <div class="flex flex-wrap gap-3">
+                <Button x-on:click="$store.toasts.show('Данные успешно сохранены!', 'success')">Успех</Button>
+                <Button variant="destructive" x-on:click="$store.toasts.show('Не удалось удалить файл.', 'error')"
+                    >Ошибка</Button
+                >
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ВСЕ ТИПЫ УВЕДОМЛЕНИЙ -->
+        <ComponentDoc
+            title="Все типы уведомлений"
+            description="5 вариантов: Успех (зеленая галочка), Ошибка (красный знак), Предупреждение (желтый треугольник), Инфо (синий круг) и Загрузка (крутящийся спиннер, не исчезает сама)."
+            code={typesCode}
+        >
+            <div class="flex flex-wrap gap-3">
+                <Button x-on:click="$store.toasts.show('Данные успешно сохранены!', 'success')">Успех</Button>
+                <Button variant="destructive" x-on:click="$store.toasts.show('Не удалось удалить файл.', 'error')"
+                    >Ошибка</Button
+                >
+                <Button variant="outline" x-on:click="$store.toasts.show('Скоро закончится место на диске.', 'warning')"
+                    >Предупреждение</Button
+                >
+                <Button variant="secondary" x-on:click="$store.toasts.show('Обновление 2.0 доступно.', 'info')"
+                    >Инфо</Button
+                >
+                <Button variant="ghost" x-on:click="$store.toasts.show('Идет загрузка на сервер...', 'loading')"
+                    >Загрузка</Button
+                >
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. СТОПКА УВЕДОМЛЕНИЙ (STACKED) -->
+        <ComponentDoc
+            title="Складывание в стопку (Stacked)"
+            description="Быстро кликните по кнопке 3-4 раза подряд. Уведомления не растянутся в длинную простыню, а аккуратно сложатся друг под друга. Наведите курсор на стопку, чтобы развернуть её."
+            code={stackedCode}
+        >
+            <div class="flex justify-center">
+                <Button x-on:click="$store.toasts.show('Новое уведомление ' + Math.floor(Math.random() * 100), 'info')">
+                    Создать 3 уведомления
+                </Button>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

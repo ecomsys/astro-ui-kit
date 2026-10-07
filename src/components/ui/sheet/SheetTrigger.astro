@@ -1,0 +1,16 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<span
+    tabindex="0"
+    role="button"
+    x-on:click="open = true"
+    x-on:keydown.enter.prevent="open = true"
+    data-slot="sheet-trigger"
+    class={cn("inline-flex outline-none", className)}
+    {...rest}
+>
+    <slot />
+</span>

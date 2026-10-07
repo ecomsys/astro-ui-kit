@@ -1,0 +1,18 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<ul
+    class={cn("group flex flex-1 list-none items-center justify-center gap-0", className)}
+    data-slot="navigation-menu-list"
+    {...rest}
+>
+    <slot />
+</ul>

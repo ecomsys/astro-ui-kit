@@ -1,0 +1,106 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Badge from "../../components/ui/Badge.astro";
+import { CheckCircle, AlertTriangle, Star } from "@lucide/astro";
+
+const variantsCode = `import Badge from '../../components/ui/Badge.astro';
+
+<Badge>Default</Badge>
+<Badge variant="secondary">Secondary</Badge>
+<Badge variant="destructive">Destructive</Badge>
+<Badge variant="outline">Outline</Badge>
+<Badge variant="ghost">Ghost</Badge>
+<Badge variant="link">Link</Badge>`;
+
+const iconsCode = `import Badge from '../../components/ui/Badge.astro';
+import { CheckCircle, AlertTriangle, Star } from '@lucide/astro';
+
+<Badge variant="secondary"><CheckCircle class="size-3" /> Оплачено</Badge>
+<Badge variant="destructive"><AlertTriangle class="size-3" /> Ошибка</Badge>
+<Badge variant="outline"><Star class="size-3" /> Pro</Badge>`;
+
+const usageCode = `import Badge from '../../components/ui/Badge.astro';
+
+<h2 class="text-xl font-bold flex items-center gap-2">
+  Настройки профиля
+  <Badge variant="secondary">New</Badge>
+</h2>`;
+
+const linksCode = `import Badge from '../../components/ui/Badge.astro';
+
+<!-- Бейдж автоматически рендерится как <a> -->
+<Badge href="/docs" variant="outline">Документация</Badge>
+<Badge href="https://github.com" variant="secondary">GitHub</Badge>`;
+---
+
+<DashboardLayout title="Badge">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Badge</h1>
+            <p class="text-muted-foreground text-lg">
+                Маленькие плашки для отображения статусов, меток или категорий. Поддерживают иконки и могут работать как
+                ссылки.
+            </p>
+        </div>
+
+        <!-- 1. ВАРИАНТЫ -->
+        <ComponentDoc
+            title="Варианты (Variants)"
+            description="Разные цветовые стили для разных контекстов."
+            code={variantsCode}
+        >
+            <div class="flex flex-wrap gap-3 items-center">
+                <Badge>Default</Badge>
+                <Badge variant="secondary">Secondary</Badge>
+                <Badge variant="destructive">Destructive</Badge>
+                <Badge variant="outline">Outline</Badge>
+                <Badge variant="ghost">Ghost</Badge>
+                <Badge variant="link">Link</Badge>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. С ИКОНКАМИ -->
+        <ComponentDoc
+            title="С иконками"
+            description="Используйте иконки из lucide-astro для улучшения визуального восприятия статуса."
+            code={iconsCode}
+        >
+            <div class="flex flex-wrap gap-3 items-center">
+                <Badge variant="secondary"><CheckCircle class="size-3" /> Оплачено</Badge>
+                <Badge variant="destructive"><AlertTriangle class="size-3" /> Ошибка</Badge>
+                <Badge variant="outline"><Star class="size-3" /> Pro</Badge>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. КАК ССЫЛКИ -->
+        <ComponentDoc
+            title="Как ссылка (Links)"
+            description="Передайте пропс href, и бейдж превратится в кликабельную ссылку."
+            code={linksCode}
+        >
+            <div class="flex flex-wrap gap-3 items-center">
+                <Badge href="/docs" variant="outline">Документация</Badge>
+                <Badge href="https://github.com" variant="secondary">GitHub</Badge>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ПРИМЕР ИСПОЛЬЗОВАНИЯ -->
+        <ComponentDoc
+            title="Пример использования"
+            description="Часто используется рядом с заголовками для привлечения внимания к новому функционалу."
+            code={usageCode}
+        >
+            <div class="border rounded-lg p-8 w-full max-w-md">
+                <h2 class="text-xl font-bold flex items-center gap-2">
+                    Настройки профиля
+                    <Badge variant="secondary">New</Badge>
+                </h2>
+                <p class="text-sm text-muted-foreground mt-2">
+                    Раздел с новыми настройками безопасности и двухфакторной аутентификации.
+                </p>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

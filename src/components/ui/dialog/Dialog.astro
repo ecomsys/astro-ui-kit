@@ -1,0 +1,7 @@
+---
+const { ...rest } = Astro.props;
+---
+
+<div x-data="overlay()" x-effect="toggleScrollLock()" data-slot="dialog" {...rest}>
+    <slot />
+</div>

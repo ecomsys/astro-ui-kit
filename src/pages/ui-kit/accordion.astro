@@ -1,0 +1,142 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../components/ui/accordion";
+
+const basicCode = `import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../components/ui/accordion';
+
+<Accordion class="w-full max-w-md">
+  <AccordionItem>
+    <AccordionTrigger>Это сложно настраивать?</AccordionTrigger>
+    <AccordionContent>
+      Нет, вообще не сложно. Astro и Alpine.js делают всю работу за вас.
+    </AccordionContent>
+  </AccordionItem>
+  
+  <AccordionItem>
+    <AccordionTrigger>А как с анимацией?</AccordionTrigger>
+    <AccordionContent>
+      Анимация выезжает плавно благодаря плагину @alpinejs/collapse.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>`;
+
+const defaultValueCode = `import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../components/ui/accordion';
+
+<Accordion class="w-full max-w-md">
+  <!-- Пункт 1 -->
+  <AccordionItem>
+    <AccordionTrigger>Первый пункт (закрыт)</AccordionTrigger>
+    <AccordionContent>Контент первого пункта.</AccordionContent>
+  </AccordionItem>
+
+  <!-- Пункт 2: Открыт по умолчанию! -->
+  <AccordionItem open> 
+    <AccordionTrigger>Второй пункт (открыт)</AccordionTrigger>
+    <AccordionContent>Этот пункт открыт сразу при загрузке страницы.</AccordionContent>
+  </AccordionItem>
+</Accordion>`;
+
+const richCode = `import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '../../components/ui/accordion';
+
+<Accordion class="w-full max-w-md">
+  <AccordionItem>
+    <AccordionTrigger>Что входит в тариф Pro?</AccordionTrigger>
+    <AccordionContent>
+      <p class="mb-2">Ваш тариф включает следующие возможности:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Безлимитные проекты</li>
+        <li>Доступ к премиум-компонентам</li>
+        <li>Приоритетная поддержка 24/7</li>
+      </ul>
+      <a href="#" class="text-primary hover:underline mt-3 inline-block">Подробнее о тарифах</a>
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>`;
+---
+
+<DashboardLayout title="Accordion">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Accordion</h1>
+            <p class="text-muted-foreground text-lg">
+                Список раскрывающихся блоков. Идеально подходит для FAQ (часто задаваемых вопросов) или скрытия
+                второстепенной информации.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ АККОРДЕОН -->
+        <ComponentDoc
+            title="Базовый аккордеон"
+            description="Простой список вопросов и ответов. Плавная анимация высоты."
+            code={basicCode}
+        >
+            <Accordion class="w-full max-w-md">
+                <AccordionItem>
+                    <AccordionTrigger>Это сложно настраивать?</AccordionTrigger>
+                    <AccordionContent>
+                        Нет, вообще не сложно. Astro и Alpine.js делают всю работу за вас.
+                    </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem>
+                    <AccordionTrigger>А как с анимацией?</AccordionTrigger>
+                    <AccordionContent>
+                        Анимация выезжает плавно благодаря плагину @alpinejs/collapse. Никаких рывков!
+                    </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem>
+                    <AccordionTrigger>А если длинный текст?</AccordionTrigger>
+                    <AccordionContent>
+                        Контейнер растянется автоматически. Можешь писать хоть целый параграф текста, верстка не поедет.
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
+        </ComponentDoc>
+
+        <!-- 2. ОТКРЫТЫЙ ПО УМОЛЧАНИЮ -->
+        <ComponentDoc
+            title="Открытый по умолчанию"
+            description="Используйте пропс open в AccordionItem, чтобы он был развернут при загрузке страницы."
+            code={defaultValueCode}
+        >
+            <Accordion class="w-full max-w-md">
+                <AccordionItem>
+                    <AccordionTrigger>Первый пункт (закрыт)</AccordionTrigger>
+                    <AccordionContent>Контент первого пункта.</AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem open>
+                    <AccordionTrigger>Второй пункт (открыт)</AccordionTrigger>
+                    <AccordionContent
+                        >Этот пункт открыт сразу при загрузке страницы благодаря пропсу open.</AccordionContent
+                    >
+                </AccordionItem>
+            </Accordion>
+        </ComponentDoc>
+
+        <!-- 3. С БОГАТЫМ КОНТЕНТОМ -->
+        <ComponentDoc
+            title="Сложный контент внутри"
+            description="Внутрь AccordionContent можно класть не только текст, но и списки, ссылки, картинки."
+            code={richCode}
+        >
+            <Accordion class="w-full max-w-md">
+                <AccordionItem>
+                    <AccordionTrigger>Что входит в тариф Pro?</AccordionTrigger>
+                    <AccordionContent>
+                        <p class="mb-2">Ваш тариф включает следующие возможности:</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Безлимитные проекты</li>
+                            <li>Доступ к премиум-компонентам</li>
+                            <li>Приоритетная поддержка 24/7</li>
+                        </ul>
+                        <a href="#" class="text-primary hover:underline mt-3 inline-block">Подробнее о тарифах</a>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

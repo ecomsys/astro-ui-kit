@@ -1,0 +1,31 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    side?: "top" | "bottom" | "left" | "right";
+    align?: "start" | "center" | "end";
+    sideOffset?: number;
+    matchWidth?: boolean; // <--- Добавлено
+    class?: string;
+    [key: string]: any;
+}
+
+const {
+    side = "bottom",
+    align = "center",
+    sideOffset = 4,
+    matchWidth = false, // <--- Добавлено
+    class: className,
+    ...rest
+} = Astro.props;
+---
+
+<div
+    x-data={`popover('${side}', '${align}', ${sideOffset}, ${matchWidth})`}
+    x-on:keydown.escape.window="hide()"
+    class={cn("relative inline-flex w-fit", className)}
+    data-slot="popover"
+    {...rest}
+>
+    <slot />
+</div>

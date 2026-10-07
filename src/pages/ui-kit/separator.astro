@@ -1,0 +1,85 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Separator from "../../components/ui/Separator.astro";
+
+const horizontalCode = `import Separator from '../../components/ui/Separator.astro';
+
+<div class="w-full max-w-sm">
+  <div class="text-sm font-medium">Профиль пользователя</div>
+  <Separator class="my-6" />
+  <div class="text-sm text-muted-foreground">Настройки безопасности</div>
+</div>`;
+
+const verticalCode = `import Separator from '../../components/ui/Separator.astro';
+
+<div class="flex h-10 items-center gap-4">
+  <span class="text-sm font-medium">Главная</span>
+  <Separator orientation="vertical" />
+  <span class="text-sm font-medium">Настройки</span>
+  <Separator orientation="vertical" />
+  <span class="text-sm text-muted-foreground">Выход</span>
+</div>`;
+
+const labelCode = `import Separator from '../../components/ui/Separator.astro';
+
+<div class="flex items-center gap-4 w-full max-w-sm">
+  <Separator class="flex-1" />
+  <span class="text-xs text-muted-foreground">ИЛИ</span>
+  <Separator class="flex-1" />
+</div>`;
+---
+
+<DashboardLayout title="Separator">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Separator</h1>
+            <p class="text-muted-foreground text-lg">
+                Линия-разделитель для визуального отделения контента. Поддерживает горизонтальную и вертикальную
+                ориентацию.
+            </p>
+        </div>
+
+        <!-- 1. ГОРИЗОНТАЛЬНЫЙ -->
+        <ComponentDoc
+            title="Горизонтальный (по умолчанию)"
+            description="Разделяет контент сверху вниз. Идеально подходит для разделения секций в карточках."
+            code={horizontalCode}
+        >
+            <div class="w-full max-w-sm">
+                <div class="text-sm font-medium">Профиль пользователя</div>
+                <Separator class="my-6" />
+                <div class="text-sm text-muted-foreground">Настройки безопасности</div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ВЕРТИКАЛЬНЫЙ -->
+        <ComponentDoc
+            title="Вертикальный"
+            description="Разделяет элементы по бокам. Обязательно используйте внутри flex-контейнера."
+            code={verticalCode}
+        >
+            <div class="flex h-10 items-center gap-4">
+                <span class="text-sm font-medium">Главная</span>
+                <Separator orientation="vertical" />
+                <span class="text-sm font-medium">Настройки</span>
+                <Separator orientation="vertical" />
+                <span class="text-sm text-muted-foreground">Выход</span>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. С ТЕКСТОМ (LABEL) -->
+        <ComponentDoc
+            title="Разделитель с текстом"
+            description="Часто используется в формах авторизации для разделения кнопок входа."
+            code={labelCode}
+        >
+            <div class="flex items-center gap-4 w-full max-w-sm">
+                <Separator class="flex-1" />
+                <span class="text-xs text-muted-foreground">ИЛИ</span>
+                <Separator class="flex-1" />
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

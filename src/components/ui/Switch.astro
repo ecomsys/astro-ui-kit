@@ -1,0 +1,52 @@
+---
+import { cn } from "../../lib/utils";
+
+export interface Props {
+    size?: "sm" | "default";
+    checked?: boolean;
+    disabled?: boolean;
+    name?: string;
+    value?: string | number;
+    class?: string;
+    [key: string]: any;
+}
+
+const { size = "default", checked = false, disabled = false, name, value, class: className, ...rest } = Astro.props;
+
+const containerClasses = size === "sm" ? "w-[1.5rem] h-[0.875rem] p-[0.05rem]" : "w-[2rem] h-[1.125rem] p-[0.1rem]";
+
+const thumbClasses =
+    size === "sm"
+        ? "size-[0.75rem] translate-x-0 group-data-[checked=true]:translate-x-[0.55rem]"
+        : "size-[1rem] translate-x-0 group-data-[checked=true]:translate-x-[0.75rem]";
+---
+
+<button
+    type="button"
+    role="switch"
+    class={cn(
+        "group inline-flex shrink-0 items-center rounded-full border border-transparent transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        containerClasses,
+        // ИСПРАВЛЕНО: Убрали x-bind:class. Используем data-[checked=true]: варианты Tailwind!
+        // Теперь tailwind-merge сможет легко перебить их, если ты передашь свой цвет.
+        "data-[checked=true]:bg-primary data-[checked=false]:bg-input dark:data-[checked=false]:bg-input/80",
+        className,
+    )}
+    x-data={`{ checked: ${checked} }`}
+    x-on:click="checked = !checked"
+    x-bind:aria-checked="checked.toString()"
+    data-checked={checked ? "true" : "false"}
+    x-bind:data-checked="checked ? 'true' : 'false'"
+    data-slot="switch"
+    disabled={disabled}
+    {...rest}
+>
+    {name && <input type="checkbox" x-model="checked" name={name} value={value} class="sr-only" />}
+
+    <span
+        data-slot="switch-thumb"
+        class={cn(
+            "pointer-events-none block rounded-full bg-background shadow-sm ring-0 transition-transform duration-200 ease-in-out dark:bg-foreground group-data-[checked=true]:dark:bg-primary-foreground",
+            thumbClasses,
+        )}></span>
+</button>

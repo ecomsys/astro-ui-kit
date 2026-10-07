@@ -1,0 +1,25 @@
+---
+import { cn } from "../../../lib/utils";
+import { SearchIcon } from "@lucide/astro";
+export interface Props {
+    class?: string;
+    placeholder?: string;
+    [key: string]: any;
+}
+const { class: className, placeholder = "Поиск команд...", ...rest } = Astro.props;
+---
+
+<div class="border-b border-border p-3" data-slot="command-input-wrapper">
+    <div class="flex items-center gap-2">
+        <SearchIcon class="size-4 shrink-0 opacity-50" />
+        <input
+            x-ref="input"
+            x-model="query"
+            @input="filterList()"
+            type="text"
+            placeholder={placeholder}
+            class={cn("w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground", className)}
+            {...rest}
+        />
+    </div>
+</div>

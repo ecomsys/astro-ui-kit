@@ -1,0 +1,20 @@
+---
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div
+    x-data="contextMenu()"
+    x-on:contextmenu.prevent="show($event)"
+    x-on:keydown.escape.window="hide()"
+    x-on:scroll.window="forceHide()"
+    class={className}
+    data-slot="context-menu"
+    {...rest}
+>
+    <slot />
+</div>

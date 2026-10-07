@@ -1,0 +1,27 @@
+---
+import { cn } from "../../../lib/utils";
+import Button from "../Button.astro";
+import { ChevronRightIcon } from "@lucide/astro";
+
+export interface Props {
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+    size?: "default" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
+    class?: string;
+    [key: string]: any;
+}
+
+const { variant = "outline", size = "icon", class: className, ...rest } = Astro.props;
+---
+
+<Button
+    data-slot="carousel-next"
+    variant={variant}
+    size={size}
+    class={cn("disabled:opacity-30 touch-manipulation", className)}
+    :disabled="!canScrollNext"
+    x-on:click="next()"
+    {...rest}
+>
+    <ChevronRightIcon />
+    <span class="sr-only">Next slide</span>
+</Button>

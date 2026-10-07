@@ -1,0 +1,173 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Menubar,
+    MenubarMenu,
+    MenubarTrigger,
+    MenubarContent,
+    MenubarItem,
+    MenubarSeparator,
+    MenubarCheckboxItem,
+    MenubarShortcut,
+} from "../../components/ui/menubar";
+import {
+    FileText,
+    FolderOpen,
+    Save,
+    LogOut,
+    Undo2,
+    Redo2,
+    Scissors,
+    Copy,
+    ClipboardPaste,
+    Grid3x3,
+    PanelRight,
+    Bold,
+    Italic,
+    Underline,
+    User,
+    Keyboard,
+} from "@lucide/astro";
+
+// 1. Базовое меню (Файл и Правка)
+const basicCode = `import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator, MenubarShortcut } from '../../components/ui/menubar';
+import { FileText, FolderOpen, Save, LogOut, Undo2, Redo2, Scissors, Copy, ClipboardPaste } from '@lucide/astro';
+
+<div class="flex justify-center py-8">
+  <Menubar>
+    <MenubarMenu>
+      <MenubarTrigger>Файл</MenubarTrigger>
+      <MenubarContent align="start" sideOffset={4}>
+        <MenubarItem><FileText /> Новый файл <MenubarShortcut>⌘N</MenubarShortcut></MenubarItem>
+        <MenubarItem><FolderOpen /> Открыть... <MenubarShortcut>⌘O</MenubarShortcut></MenubarItem>
+        <MenubarItem><Save /> Сохранить <MenubarShortcut>⌘S</MenubarShortcut></MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem variant="destructive"><LogOut /> Выйти</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+
+    <MenubarMenu>
+      <MenubarTrigger>Правка</MenubarTrigger>
+      <MenubarContent align="start" sideOffset={4}>
+        <MenubarItem><Undo2 /> Отменить <MenubarShortcut>⌘Z</MenubarShortcut></MenubarItem>
+        <MenubarItem><Redo2 /> Вернуть <MenubarShortcut>⌘⇧Z</MenubarShortcut></MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem><Scissors /> Вырезать</MenubarItem>
+        <MenubarItem><Copy /> Копировать</MenubarItem>
+        <MenubarItem><ClipboardPaste /> Вставить</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+  </Menubar>
+</div>`;
+
+// 2. Меню с чекбоксами (Вид и Аккаунт)
+const checkboxCode = `import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent, MenubarItem, MenubarSeparator, MenubarCheckboxItem } from '../../components/ui/menubar';
+import { Bold, Italic, Underline, Grid3x3, PanelRight, User, Keyboard, LogOut } from '@lucide/astro';
+
+<div class="flex justify-center py-8">
+  <Menubar>
+    <MenubarMenu>
+      <MenubarTrigger>Вид</MenubarTrigger>
+      <MenubarContent align="start" sideOffset={4}>
+        <!-- MenubarCheckboxItem оставляет меню открытым при клике -->
+        <MenubarCheckboxItem><Bold /> Жирный</MenubarCheckboxItem>
+        <MenubarCheckboxItem><Italic /> Курсив</MenubarCheckboxItem>
+        <MenubarCheckboxItem><Underline /> Подчеркнутый</MenubarCheckboxItem>
+        <MenubarSeparator />
+        <MenubarCheckboxItem><Grid3x3 /> Показать сетку</MenubarCheckboxItem>
+        <MenubarCheckboxItem><PanelRight /> Боковая панель</MenubarCheckboxItem>
+      </MenubarContent>
+    </MenubarMenu>
+
+    <MenubarMenu>
+      <MenubarTrigger>Аккаунт</MenubarTrigger>
+      <MenubarContent align="start" sideOffset={4}>
+        <MenubarItem><User /> Профиль</MenubarItem>
+        <MenubarItem><Keyboard /> Горячие клавиши</MenubarItem>
+        <MenubarSeparator />
+        <MenubarItem variant="destructive"><LogOut /> Удалить аккаунт</MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+  </Menubar>
+</div>`;
+---
+
+<DashboardLayout title="Menubar">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Menubar</h1>
+            <p class="text-muted-foreground text-lg">
+                Классическое меню десктопных приложений (как в VS Code или Photoshop). Кликни на пункт, а затем переведи
+                курсор на соседний — меню переключится само. Поддерживает горячие клавиши, разделители и чекбоксы.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВОЕ МЕНЮ -->
+        <ComponentDoc
+            title="Базовое меню"
+            description="Меню Файл и Правка. Использует MenubarShortcut для горячих клавиш и MenubarSeparator для линий."
+            code={basicCode}
+        >
+            <div class="flex justify-center py-8">
+                <Menubar>
+                    <MenubarMenu>
+                        <MenubarTrigger>Файл</MenubarTrigger>
+                        <MenubarContent align="start" sideOffset={4}>
+                            <MenubarItem><FileText /> Новый файл <MenubarShortcut>⌘N</MenubarShortcut></MenubarItem>
+                            <MenubarItem><FolderOpen /> Открыть... <MenubarShortcut>⌘O</MenubarShortcut></MenubarItem>
+                            <MenubarItem><Save /> Сохранить <MenubarShortcut>⌘S</MenubarShortcut></MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem variant="destructive"><LogOut /> Выйти</MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+
+                    <MenubarMenu>
+                        <MenubarTrigger>Правка</MenubarTrigger>
+                        <MenubarContent align="start" sideOffset={4}>
+                            <MenubarItem><Undo2 /> Отменить <MenubarShortcut>⌘Z</MenubarShortcut></MenubarItem>
+                            <MenubarItem><Redo2 /> Вернуть <MenubarShortcut>⌘⇧Z</MenubarShortcut></MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem><Scissors /> Вырезать</MenubarItem>
+                            <MenubarItem><Copy /> Копировать</MenubarItem>
+                            <MenubarItem><ClipboardPaste /> Вставить</MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+                </Menubar>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. МЕНЮ С ЧЕКБОКСАМИ -->
+        <ComponentDoc
+            title="Меню с чекбоксами"
+            description="Используйте MenubarCheckboxItem для множественного выбора. При клике на чекбокс меню не закроется, и появится галочка."
+            code={checkboxCode}
+        >
+            <div class="flex justify-center py-8">
+                <Menubar>
+                    <MenubarMenu>
+                        <MenubarTrigger>Вид</MenubarTrigger>
+                        <MenubarContent align="start" sideOffset={4}>
+                            <MenubarCheckboxItem><Bold /> Жирный</MenubarCheckboxItem>
+                            <MenubarCheckboxItem><Italic /> Курсив</MenubarCheckboxItem>
+                            <MenubarCheckboxItem><Underline /> Подчеркнутый</MenubarCheckboxItem>
+                            <MenubarSeparator />
+                            <MenubarCheckboxItem><Grid3x3 /> Показать сетку</MenubarCheckboxItem>
+                            <MenubarCheckboxItem><PanelRight /> Боковая панель</MenubarCheckboxItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+
+                    <MenubarMenu>
+                        <MenubarTrigger>Аккаунт</MenubarTrigger>
+                        <MenubarContent align="start" sideOffset={4}>
+                            <MenubarItem><User /> Профиль</MenubarItem>
+                            <MenubarItem><Keyboard /> Горячие клавиши</MenubarItem>
+                            <MenubarSeparator />
+                            <MenubarItem variant="destructive"><LogOut /> Удалить аккаунт</MenubarItem>
+                        </MenubarContent>
+                    </MenubarMenu>
+                </Menubar>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

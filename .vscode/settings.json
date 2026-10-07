@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "astro-build.astro-vscode",
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
+  },
+  "tailwindCSS.colorDecorators": true,
+  "tailwindCSS.experimental.classRegex": [
+    "(?:x-bind?:class|:class)=\"([^\"]*)\"",
+    "\\b(?:class|className)=\"([^\"]*)\"",
+    "[\"'`]([^\"'`]*\\b(?:bg|text|border|rounded|flex|grid|font|px|py|p|m|w|h|hover|focus|sm|md|lg|xl|active|transition)\\b[^\"'`]*)[\"'`]"
+  ]
+}

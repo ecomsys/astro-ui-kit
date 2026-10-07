@@ -1,0 +1,23 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    orientation?: "horizontal" | "vertical";
+    class?: string;
+    [key: string]: any;
+}
+
+const { orientation = "horizontal", class: className, ...rest } = Astro.props;
+---
+
+<div
+    x-data={`resizable('${orientation}')`}
+    x-on:pointermove.window="onResize($event)"
+    x-on:pointerup.window="endResize()"
+    data-orientation={orientation}
+    class={cn("group flex h-full w-full", orientation === "vertical" ? "flex-col" : "flex-row", className)}
+    data-slot="resizable-panel-group"
+    {...rest}
+>
+    <slot />
+</div>

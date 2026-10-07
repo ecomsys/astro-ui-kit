@@ -1,0 +1,15 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    direction?: "up" | "down" | "left" | "right";
+    class?: string;
+    [key: string]: any;
+}
+
+const { direction = "down", class: className, ...rest } = Astro.props;
+---
+
+<div x-data={`drawer('${direction}')`} class={className} data-slot="drawer" {...rest}>
+    <slot />
+</div>

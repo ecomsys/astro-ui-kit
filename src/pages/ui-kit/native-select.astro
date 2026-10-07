@@ -1,0 +1,193 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { NativeSelect, NativeSelectOption, NativeSelectOptGroup } from "../../components/ui/native-select";
+import Label from "../../components/ui/Label.astro";
+import Button from "../../components/ui/Button.astro";
+
+const countries = [
+    { value: "ru", label: "Россия" },
+    { value: "by", label: "Беларусь" },
+    { value: "kz", label: "Казахстан" },
+    { value: "us", label: "США" },
+];
+
+const cities = [
+    {
+        group: "Европа",
+        items: [
+            { value: "msk", label: "Москва" },
+            { value: "spb", label: "Санкт-Петербург" },
+        ],
+    },
+    {
+        group: "Азия",
+        items: [
+            { value: "nsk", label: "Новосибирск" },
+            { value: "vlk", label: "Владивосток" },
+        ],
+    },
+];
+
+const basicCode = `import { NativeSelect, NativeSelectOption } from '../../components/ui/native-select';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-48">
+  <Label for="country">Страна</Label>
+  <NativeSelect id="country">
+    ${countries.map((c) => `<NativeSelectOption value="${c.value}">${c.label}</NativeSelectOption>`).join("\n    ")}
+  </NativeSelect>
+</div>`;
+
+const groupedCode = `import { NativeSelect, NativeSelectOption, NativeSelectOptGroup } from '../../components/ui/native-select';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-56">
+  <Label for="city">Город</Label>
+  <NativeSelect id="city">
+    ${cities.map((c) => `<NativeSelectOptGroup label="${c.group}">\n    ${c.items.map((i) => `<NativeSelectOption value="${i.value}">${i.label}</NativeSelectOption>`).join("\n    ")}\n  </NativeSelectOptGroup>`).join("\n  ")}
+  </NativeSelect>
+</div>`;
+
+const sizesCode = `import { NativeSelect, NativeSelectOption } from '../../components/ui/native-select';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex items-end gap-4">
+  <div class="flex flex-col gap-2">
+    <Label for="sm">Маленький</Label>
+    <NativeSelect id="sm" size="sm" class="w-40">
+      <NativeSelectOption value="1">Опция 1</NativeSelectOption>
+      <NativeSelectOption value="2">Опция 2</NativeSelectOption>
+    </NativeSelect>
+  </div>
+  <div class="flex flex-col gap-2">
+    <Label for="def">Обычный</Label>
+    <NativeSelect id="def" class="w-48">
+      <NativeSelectOption value="1">Опция 1</NativeSelectOption>
+      <NativeSelectOption value="2">Опция 2</NativeSelectOption>
+    </NativeSelect>
+  </div>
+</div>`;
+
+const disabledCode = `import { NativeSelect, NativeSelectOption } from '../../components/ui/native-select';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-48">
+  <Label for="status">Статус</Label>
+  <NativeSelect id="status" disabled>
+    <NativeSelectOption value="active">Активен</NativeSelectOption>
+    <NativeSelectOption value="banned">Заблокирован</NativeSelectOption>
+  </NativeSelect>
+</div>`;
+
+const formCode = `import { NativeSelect, NativeSelectOption } from '../../components/ui/native-select';
+import Label from '../../components/ui/Label.astro';
+import Button from '../../components/ui/Button.astro';
+
+<form @submit.prevent="alert('Страна: ' + new FormData($event.target).get('country'))" class="flex flex-col gap-4 w-48">
+  <div class="flex flex-col gap-2">
+    <Label for="country">Страна</Label>
+    <NativeSelect id="country" name="country">
+      <NativeSelectOption value="ru">Россия</NativeSelectOption>
+      <NativeSelectOption value="by">Беларусь</NativeSelectOption>
+    </NativeSelect>
+  </div>
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Native Select">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Native Select</h1>
+            <p class="text-muted-foreground text-lg">Стилизованный нативный тег &lt;select&gt;.</p>
+        </div>
+
+        <ComponentDoc title="Базовый список" description="Стандартный выпадающий список." code={basicCode}>
+            <div class="flex flex-col gap-2 w-48">
+                <Label for="country">Страна</Label>
+                <NativeSelect id="country">
+                    {countries.map((c) => <NativeSelectOption value={c.value}>{c.label}</NativeSelectOption>)}
+                </NativeSelect>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="С группировкой (OptGroup)"
+            description="NativeSelectOptGroup для логического объединения."
+            code={groupedCode}
+        >
+            <div class="flex flex-col gap-2 w-56">
+                <Label for="city">Город</Label>
+                <NativeSelect id="city">
+                    {
+                        cities.map((c) => (
+                            <NativeSelectOptGroup label={c.group}>
+                                {c.items.map((i) => (
+                                    <NativeSelectOption value={i.value}>{i.label}</NativeSelectOption>
+                                ))}
+                            </NativeSelectOptGroup>
+                        ))
+                    }
+                </NativeSelect>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc title="Размеры (Sizes)" description="Пропс size='sm' для компактных форм." code={sizesCode}>
+            <div class="flex items-end gap-4">
+                <div class="flex flex-col gap-2">
+                    <Label for="sm">Маленький</Label>
+                    <NativeSelect id="sm" size="sm" class="w-40"
+                        ><NativeSelectOption value="1">Опция 1</NativeSelectOption><NativeSelectOption value="2"
+                            >Опция 2</NativeSelectOption
+                        ></NativeSelect
+                    >
+                </div>
+                <div class="flex flex-col gap-2">
+                    <Label for="def">Обычный</Label>
+                    <NativeSelect id="def" class="w-48"
+                        ><NativeSelectOption value="1">Опция 1</NativeSelectOption><NativeSelectOption value="2"
+                            >Опция 2</NativeSelectOption
+                        ></NativeSelect
+                    >
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <ComponentDoc
+            title="Отключенное состояние (Disabled)"
+            description="Список становится серым."
+            code={disabledCode}
+        >
+            <div class="flex flex-col gap-2 w-48">
+                <Label for="status">Статус</Label>
+                <NativeSelect id="status" disabled
+                    ><NativeSelectOption value="active">Активен</NativeSelectOption><NativeSelectOption value="banned"
+                        >Заблокирован</NativeSelectOption
+                    ></NativeSelect
+                >
+            </div>
+        </ComponentDoc>
+
+        <!-- НОВЫЙ ПРИМЕР С ФОРМОЙ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Нативный select отлично работает с FormData. Просто передай name и id."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Страна: ' + new FormData($event.target).get('country'))"
+                class="flex flex-col gap-4 w-48"
+            >
+                <div class="flex flex-col gap-2">
+                    <Label for="country">Страна</Label>
+                    <NativeSelect id="country" name="country">
+                        <NativeSelectOption value="ru">Россия</NativeSelectOption>
+                        <NativeSelectOption value="by">Беларусь</NativeSelectOption>
+                    </NativeSelect>
+                </div>
+                <Button type="submit" class="w-full">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

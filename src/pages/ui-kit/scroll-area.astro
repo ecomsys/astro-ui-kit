@@ -1,0 +1,129 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import ScrollArea from "../../components/ui/scroll-area/ScrollArea.astro";
+
+const tags = Array.from({ length: 50 }).map((_, i) => `Тег №${i + 1}`);
+const artwork = Array.from({ length: 8 }).map((_, i) => `Картина ${i + 1}`);
+
+const basicCode = `import ScrollArea from '../../components/ui/scroll-area/ScrollArea.astro';
+
+<ScrollArea class="h-72 w-72 rounded-md border p-4">
+  <p class="text-sm text-muted-foreground">
+    Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Вдали от всех живут они в буквенных домах на берегу Семантика большого языкового океана. Маленький ручеек Даль журчит по всей стране и обеспечивает ее всеми необходимыми правилами. Эта парадигматическая страна, в которой жаренные члены предложения залетают прямо в рот. Даже всемогущая пунктуация не имеет власти над рыбными текстами, ведущими безорфографичный образ жизни. Однажды одна строчка рыбного текста по имени Lorem ipsum решила выйти в большой мир грамматики.
+  </p>
+</ScrollArea>`;
+
+const hoverCode = `import ScrollArea from '../../components/ui/scroll-area/ScrollArea.astro';
+
+<!-- Пропс hover={true} прячет скроллбар, пока курсор не наведен на блок -->
+<ScrollArea hover={true} class="h-72 w-72 rounded-md border p-4">
+  <div class="flex flex-col gap-2">
+    {Array.from({ length: 15 }).map((_, i) => (
+      <div class="text-sm text-muted-foreground">Строка {i + 1}</div>
+    ))}
+  </div>
+</ScrollArea>`;
+
+const horizontalCode = `import ScrollArea from '../../components/ui/scroll-area/ScrollArea.astro';
+
+<!-- Пропс horizontal={true} включает горизонтальный скролл -->
+<ScrollArea horizontal={true} class="w-80 rounded-md border p-4">
+  <div class="flex gap-4">
+    {Array.from({ length: 8 }).map((_, i) => (
+      <div class="size-48 shrink-0 bg-muted rounded-md flex items-center justify-center font-medium">
+        Картина {i + 1}
+      </div>
+    ))}
+  </div>
+</ScrollArea>`;
+
+const bothCode = `import ScrollArea from '../../components/ui/scroll-area/ScrollArea.astro';
+
+<!-- Сразу оба направления: вертикальный есть по умолчанию, горизонтальный включаем пропсом -->
+<ScrollArea horizontal={true} class="h-72 w-96 rounded-md border p-4">
+  <div class="size-[40rem] bg-muted rounded-md flex items-center justify-center font-medium">
+    Я огромный блок 640x640px!
+  </div>
+</ScrollArea>`;
+---
+
+<DashboardLayout title="Scroll Area">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Scroll Area</h1>
+            <p class="text-muted-foreground text-lg">
+                Кастомный скроллбар, который заменяет уродливый системный. Поддерживает вертикальный и горизонтальный
+                скролл, перетаскивание мышкой и пальцем (тач), а также появление только при наведении (hover).
+            </p>
+        </div>
+
+        <!-- 1. ВЕРТИКАЛЬНЫЙ СКРОЛЛ -->
+        <ComponentDoc
+            title="Вертикальный скролл"
+            description="Базовый вариант. Скроллбар всегда видим. Попробуйте потаскать ползунок мышкой!"
+            code={basicCode}
+        >
+            <ScrollArea class="h-72 w-72 rounded-md border p-4">
+                <p class="text-sm text-muted-foreground">
+                    Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Вдали от всех
+                    живут они в буквенных домах на берегу Семантика большого языкового океана. Маленький ручеек Даль
+                    журчит по всей стране и обеспечивает ее всеми необходимыми правилами. Эта парадигматическая страна,
+                    в которой жаренные члены предложения залетают прямо в рот. Даже всемогущая пунктуация не имеет
+                    власти над рыбными текстами, ведущими безорфографичный образ жизни. Однажды одна строчка рыбного
+                    текста по имени Lorem ipsum решила выйти в большой мир грамматики.
+                </p>
+            </ScrollArea>
+        </ComponentDoc>
+
+        <!-- 2. ПОЯВЛЕНИЕ ПРИ НАВЕДЕНИИ (HOVER) -->
+        <ComponentDoc
+            title="Авто-скрытие (Hover)"
+            description="Пропс hover={true} скрывает скроллбар. Он появится только когда вы наведете курсор на область."
+            code={hoverCode}
+        >
+            <ScrollArea hover={true} class="h-72 w-72 rounded-md border p-4">
+                <div class="flex flex-col gap-2">
+                    {
+                        Array.from({ length: 15 }).map((_, i) => (
+                            <div class="text-sm text-muted-foreground">Строка {i + 1}</div>
+                        ))
+                    }
+                </div>
+            </ScrollArea>
+        </ComponentDoc>
+
+        <!-- 3. ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ -->
+        <ComponentDoc
+            title="Горизонтальный скролл"
+            description="Пропс horizontal={true} включает нижний скроллбар для широкого контента (например, галерея)."
+            code={horizontalCode}
+        >
+            <ScrollArea horizontal={true} class="w-80 rounded-md border p-4">
+                <div class="flex gap-4">
+                    {
+                        artwork.map((item) => (
+                            <div class="size-48 shrink-0 bg-muted rounded-md flex items-center justify-center font-medium">
+                                {item}
+                            </div>
+                        ))
+                    }
+                </div>
+            </ScrollArea>
+        </ComponentDoc>
+
+        <!-- 4. ДВУНАПРАВЛЕННЫЙ СКРОЛЛ -->
+        <ComponentDoc
+            title="Двунаправленный скролл (Оба направления)"
+            description="Если контент огромный по ширине и высоте. Включаем horizontal, вертикальный работает автоматом."
+            code={bothCode}
+        >
+            <ScrollArea horizontal={true} class="h-72 w-96 rounded-md border p-4">
+                <div class="size-[40rem] bg-muted rounded-md flex items-center justify-center font-medium">
+                    Я огромный блок 640x640px!
+                </div>
+            </ScrollArea>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

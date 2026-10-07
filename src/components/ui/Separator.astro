@@ -1,0 +1,18 @@
+---
+import { cn } from "../../lib/utils";
+
+export interface Props {
+    orientation?: "horizontal" | "vertical";
+    class?: string;
+    [key: string]: any;
+}
+
+const { orientation = "horizontal", class: className, ...rest } = Astro.props;
+
+// Простые и надежные классы
+const orientationClasses = orientation === "horizontal" ? "h-[0.0625rem] w-full" : "h-full w-[0.0625rem] self-stretch";
+
+const computedClasses = cn("shrink-0 bg-border", orientationClasses, className);
+---
+
+<div data-slot="separator" role="separator" aria-orientation={orientation} class={computedClasses} {...rest}></div>

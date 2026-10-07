@@ -1,0 +1,134 @@
+---
+import { cn } from "../../../lib/utils";
+const { class: className, ...rest } = Astro.props;
+---
+
+<div
+    x-data="{ 
+    translate: 0,
+    startX: 0,
+    lastTranslate: 0,
+    isDragging: false,
+    hasDragged: false,
+    maxScroll: 0,
+    
+    // Переменные для инерции
+    velocity: 0,
+    lastX: 0,
+    lastTime: 0,
+    transitionStyle: 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+
+    init() {
+      this.updateBounds();
+      const ro = new ResizeObserver(() => this.updateBounds());
+      ro.observe(this.$refs.track);
+      ro.observe(this.$refs.container);
+    },
+
+    updateBounds() {
+      this.$nextTick(() => {
+        this.maxScroll = Math.max(0, this.$refs.track.scrollWidth - this.$refs.container.offsetWidth);
+        if (this.translate < -this.maxScroll) this.translate = -this.maxScroll;
+        if (this.translate > 0) this.translate = 0;
+      });
+    },
+
+    startDrag(e) {
+      this.isDragging = true;
+      this.hasDragged = false;
+      this.startX = e.clientX;
+      this.lastX = e.clientX;
+      this.lastTime = Date.now();
+      this.lastTranslate = this.translate;
+      this.velocity = 0;
+      this.transitionStyle = 'none';
+    },
+
+    onDrag(e) {
+      if (!this.isDragging) return;
+      e.preventDefault();
+      const diff = e.clientX - this.startX;
+      if (Math.abs(diff) > 5) this.hasDragged = true;
+      
+      let newTranslate = this.lastTranslate + diff;
+
+      if (newTranslate > 0) newTranslate = newTranslate * 0.3;
+      if (newTranslate < -this.maxScroll) newTranslate = -this.maxScroll + (newTranslate + this.maxScroll) * 0.3;
+
+      this.translate = newTranslate;
+
+      const now = Date.now();
+      const dt = now - this.lastTime;
+      if (dt > 0) {
+        this.velocity = (e.clientX - this.lastX) / dt;
+      }
+      this.lastX = e.clientX;
+      this.lastTime = now;
+    },
+
+    stopDrag() {
+      if (!this.isDragging) return;
+      this.isDragging = false;
+      
+      this.transitionStyle = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      
+      let v = Math.max(-15, Math.min(15, this.velocity));
+      let target = this.translate + v * 500;
+      
+      if (target > 0) target = 0;
+      if (target < -this.maxScroll) target = -this.maxScroll;
+      
+      this.translate = target;
+    },
+
+    onWheel(e) {
+      // Если слайдеру некуда ехать, сразу отдаем скролл странице
+      if (this.maxScroll <= 0) return; 
+
+      let isAtLeftEdge = this.translate >= 0;
+      let isAtRightEdge = this.translate <= -this.maxScroll;
+
+      // Если крутят вниз (вперед) и слайдер уже в конце — отдаем страницу
+      if (e.deltaY > 0 && isAtRightEdge) return;
+      // Если крутят вверх (назад) и слайдер в начале — отдаем страницу
+      if (e.deltaY < 0 && isAtLeftEdge) return;
+
+      // Иначе перехватываем скролл для слайдера
+      e.preventDefault();
+      
+      let newTranslate = this.translate - e.deltaY * 1.5;
+      
+      if (newTranslate > 0) newTranslate = 0;
+      if (newTranslate < -this.maxScroll) newTranslate = -this.maxScroll;
+      
+      this.transitionStyle = 'transform 0.3s ease-out';
+      this.translate = newTranslate;
+    },
+
+    blockClick(e) {
+      if (this.hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.hasDragged = false;
+      }
+    }
+  }"
+    x-ref="container"
+    x-on:wheel="onWheel($event)"
+    x-on:click.capture="blockClick($event)"
+    data-slot="attachment-group"
+    class={cn("relative w-full overflow-hidden py-1 select-none", className)}
+    {...rest}
+>
+    <div
+        x-ref="track"
+        x-on:pointerdown="startDrag($event)"
+        x-on:pointermove.window="onDrag($event)"
+        x-on:pointerup.window="stopDrag()"
+        x-on:dragstart.prevent
+        x-bind:style="`transform: translateX(${translate}px); transition: ${transitionStyle};`"
+        class="flex w-fit gap-3 cursor-grab active:cursor-grabbing will-change-transform touch-pan-y"
+    >
+        <slot />
+    </div>
+</div>

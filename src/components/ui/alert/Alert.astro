@@ -1,0 +1,33 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    variant?: "default" | "destructive";
+    class?: string;
+    [key: string]: any;
+}
+
+const { variant = "default", class: className, ...rest } = Astro.props;
+
+const baseClasses =
+    "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4";
+const variants = {
+    default: "bg-card text-card-foreground",
+    destructive: "bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current",
+};
+---
+
+<!-- Добавляем x-data, x-show и плавную анимацию исчезновения -->
+<div
+    x-data="{ open: true }"
+    x-show="open"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+    role="alert"
+    data-slot="alert"
+    class={cn(baseClasses, variants[variant], className)}
+    {...rest}
+>
+    <slot />
+</div>

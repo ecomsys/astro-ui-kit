@@ -1,0 +1,172 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { ChartContainer, ChartLegend, BarChart, LineChart, DonutChart } from "../../components/ui/chart";
+
+// 1. Данные определяются ТОЛЬКО ОДИН РАЗ здесь.
+const barData = [
+    { month: "Янв", revenue: 4000 },
+    { month: "Фев", revenue: 3000 },
+    { month: "Мар", revenue: 5000 },
+    { month: "Апр", revenue: 2780 },
+    { month: "Май", revenue: 8900 },
+    { month: "Июн", revenue: 5390 },
+];
+
+const barColorsData = [
+    { month: "Янв", revenue: 4000, color: "var(--chart-1)" },
+    { month: "Фев", revenue: 3000, color: "var(--chart-2)" },
+    { month: "Мар", revenue: 5000, color: "var(--chart-3)" },
+    { month: "Апр", revenue: 2780, color: "var(--chart-4)" },
+    { month: "Май", revenue: 8900, color: "var(--chart-5)" },
+];
+
+const lineData = [
+    { month: "Янв", users: 120 },
+    { month: "Фев", users: 150 },
+    { month: "Мар", users: 100 },
+    { month: "Апр", users: 200 },
+    { month: "Май", users: 280 },
+    { month: "Июн", users: 250 },
+];
+
+const donutData = [
+    { label: "Органика", value: 4000, color: "var(--chart-1)" },
+    { label: "Реклама", value: 3000, color: "var(--chart-2)" },
+    { label: "Соцсети", value: 2000, color: "var(--chart-3)" },
+    { label: "Прямой", value: 1000, color: "var(--chart-4)" },
+];
+
+// 2. Код для копирования генерируется АВТОМАТИЧЕСКИ через JSON.stringify
+const barCode = `import { ChartContainer, BarChart } from '../../components/ui/chart';
+
+const data = ${JSON.stringify(barData, null, 2)};
+
+<ChartContainer config={{ revenue: { label: "Доход", color: "var(--chart-1)" } }} class="h-64">
+  <BarChart data={data} index="month" category="revenue" />
+</ChartContainer>`;
+
+const barColorsCode = `import { ChartContainer, BarChart } from '../../components/ui/chart';
+
+const data = ${JSON.stringify(barColorsData, null, 2)};
+
+<ChartContainer config={{ revenue: { label: "Доход", color: "var(--chart-1)" } }} class="h-64">
+  <BarChart data={data} index="month" category="revenue" />
+</ChartContainer>`;
+
+const lineCode = `import { ChartContainer, LineChart } from '../../components/ui/chart';
+
+const data = ${JSON.stringify(lineData, null, 2)};
+
+<ChartContainer config={{ users: { label: "Пользователи", color: "var(--chart-2)" } }} class="h-64">
+  <LineChart data={data} index="month" category="users" />
+</ChartContainer>`;
+
+const donutCode = `import { ChartContainer, ChartLegend, DonutChart } from '../../components/ui/chart';
+
+const data = ${JSON.stringify(donutData, null, 2)};
+
+<ChartContainer config={{ traffic: { label: "Трафик", color: "var(--chart-1)" } }}>
+  <div class="flex flex-col items-center">
+    <DonutChart data={data} size={180} />
+    
+    <ChartLegend class="mt-4 flex-wrap gap-4">
+      {data.map((item) => (
+        <div class="flex items-center gap-2">
+          <div style={\`width: 0.75rem; height: 0.75rem; background-color: \${item.color}; display: block; border-radius: 0.125rem;\`}></div>
+          <span class="text-xs text-muted-foreground">{item.label}</span>
+        </div>
+      ))}
+    </ChartLegend>
+  </div>
+</ChartContainer>`;
+---
+
+<DashboardLayout title="Charts">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Charts</h1>
+            <p class="text-muted-foreground text-lg">
+                Графики на чистом SVG и Alpine.js. Поддерживают адаптивность, тултипы при наведении и кастомные цвета.
+                Никаких тяжелых библиотек.
+            </p>
+        </div>
+
+        <!-- 1. СТОЛБЧАТЫЙ ГРАФИК (BAR) -->
+        <ComponentDoc
+            title="Столбчатый график (Bar Chart)"
+            description="Базовый график для сравнения значений. Цвет берется из конфига ChartContainer."
+            code={barCode}
+        >
+            <div class="w-full border rounded-lg p-6 bg-card flex justify-center">
+                <ChartContainer
+                    config={{ revenue: { label: "Доход", color: "var(--chart-1)" } }}
+                    class="h-64 w-full max-w-xl"
+                >
+                    <BarChart data={barData} index="month" category="revenue" />
+                </ChartContainer>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗНОЦВЕТНЫЕ СТОЛБИКИ -->
+        <ComponentDoc
+            title="Свои цвета для столбиков"
+            description="Если добавить поле color в данные, каждый столбик окрасится индивидуально."
+            code={barColorsCode}
+        >
+            <div class="w-full border rounded-lg p-6 bg-card flex justify-center">
+                <ChartContainer
+                    config={{ revenue: { label: "Доход", color: "var(--chart-1)" } }}
+                    class="h-64 w-full max-w-xl"
+                >
+                    <BarChart data={barColorsData} index="month" category="revenue" />
+                </ChartContainer>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ЛИНЕЙНЫЙ ГРАФИК (LINE) -->
+        <ComponentDoc
+            title="Линейный график (Line Chart)"
+            description="Идеально для демонстрации динамики изменений во времени. Точки подсвечиваются при наведении."
+            code={lineCode}
+        >
+            <div class="w-full border rounded-lg p-6 bg-card flex justify-center">
+                <ChartContainer
+                    config={{ users: { label: "Пользователи", color: "var(--chart-2)" } }}
+                    class="h-64 w-full max-w-xl"
+                >
+                    <LineChart data={lineData} index="month" category="users" />
+                </ChartContainer>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. КОЛЬЦЕВОЙ ГРАФИК (DONUT) -->
+        <ComponentDoc
+            title="Кольцевой график (Donut Chart)"
+            description="Для отображения долей (например, источники трафика). Сектора подсвечиваются при наведении. Легенда генерируется в цикле."
+            code={donutCode}
+        >
+            <div class="w-full border rounded-lg p-6 bg-card flex justify-center">
+                <ChartContainer config={{ traffic: { label: "Трафик", color: "var(--chart-1)" } }}>
+                    <div class="flex flex-col items-center">
+                        <DonutChart data={donutData} size={180} />
+
+                        <ChartLegend class="mt-4 flex-wrap gap-4">
+                            {
+                                donutData.map((item) => (
+                                    <div class="flex items-center gap-2">
+                                        <div
+                                            style={`width: 0.75rem; height: 0.75rem; background-color: ${item.color}; display: block; border-radius: 0.125rem;`}
+                                        />
+                                        <span class="text-xs text-muted-foreground">{item.label}</span>
+                                    </div>
+                                ))
+                            }
+                        </ChartLegend>
+                    </div>
+                </ChartContainer>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

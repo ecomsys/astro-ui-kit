@@ -1,0 +1,27 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    variant?: "default" | "destructive";
+    inset?: boolean;
+    class?: string;
+    [key: string]: any;
+}
+
+const { variant = "default", inset = false, class: className, ...rest } = Astro.props;
+---
+
+<button
+    type="button"
+    x-on:click="open = false"
+    data-slot="dropdown-menu-item"
+    data-variant={variant}
+    data-inset={inset ? "" : undefined}
+    class={cn(
+        "group/dropdown-menu-item relative flex w-full text-left  cursor-default items-start gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:hover:bg-destructive/10 data-[variant=destructive]:hover:text-destructive dark:data-[variant=destructive]:hover:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive",
+        className,
+    )}
+    {...rest}
+>
+    <slot />
+</button>

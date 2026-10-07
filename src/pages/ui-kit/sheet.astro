@@ -1,0 +1,259 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Sheet,
+    SheetTrigger,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
+    SheetFooter,
+} from "../../components/ui/sheet";
+import Button from "../../components/ui/Button.astro";
+import { ShoppingCart, Trash2, ArrowRight, ArrowLeft, ArrowUp, ArrowDown } from "@lucide/astro";
+
+const basicCode = `import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '../../components/ui/sheet';
+import Button from '../../components/ui/Button.astro';
+
+<!-- По умолчанию выезжает справа (side="right") -->
+<Sheet>
+  <SheetTrigger>
+    <Button>Открыть панель</Button>
+  </SheetTrigger>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>Настройки</SheetTitle>
+      <SheetDescription>Управляйте своим профилем.</SheetDescription>
+    </SheetHeader>
+    <SheetFooter>
+      <Button x-on:click="open = false">Закрыть</Button>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>`;
+
+const sidesCode = `import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '../../components/ui/sheet';
+import Button from '../../components/ui/Button.astro';
+
+<!-- side="left" -->
+<Sheet>
+  <SheetTrigger><Button variant="outline">Слева</Button></SheetTrigger>
+  <SheetContent side="left">
+    <SheetHeader><SheetTitle>Левая панель</SheetTitle></SheetHeader>
+  </SheetContent>
+</Sheet>
+
+<!-- side="top" -->
+<Sheet>
+  <SheetTrigger><Button variant="outline">Сверху</Button></SheetTrigger>
+  <SheetContent side="top">
+    <SheetHeader><SheetTitle>Верхняя панель</SheetTitle></SheetHeader>
+  </SheetContent>
+</Sheet>
+
+<!-- side="bottom" -->
+<Sheet>
+  <SheetTrigger><Button variant="outline">Снизу</Button></SheetTrigger>
+  <SheetContent side="bottom">
+    <SheetHeader><SheetTitle>Нижняя панель</SheetTitle></SheetHeader>
+  </SheetContent>
+</Sheet>
+
+<!-- side="right" (по умолчанию) -->
+<Sheet>
+  <SheetTrigger><Button variant="outline">Справа</Button></SheetTrigger>
+  <SheetContent>
+    <SheetHeader><SheetTitle>Правая панель</SheetTitle></SheetHeader>
+  </SheetContent>
+</Sheet>`;
+
+const cartCode = `import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '../../components/ui/sheet';
+import Button from '../../components/ui/Button.astro';
+import { ShoppingCart, Trash2 } from '@lucide/astro';
+
+<Sheet>
+  <SheetTrigger>
+    <Button><ShoppingCart class="size-4" /> Корзина (2)</Button>
+  </SheetTrigger>
+  <!-- Ограничиваем ширину через max-w-md (28rem) -->
+  <SheetContent class="w-full max-w-md">
+    <SheetHeader>
+      <SheetTitle>Ваша корзина</SheetTitle>
+      <SheetDescription>2 товара на сумму 4 500 ₽</SheetDescription>
+    </SheetHeader>
+    
+    <!-- Список товаров. Добавлен overflow-y-auto на случай длинного списка -->
+    <div class="flex flex-col gap-4 py-4 overflow-y-auto">
+      <!-- Товар 1 -->
+      <div class="flex items-center gap-4 p-2 rounded-lg border">
+        <div class="size-12 rounded-md bg-muted"></div>
+        <div class="flex-1">
+          <p class="text-sm font-medium">Кроссовки Nike</p>
+          <p class="text-xs text-muted-foreground">Размер: 42</p>
+        </div>
+        <div class="text-sm font-bold">3 500 ₽</div>
+        <Button variant="ghost" size="icon-sm" x-on:click="open = false"><Trash2 class="size-4" /></Button>
+      </div>
+      
+      <!-- Товар 2 -->
+      <div class="flex items-center gap-4 p-2 rounded-lg border">
+        <div class="size-12 rounded-md bg-muted"></div>
+        <div class="flex-1">
+          <p class="text-sm font-medium">Футболка</p>
+          <p class="text-xs text-muted-foreground">Цвет: Черный</p>
+        </div>
+        <div class="text-sm font-bold">1 000 ₽</div>
+        <Button variant="ghost" size="icon-sm" x-on:click="open = false"><Trash2 class="size-4" /></Button>
+      </div>
+    </div>
+    
+    <SheetFooter>
+      <div class="flex flex-col gap-4 w-full">
+        <div class="flex items-center justify-between text-sm">
+          <span>Итого:</span>
+          <span class="font-bold text-lg">4 500 ₽</span>
+        </div>
+        <Button class="w-full" x-on:click="open = false">Оформить заказ</Button>
+      </div>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>`;
+---
+
+<DashboardLayout title="Sheet">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Sheet</h1>
+            <p class="text-muted-foreground text-lg">
+                Выезжающая панель, прикрепленная к краю экрана. Используется для меню, фильтров и корзин. Поддерживает 4
+                стороны.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ ПАНЕЛЬ -->
+        <ComponentDoc
+            title="Базовая панель"
+            description="По умолчанию панель выезжает справа. Кнопка закрытия (крестик) есть в углу."
+            code={basicCode}
+        >
+            <div class="flex justify-center">
+                <Sheet>
+                    <SheetTrigger>
+                        <Button>Открыть панель</Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader>
+                            <SheetTitle>Настройки</SheetTitle>
+                            <SheetDescription>Управляйте своим профилем.</SheetDescription>
+                        </SheetHeader>
+                        <SheetFooter>
+                            <Button x-on:click="open = false">Закрыть</Button>
+                        </SheetFooter>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ВСЕ СТОРОНЫ -->
+        <ComponentDoc
+            title="Все стороны (Sides)"
+            description="Используйте пропс side, чтобы выбрать сторону выезда: left, right, top, bottom."
+            code={sidesCode}
+        >
+            <div class="flex flex-wrap justify-center gap-4">
+                <Sheet>
+                    <SheetTrigger><Button variant="outline">Слева</Button></SheetTrigger>
+                    <SheetContent side="left">
+                        <SheetHeader><SheetTitle>Левая панель</SheetTitle></SheetHeader>
+                    </SheetContent>
+                </Sheet>
+
+                <!-- side="top" -->
+                <Sheet>
+                    <SheetTrigger><Button variant="outline">Сверху</Button></SheetTrigger>
+                    <SheetContent side="top">
+                        <SheetHeader><SheetTitle>Верхняя панель</SheetTitle></SheetHeader>
+                    </SheetContent>
+                </Sheet>
+
+                <!-- side="bottom" -->
+                <Sheet>
+                    <SheetTrigger><Button variant="outline">Снизу</Button></SheetTrigger>
+                    <SheetContent side="bottom">
+                        <SheetHeader><SheetTitle>Нижняя панель</SheetTitle></SheetHeader>
+                    </SheetContent>
+                </Sheet>
+
+                <!-- side="right" (по умолчанию) -->
+                <Sheet>
+                    <SheetTrigger><Button variant="outline">Справа</Button></SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader><SheetTitle>Правая панель</SheetTitle></SheetHeader>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. КОРЗИНА ПОКУПОК (ЖИРНЫЙ ПРИМЕР) -->
+        <ComponentDoc
+            title="Корзина покупок (Rich Content)"
+            description="Реальный пример интернет-магазина. Внутри список товаров, иконки удаления и подвал с итоговой суммой. Ширина ограничена max-w-md."
+            code={cartCode}
+        >
+            <div class="flex justify-center">
+                <Sheet>
+                    <SheetTrigger>
+                        <Button><ShoppingCart class="size-4" /> Корзина (2)</Button>
+                    </SheetTrigger>
+                    <!-- Ограничиваем ширину через max-w-md (28rem) -->
+                    <SheetContent class="w-full max-w-md">
+                        <SheetHeader>
+                            <SheetTitle>Ваша корзина</SheetTitle>
+                            <SheetDescription>2 товара на сумму 4 500 ₽</SheetDescription>
+                        </SheetHeader>
+
+                        <!-- Список товаров. Добавлен overflow-y-auto на случай длинного списка -->
+                        <div class="flex flex-col gap-4 py-4 overflow-y-auto">
+                            <!-- Товар 1 -->
+                            <div class="flex items-center gap-4 p-2 rounded-lg border">
+                                <div class="size-12 rounded-md bg-muted"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">Кроссовки Nike</p>
+                                    <p class="text-xs text-muted-foreground">Размер: 42</p>
+                                </div>
+                                <div class="text-sm font-bold">3 500 ₽</div>
+                                <Button variant="ghost" size="icon-sm" x-on:click="open = false"
+                                    ><Trash2 class="size-4" /></Button
+                                >
+                            </div>
+
+                            <!-- Товар 2 -->
+                            <div class="flex items-center gap-4 p-2 rounded-lg border">
+                                <div class="size-12 rounded-md bg-muted"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">Футболка</p>
+                                    <p class="text-xs text-muted-foreground">Цвет: Черный</p>
+                                </div>
+                                <div class="text-sm font-bold">1 000 ₽</div>
+                                <Button variant="ghost" size="icon-sm" x-on:click="open = false"
+                                    ><Trash2 class="size-4" /></Button
+                                >
+                            </div>
+                        </div>
+
+                        <SheetFooter>
+                            <div class="flex flex-col gap-4 w-full">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span>Итого:</span>
+                                    <span class="font-bold text-lg">4 500 ₽</span>
+                                </div>
+                                <Button class="w-full" x-on:click="open = false">Оформить заказ</Button>
+                            </div>
+                        </SheetFooter>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

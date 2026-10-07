@@ -1,0 +1,29 @@
+---
+import { cn } from "../../../lib/utils";
+import PaginationLink from "./PaginationLink.astro";
+import { ChevronRightIcon } from "@lucide/astro";
+
+export interface Props {
+    href?: string;
+    isActive?: boolean;
+    disabled?: boolean;
+    text?: string;
+    class?: string;
+    [key: string]: any;
+}
+
+const { href = "#", isActive = false, disabled = false, text = "Далее", class: className, ...rest } = Astro.props;
+---
+
+<PaginationLink
+    href={disabled ? undefined : href}
+    isActive={isActive}
+    size="default"
+    aria-label="Go to next page"
+    aria-disabled={disabled ? "true" : undefined}
+    class={cn("pr-1.5!", disabled && "pointer-events-none opacity-50", className)}
+    {...rest}
+>
+    <span class="hidden sm:block">{text}</span>
+    <ChevronRightIcon data-icon="inline-end" />
+</PaginationLink>

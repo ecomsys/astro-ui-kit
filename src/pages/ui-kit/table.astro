@@ -1,0 +1,213 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableFooter,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableCaption,
+} from "../../components/ui/table";
+import Checkbox from "../../components/ui/Checkbox.astro";
+
+const basicCode = `import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../../components/ui/table';
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Имя</TableHead>
+      <TableHead>Роль</TableHead>
+      <TableHead class="text-right">Статус</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Иван Иванов</TableCell>
+      <TableCell>Frontend Developer</TableCell>
+      <TableCell class="text-right text-green-600">Активен</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Петр Петров</TableCell>
+      <TableCell>Designer</TableCell>
+      <TableCell class="text-right text-muted-foreground">В отпуске</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`;
+
+const footerCode = `import { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption } from '../../components/ui/table';
+
+<Table>
+  <TableCaption>Список сотрудников за октябрь 2025.</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Отдел</TableHead>
+      <TableHead class="text-right">Кол-во человек</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Разработка</TableCell>
+      <TableCell class="text-right">12</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Дизайн</TableCell>
+      <TableCell class="text-right">5</TableCell>
+    </TableRow>
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell>Итого</TableCell>
+      <TableCell class="text-right">17</TableCell>
+    </TableRow>
+  </TableFooter>
+</Table>`;
+
+const checkboxCode = `import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../../components/ui/table';
+import Checkbox from '../../components/ui/Checkbox.astro';
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <!-- Чекбокс в шапке (Выделить все) -->
+      <TableHead class="w-8"><Checkbox /></TableHead>
+      <TableHead>Задача</TableHead>
+      <TableHead>Дедлайн</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell><Checkbox /></TableCell>
+      <TableCell>Верстать лендинг</TableCell>
+      <TableCell>25.10.2025</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell><Checkbox checked /></TableCell>
+      <TableCell>Интегрировать API</TableCell>
+      <TableCell>28.10.2025</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`;
+---
+
+<DashboardLayout title="Table">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Table</h1>
+            <p class="text-muted-foreground text-lg">
+                Семантические таблицы для отображения массивов данных. Поддерживает горизонтальный скролл на мобильных
+                устройствах и любую вложенность.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВАЯ ТАБЛИЦА -->
+        <ComponentDoc
+            title="Базовая таблица"
+            description="Простая таблица с шапкой и телом. Класс text-right выравнивает контент по правому краю."
+            code={basicCode}
+        >
+            <div class="w-full max-w-2xl border rounded-lg overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Имя</TableHead>
+                            <TableHead>Роль</TableHead>
+                            <TableHead class="text-right">Статус</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Иван Иванов</TableCell>
+                            <TableCell>Frontend Developer</TableCell>
+                            <TableCell class="text-right text-green-600 font-medium">Активен</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Петр Петров</TableCell>
+                            <TableCell>Designer</TableCell>
+                            <TableCell class="text-right text-muted-foreground">В отпуске</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Анна Смирнова</TableCell>
+                            <TableCell>Project Manager</TableCell>
+                            <TableCell class="text-right text-green-600 font-medium">Активен</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. С ПОДВАЛОМ И ЗАГОЛОВКОМ -->
+        <ComponentDoc
+            title="С подвалом (Footer) и подписью (Caption)"
+            description="Используйте TableFooter для итоговых сумм. TableCaption добавляет семантический заголовок (важно для SEO)."
+            code={footerCode}
+        >
+            <div class="w-full max-w-2xl border rounded-lg overflow-hidden">
+                <Table>
+                    <TableCaption>Список сотрудников за октябрь 2025.</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Отдел</TableHead>
+                            <TableHead class="text-right">Кол-во человек</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>Разработка</TableCell>
+                            <TableCell class="text-right">12</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Дизайн</TableCell>
+                            <TableCell class="text-right">5</TableCell>
+                        </TableRow>
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell>Итого</TableCell>
+                            <TableCell class="text-right font-bold">17</TableCell>
+                        </TableRow>
+                    </TableFooter>
+                </Table>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ТАБЛИЦА С ЧЕКБОКСАМИ -->
+        <ComponentDoc
+            title="С чекбоксами (Массовый выбор)"
+            description="Классический UI для управления задачами. Класс w-8 в TableHead фиксирует ширину колонки с чекбоксом."
+            code={checkboxCode}
+        >
+            <div class="w-full max-w-2xl border rounded-lg overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead class="w-8"><Checkbox /></TableHead>
+                            <TableHead>Задача</TableHead>
+                            <TableHead>Дедлайн</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell><Checkbox /></TableCell>
+                            <TableCell>Верстать лендинг</TableCell>
+                            <TableCell class="text-muted-foreground">25.10.2025</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell><Checkbox checked /></TableCell>
+                            <TableCell>Интегрировать API</TableCell>
+                            <TableCell class="text-muted-foreground">28.10.2025</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell><Checkbox /></TableCell>
+                            <TableCell>Написать документацию</TableCell>
+                            <TableCell class="text-muted-foreground">30.10.2025</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

@@ -1,0 +1,168 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Input from "../../components/ui/Input.astro";
+import Label from "../../components/ui/Label.astro";
+import Textarea from "../../components/ui/Textarea.astro";
+import Button from "../../components/ui/Button.astro";
+import { Eye, EyeOff } from "@lucide/astro";
+
+const basicCode = `import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="name">Имя</Label>
+  <Input id="name" placeholder="Иван Иванов" />
+</div>`;
+
+const passwordCode = `import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+import { Eye, EyeOff } from '@lucide/astro';
+
+<!-- Магия на Alpine.js: x-data хранит состояние visible -->
+<div class="flex flex-col gap-2 w-full max-w-sm" x-data="{ visible: false }">
+  <Label for="pwd">Пароль</Label>
+  <div class="relative">
+    <!-- Тип меняется реактивно -->
+    <Input id="pwd" :type="visible ? 'text' : 'password'" placeholder="******" class="pr-10" />
+    
+    <!-- Кнопка-глазик -->
+    <button type="button" @click="visible = !visible" class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+      <Eye x-show="!visible" class="size-4" />
+      <EyeOff x-show="visible" x-cloak class="size-4" />
+    </button>
+  </div>
+</div>`;
+
+const typesCode = `import Input from '../../components/ui/Input.astro';
+
+<Input type="email" placeholder="m@example.com" />
+<Input type="file" />`;
+
+const textareaCode = `import Textarea from '../../components/ui/Textarea.astro';
+import Label from '../../components/ui/Label.astro';
+
+<div class="flex flex-col gap-2 w-full max-w-sm">
+  <Label for="msg">Сообщение</Label>
+  <Textarea id="msg" placeholder="Напишите что-нибудь..."></Textarea>
+</div>`;
+
+const formCode = `import Input from '../../components/ui/Input.astro';
+import Label from '../../components/ui/Label.astro';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Добавляем name="..." атрибуты и алерт через @submit.prevent -->
+<form @submit.prevent="alert('Email: ' + new FormData($event.target).get('email') + '\\nПароль: ' + new FormData($event.target).get('password'))" class="flex flex-col gap-4 w-full max-w-sm">
+  <div class="flex flex-col gap-2">
+    <Label for="email">Email</Label>
+    <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+  </div>
+  
+  <div class="flex flex-col gap-2">
+    <Label for="password">Пароль</Label>
+    <Input id="password" name="password" type="password" placeholder="******" required />
+  </div>
+  
+  <div class="flex justify-end gap-2 pt-2">
+    <Button type="button" variant="outline">Отмена</Button>
+    <Button type="submit">Войти</Button>
+  </div>
+</form>`;
+---
+
+<DashboardLayout title="Input & Forms">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Input & Forms</h1>
+            <p class="text-muted-foreground text-lg">
+                Компоненты для ввода текста, паролей и сообщений. Включает в себя <code
+                    class="text-sm bg-muted px-1.5 py-0.5 rounded">Input</code
+                >, <code class="text-sm bg-muted px-1.5 py-0.5 rounded">Label</code> и <code
+                    class="text-sm bg-muted px-1.5 py-0.5 rounded">Textarea</code
+                >.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ ИНПУТ -->
+        <ComponentDoc title="Базовый ввод" description="Стандартное поле ввода с привязанным лейблом." code={basicCode}>
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="name">Имя</Label>
+                <Input id="name" placeholder="Иван Иванов" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ПОКАЗ/СКРЫТИЕ ПАРОЛЯ -->
+        <ComponentDoc
+            title="Поле пароля (Show/Hide)"
+            description="Кнопка-глазик для переключения видимости пароля. Работает на Alpine.js."
+            code={passwordCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm" x-data="{ visible: false }">
+                <Label for="pwd">Пароль</Label>
+                <div class="relative">
+                    <Input id="pwd" :type="visible ? 'text' : 'password'" placeholder="******" class="pr-10" />
+                    <button
+                        type="button"
+                        @click="visible = !visible"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                        <Eye x-show="!visible" class="size-4" />
+                        <EyeOff x-show="visible" x-cloak class="size-4" />
+                    </button>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ТИПЫ ИНПУТОВ -->
+        <ComponentDoc
+            title="Типы полей (Types)"
+            description="Поддержка всех нативных HTML-типов, включая файлы."
+            code={typesCode}
+        >
+            <div class="flex flex-col gap-4 w-full max-w-sm">
+                <Input type="email" placeholder="m@example.com" />
+                <Input type="file" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ТЕКСТАРЕА -->
+        <ComponentDoc
+            title="Textarea (Многострочный текст)"
+            description="Поле для длинных сообщений. Автоматически растягивается по мере ввода текста."
+            code={textareaCode}
+        >
+            <div class="flex flex-col gap-2 w-full max-w-sm">
+                <Label for="msg">Сообщение</Label>
+                <Textarea id="msg" placeholder="Начните печатать, и я вырасту вниз..." />
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. ПОЛНОЦЕННАЯ ФОРМА С ОТПРАВКОЙ -->
+        <ComponentDoc
+            title="Форма входа (Form Submit)"
+            description="Пример компоновки полей внутри <form>. Мы добавили атрибуты name и алерт, чтобы показать, как данные легко достаются через FormData."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Email: ' + new FormData($event.target).get('email') + '\nПароль: ' + new FormData($event.target).get('password'))"
+                class="flex flex-col gap-4 w-full max-w-sm"
+            >
+                <div class="flex flex-col gap-2">
+                    <Label for="email">Email</Label>
+                    <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <Label for="password">Пароль</Label>
+                    <Input id="password" name="password" type="password" placeholder="******" required />
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <Button type="button" variant="outline">Отмена</Button>
+                    <Button type="submit">Войти</Button>
+                </div>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

@@ -1,0 +1,135 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Toggle from "../../components/ui/Toggle.astro";
+import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Search, Star, Heart } from "@lucide/astro";
+
+const basicCode = `import Toggle from '../../components/ui/Toggle.astro';
+
+<div class="flex flex-wrap gap-3 items-center">
+  <Toggle>Опция 1</Toggle>
+  <Toggle pressed={true}>Опция 2 (Вкл)</Toggle>
+</div>`;
+
+const sizesCode = `import Toggle from '../../components/ui/Toggle.astro';
+
+<div class="flex flex-wrap gap-3 items-center">
+  <Toggle size="sm">Маленькая</Toggle>
+  <Toggle size="default">Обычная</Toggle>
+  <Toggle size="lg">Большая</Toggle>
+</div>`;
+
+const variantsCode = `import Toggle from '../../components/ui/Toggle.astro';
+import { Star, Heart } from '@lucide/astro';
+
+<div class="flex flex-wrap gap-3 items-center">
+  <Toggle variant="outline"><Star class="size-4" /> В избранное</Toggle>
+  <Toggle variant="ghost" pressed={true}><Heart class="size-4" /> Нравится</Toggle>
+</div>`;
+
+const iconSizesCode = `import Toggle from '../../components/ui/Toggle.astro';
+import { Search } from '@lucide/astro';
+
+<div class="flex flex-wrap gap-2 items-center">
+  <Toggle variant="outline" size="icon-sm"><Search class="size-3.5" /></Toggle>
+  <Toggle variant="outline" size="icon"><Search class="size-4" /></Toggle>
+  <Toggle variant="outline" size="icon-lg"><Search class="size-4" /></Toggle>
+</div>`;
+
+const toolbarCode = `import Toggle from '../../components/ui/Toggle.astro';
+import { Bold, Italic, Underline } from '@lucide/astro';
+
+<div class="flex items-center gap-1 p-1 border rounded-lg w-fit bg-card">
+  <Toggle variant="ghost" size="icon" aria-label="Toggle bold">
+    <Bold class="size-4" />
+  </Toggle>
+  <Toggle variant="ghost" size="icon" pressed={true} aria-label="Toggle italic">
+    <Italic class="size-4" />
+  </Toggle>
+  <Toggle variant="ghost" size="icon" aria-label="Toggle underline">
+    <Underline class="size-4" />
+  </Toggle>
+</div>`;
+---
+
+<DashboardLayout title="Toggle">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Toggle</h1>
+            <p class="text-muted-foreground text-lg">
+                Кнопка-переключатель. Остается в нажатом состоянии (pressed) до повторного клика. Идеально подходит для
+                тулбаров и фильтров.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ TOGGLE -->
+        <ComponentDoc
+            title="Базовый Toggle"
+            description="Передайте пропс pressed={true}, чтобы кнопка была нажата при загрузке страницы."
+            code={basicCode}
+        >
+            <div class="flex flex-wrap gap-3 items-center">
+                <Toggle>Опция 1</Toggle>
+                <Toggle pressed={true}>Опция 2 (Вкл)</Toggle>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. РАЗМЕРЫ -->
+        <ComponentDoc
+            title="Размеры (Sizes)"
+            description="Поддерживает три текстовых размера: sm, default и lg."
+            code={sizesCode}
+        >
+            <div class="flex flex-wrap gap-3 items-center">
+                <Toggle size="sm">Маленькая</Toggle>
+                <Toggle size="default">Обычная</Toggle>
+                <Toggle size="lg">Большая</Toggle>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. ВАРИАНТЫ (VARIANTS) -->
+        <ComponentDoc
+            title="Варианты (Variants)"
+            description="variant='outline' добавляет рамку, а variant='ghost' делает фон прозрачным до наведения."
+            code={variantsCode}
+        >
+            <div class="flex flex-wrap gap-3 items-center">
+                <Toggle variant="outline"><Star class="size-4" /> В избранное</Toggle>
+                <Toggle variant="ghost" pressed={true}><Heart class="size-4" /> Нравится</Toggle>
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ИКОНОЧНЫЕ РАЗМЕРЫ (ICON SIZES) -->
+        <ComponentDoc
+            title="Иконочные размеры"
+            description="Квадратные кнопки для иконок. Доступны размеры icon-sm, icon, icon-lg."
+            code={iconSizesCode}
+        >
+            <div class="flex flex-wrap gap-2 items-center">
+                <Toggle variant="outline" size="icon-sm"><Search class="size-3.5" /></Toggle>
+                <Toggle variant="outline" size="icon"><Search class="size-4" /></Toggle>
+                <Toggle variant="outline" size="icon-lg"><Search class="size-4" /></Toggle>
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. ПАНЕЛЬ ИНСТРУМЕНТОВ (TOOLBAR) -->
+        <ComponentDoc
+            title="Тулбар текстового редактора"
+            description="Реальный кейс: группа иконок-переключателей. Используйте size='icon' для квадратных кнопок."
+            code={toolbarCode}
+        >
+            <div class="flex items-center gap-1 p-1 border rounded-lg w-fit bg-card">
+                <Toggle variant="ghost" size="icon" aria-label="Toggle bold">
+                    <Bold class="size-4" />
+                </Toggle>
+                <Toggle variant="ghost" size="icon" pressed={true} aria-label="Toggle italic">
+                    <Italic class="size-4" />
+                </Toggle>
+                <Toggle variant="ghost" size="icon" aria-label="Toggle underline">
+                    <Underline class="size-4" />
+                </Toggle>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

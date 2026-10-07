@@ -1,0 +1,11 @@
+---
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+const { ...rest } = Astro.props;
+---
+
+<div x-data="overlay()" x-effect="toggleScrollLock()" data-slot="sheet" {...rest}>
+    <slot />
+</div>

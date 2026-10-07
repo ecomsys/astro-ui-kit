@@ -1,0 +1,12 @@
+export { default as SidebarProvider } from "./SidebarProvider.astro";
+export { default as Sidebar } from "./Sidebar.astro";
+export { default as SidebarInset } from "./SidebarInset.astro";
+export { default as SidebarTrigger } from "./SidebarTrigger.astro";
+export { default as SidebarHeader } from "./SidebarHeader.astro";
+export { default as SidebarContent } from "./SidebarContent.astro";
+export { default as SidebarFooter } from "./SidebarFooter.astro";
+export { default as SidebarGroup } from "./SidebarGroup.astro";
+export { default as SidebarMenu } from "./SidebarMenu.astro";
+export { default as SidebarMenuItem } from "./SidebarMenuItem.astro";
+export { default as SidebarMenuButton } from "./SidebarMenuButton.astro";
+export { default as SidebarGroupLabel } from "./SidebarGroupLabel.astro";

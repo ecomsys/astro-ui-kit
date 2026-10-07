@@ -1,0 +1,17 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    class?: string;
+    [key: string]: any;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div x-ref="viewport" class={cn("overflow-hidden outline-none h-full py-1", className)} data-slot="carousel-content">
+    <!-- :class переключает CSS логику -->
+    <div class="flex h-full embla-track" :class="loopActive ? 'is-loop' : ''" {...rest}>
+        <slot />
+    </div>
+</div>

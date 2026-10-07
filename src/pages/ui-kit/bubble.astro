@@ -1,0 +1,254 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import { BubbleGroup, Bubble, BubbleContent, BubbleReactions } from "../../components/ui/bubble";
+import {
+    MessageGroup,
+    Message,
+    MessageAvatar,
+    MessageContent,
+    MessageHeader,
+    MessageFooter,
+} from "../../components/ui/message";
+import { Avatar, AvatarImage, AvatarFallback } from "../../components/ui/avatar";
+import { Bot, User, Heart, ThumbsUp, Laugh, Angry, Copy, Check } from "@lucide/astro";
+
+const chatCode = `import { BubbleGroup, Bubble, BubbleContent, BubbleReactions } from '../../components/ui/bubble';
+import { MessageGroup, Message, MessageAvatar, MessageContent, MessageHeader, MessageFooter } from '../../components/ui/message';
+import { Avatar, AvatarFallback } from '../../components/ui/avatar';
+import { Bot, User, Heart, ThumbsUp } from '@lucide/astro';
+
+<div class="mx-auto w-full max-w-2xl rounded-2xl border bg-popover shadow-xl">
+  <div class="flex items-center gap-3 border-b p-4">
+    <Avatar><AvatarFallback>AI</AvatarFallback></Avatar>
+    <div>
+      <p class="font-semibold">AI Assistant</p>
+      <p class="text-xs text-muted-foreground">Онлайн</p>
+    </div>
+  </div>
+  
+  <div class="p-4 space-y-6">
+    <MessageGroup>
+      <Message align="start">
+        <MessageAvatar><Avatar><AvatarFallback>AI</AvatarFallback></Avatar></MessageAvatar>
+        <MessageContent>
+          <MessageHeader>AI Assistant</MessageHeader>
+          <BubbleGroup>
+            <Bubble variant="default">
+              <BubbleContent>Привет! Я твой виртуальный ассистент. Чем могу помочь сегодня?</BubbleContent>
+              <BubbleReactions side="bottom" align="end">
+                <ThumbsUp class="size-3.5" />
+                <Heart class="size-3.5" />
+              </BubbleReactions>
+            </Bubble>
+          </BubbleGroup>
+          <MessageFooter>12:30</MessageFooter>
+        </MessageContent>
+      </Message>
+      
+      <Message align="end">
+        <MessageAvatar><Avatar><AvatarFallback>Я</AvatarFallback></Avatar></MessageAvatar>
+        <MessageContent>
+          <BubbleGroup>
+            <Bubble variant="secondary">
+              <BubbleContent>Напиши мне компонент кнопки на Astro</BubbleContent>
+            </Bubble>
+          </BubbleGroup>
+          <MessageFooter>12:31</MessageFooter>
+        </MessageContent>
+      </Message>
+      
+      <Message align="start">
+        <MessageAvatar><Avatar><AvatarFallback>AI</AvatarFallback></Avatar></MessageAvatar>
+        <MessageContent>
+          <BubbleGroup>
+            <Bubble variant="outline">
+              <BubbleContent class="font-mono text-xs">import Button from './Button.astro'</BubbleContent>
+            </Bubble>
+            <Bubble variant="tinted">
+              <BubbleContent>Вот твой код. Копируй и используй!</BubbleContent>
+              <BubbleReactions side="bottom" align="end">
+                <Laugh class="size-3.5" />
+                <Angry class="size-3.5" />
+              </BubbleReactions>
+            </Bubble>
+          </BubbleGroup>
+          <MessageFooter>12:32</MessageFooter>
+        </MessageContent>
+      </Message>
+    </MessageGroup>
+  </div>
+</div>`;
+
+const variantsCode = `import { BubbleGroup, Bubble, BubbleContent } from '../../components/ui/bubble';
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <Bubble variant="default"><BubbleContent>Default (Primary)</BubbleContent></Bubble>
+  <Bubble variant="secondary"><BubbleContent>Secondary</BubbleContent></Bubble>
+  <Bubble variant="muted"><BubbleContent>Muted</BubbleContent></Bubble>
+  <Bubble variant="tinted"><BubbleContent>Tinted</BubbleContent></Bubble>
+  <Bubble variant="outline"><BubbleContent>Outline</BubbleContent></Bubble>
+  <Bubble variant="destructive"><BubbleContent>Destructive</BubbleContent></Bubble>
+  <Bubble variant="ghost"><BubbleContent>Ghost (без рамок)</BubbleContent></Bubble>
+</div>`;
+
+const reactionsCode = `import { Bubble, BubbleContent, BubbleReactions } from '../../components/ui/bubble';
+import { Heart, ThumbsUp } from '@lucide/astro';
+
+<Bubble variant="default">
+  <BubbleContent>Сообщение с реакциями</BubbleContent>
+  <BubbleReactions side="bottom" align="end">
+    <ThumbsUp class="size-3.5" />
+    <Heart class="size-3.5" />
+  </BubbleReactions>
+</Bubble>`;
+---
+
+<DashboardLayout title="Bubble">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Bubble</h1>
+            <p class="text-muted-foreground text-lg">
+                "Пузырь" сообщения. Содержит сам текст, медиа или кнопки. Поддерживает 7 вариантов оформления и
+                плавающие реакции (BubbleReactions).
+            </p>
+        </div>
+
+        <!-- 1. ИНТЕРФЕЙС ЧАТА (Реальный кейс) -->
+        <ComponentDoc
+            title="Интерфейс чата"
+            description="Полноценный пример переписки с AI. Использует Message для раскладки и Bubble для контента. Добавлены реакции и разные варианты пузырей."
+            code={chatCode}
+        >
+            <div class="py-8">
+                <div class="mx-auto w-full max-w-2xl rounded-2xl border bg-popover shadow-xl">
+                    <div class="flex items-center gap-3 border-b p-4">
+                        <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                            <Bot class="size-6" />
+                        </div>
+                        <div>
+                            <p class="font-semibold">AI Assistant</p>
+                            <p class="text-xs text-green-500">В сети</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 space-y-6">
+                        <MessageGroup>
+                            <Message align="start">
+                                <MessageAvatar>
+                                    <div
+                                        class="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+                                    >
+                                        <Bot class="size-5" />
+                                    </div>
+                                </MessageAvatar>
+                                <MessageContent>
+                                    <MessageHeader>AI Assistant</MessageHeader>
+                                    <BubbleGroup>
+                                        <Bubble variant="default">
+                                            <BubbleContent
+                                                >Привет! Я твой виртуальный ассистент. Чем могу помочь сегодня?</BubbleContent
+                                            >
+                                            <BubbleReactions side="bottom" align="end">
+                                                <ThumbsUp class="size-3.5" />
+                                                <Heart class="size-3.5" />
+                                            </BubbleReactions>
+                                        </Bubble>
+                                    </BubbleGroup>
+                                    <MessageFooter>12:30</MessageFooter>
+                                </MessageContent>
+                            </Message>
+
+                            <Message align="end">
+                                <MessageAvatar>
+                                    <div
+                                        class="flex size-8 items-center justify-center rounded-full bg-muted text-foreground"
+                                    >
+                                        <User class="size-5" />
+                                    </div>
+                                </MessageAvatar>
+                                <MessageContent>
+                                    <BubbleGroup>
+                                        <Bubble variant="secondary">
+                                            <BubbleContent>Напиши мне компонент кнопки на Astro</BubbleContent>
+                                        </Bubble>
+                                    </BubbleGroup>
+                                    <MessageFooter>12:31</MessageFooter>
+                                </MessageContent>
+                            </Message>
+
+                            <Message align="start">
+                                <MessageAvatar>
+                                    <div
+                                        class="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+                                    >
+                                        <Bot class="size-5" />
+                                    </div>
+                                </MessageAvatar>
+                                <MessageContent>
+                                    <BubbleGroup>
+                                        <Bubble variant="outline">
+                                            <BubbleContent class="font-mono text-xs"
+                                                >import Button from './Button.astro'</BubbleContent
+                                            >
+                                        </Bubble>
+                                        <Bubble variant="tinted">
+                                            <BubbleContent>Вот твой код. Копируй и используй!</BubbleContent>
+                                            <BubbleReactions side="bottom" align="end">
+                                                <Laugh class="size-3.5" />
+                                                <Angry class="size-3.5" />
+                                            </BubbleReactions>
+                                        </Bubble>
+                                    </BubbleGroup>
+                                    <MessageFooter>12:32</MessageFooter>
+                                </MessageContent>
+                            </Message>
+                        </MessageGroup>
+                    </div>
+                </div>
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ВСЕ ВАРИАНТЫ ПУЗЫРЕЙ -->
+        <ComponentDoc
+            title="Все варианты (Variants)"
+            description="7 стилей: default, secondary, muted, tinted, outline, destructive, ghost. Сгруппированы в сетку для наглядности."
+            code={variantsCode}
+        >
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-8">
+                <Bubble variant="default"><BubbleContent>Default (Primary)</BubbleContent></Bubble>
+                <Bubble variant="secondary"><BubbleContent>Secondary</BubbleContent></Bubble>
+                <Bubble variant="muted"><BubbleContent>Muted</BubbleContent></Bubble>
+                <Bubble variant="tinted"><BubbleContent>Tinted</BubbleContent></Bubble>
+                <Bubble variant="outline"><BubbleContent>Outline</BubbleContent></Bubble>
+                <Bubble variant="destructive"><BubbleContent>Destructive</BubbleContent></Bubble>
+                <Bubble variant="ghost"><BubbleContent>Ghost (без рамок)</BubbleContent></Bubble>
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. РЕАКЦИИ -->
+        <ComponentDoc
+            title="Реакции (BubbleReactions)"
+            description="Плавающие реакции (лайки) поверх пузыря. side управляет вертикалью (top/bottom), align — горизонталью (start/end)."
+            code={reactionsCode}
+        >
+            <div class="flex flex-col gap-6 py-8">
+                <Bubble variant="default">
+                    <BubbleContent>Реакции снизу справа (по умолчанию)</BubbleContent>
+                    <BubbleReactions side="bottom" align="end">
+                        <ThumbsUp class="size-3.5" />
+                        <Heart class="size-3.5" />
+                    </BubbleReactions>
+                </Bubble>
+
+                <Bubble variant="secondary">
+                    <BubbleContent>Реакции сверху слева</BubbleContent>
+                    <BubbleReactions side="top" align="start">
+                        <Laugh class="size-3.5" />
+                        <Angry class="size-3.5" />
+                    </BubbleReactions>
+                </Bubble>
+            </div>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

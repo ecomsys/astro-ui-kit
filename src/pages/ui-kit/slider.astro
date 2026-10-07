@@ -1,0 +1,154 @@
+---
+import DashboardLayout from "../../layouts/DashboardLayout.astro";
+import ComponentDoc from "../../components/ComponentDoc.astro";
+import Slider from "../../components/ui/slider/Slider.astro";
+import Button from "../../components/ui/Button.astro";
+
+const basicCode = `import Slider from '../../components/ui/Slider.astro';
+
+<Slider defaultValue={[50]} max={100} step={1} class="w-full max-w-xs" />`;
+
+const rangeCode = `import Slider from '../../components/ui/Slider.astro';
+
+<!-- Передайте массив из двух значений для диапазона -->
+<Slider defaultValue={[25, 75]} max={100} step={1} class="w-full max-w-xs" />`;
+
+const stepsCode = `import Slider from '../../components/ui/Slider.astro';
+
+<!-- Шаг 10 (значения: 0, 10, 20, 30...) -->
+<Slider defaultValue={[30]} max={100} step={10} class="w-full max-w-xs" />`;
+
+const dynamicCode = `import Slider from '../../components/ui/Slider.astro';
+
+<!-- Магия Alpine.js: ловим событие input и обновляем значение -->
+<div class="w-full max-w-xs" x-data="{ volume: 50 }">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-sm font-medium">Громкость:</span>
+    <span class="text-sm font-bold text-primary" x-text="volume + '%'"></span>
+  </div>
+  <Slider defaultValue={[50]} max={100} step={1} @input="volume = $event.detail.values[0]" />
+</div>`;
+
+const rangeDynamicCode = `import Slider from '../../components/ui/Slider.astro';
+
+<div class="w-full max-w-xs" x-data="{ minPrice: 2500, maxPrice: 7500 }">
+  <div class="flex items-center justify-between mb-4">
+    <span class="text-sm font-medium">Цена:</span>
+    <span class="text-sm font-bold text-primary">
+      <span x-text="minPrice.toLocaleString('ru-RU') + ' ₽'"></span>
+      —
+      <span x-text="maxPrice.toLocaleString('ru-RU') + ' ₽'"></span>
+    </span>
+  </div>
+  <Slider defaultValue={[2500, 7500]} max={10000} step={100} @input="minPrice = $event.detail.values[0]; maxPrice = $event.detail.values[1]" />
+</div>`;
+
+const formCode = `import Slider from '../../components/ui/Slider.astro';
+import Button from '../../components/ui/Button.astro';
+
+<!-- Просто навешиваем name="price" и всё улетит на сервер (через запятую, если диапазон) -->
+<form @submit.prevent="alert('Цена: ' + new FormData($event.target).get('price'))" class="flex flex-col gap-6 w-full max-w-xs">
+  <Slider defaultValue={[2500, 7500]} name="price" max={10000} step={100} />
+  <Button type="submit" class="w-full">Отправить</Button>
+</form>`;
+---
+
+<DashboardLayout title="Slider">
+    <div class="flex flex-col gap-10">
+        <!-- Заголовок страницы -->
+        <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold tracking-tight">Slider</h1>
+            <p class="text-muted-foreground text-lg">
+                Компонент для выбора числового значения или диапазона. Поддерживает свайп мышкой и пальцем (Pointer
+                Events), а также отправку данных в формы.
+            </p>
+        </div>
+
+        <!-- 1. БАЗОВЫЙ ПОЛЗУНОК -->
+        <ComponentDoc
+            title="Базовый ползунок"
+            description="Одиночный ползунок. Значение передается в пропсе defaultValue."
+            code={basicCode}
+        >
+            <div class="w-full max-w-xs px-2">
+                <Slider defaultValue={[50]} max={100} step={1} />
+            </div>
+        </ComponentDoc>
+
+        <!-- 2. ДИАПАЗОН (RANGE) -->
+        <ComponentDoc
+            title="Диапазон (Range)"
+            description="Выбор минимального и максимального значения. Передайте массив из двух чисел."
+            code={rangeCode}
+        >
+            <div class="w-full max-w-xs px-2">
+                <Slider defaultValue={[25, 75]} max={100} step={1} />
+            </div>
+        </ComponentDoc>
+
+        <!-- 3. С ШАГОМ (STEPS) -->
+        <ComponentDoc
+            title="С шагом (Steps)"
+            description="Ограничивает выбор кратными значениями (например, десятками)."
+            code={stepsCode}
+        >
+            <div class="w-full max-w-xs px-2">
+                <Slider defaultValue={[30]} max={100} step={10} />
+            </div>
+        </ComponentDoc>
+
+        <!-- 4. ДИНАМИЧЕСКОЕ ЗНАЧЕНИЕ (Одиночный) -->
+        <ComponentDoc
+            title="Вывод значения на экран"
+            description="Реальный пример: ловим событие @input через Alpine.js и выводим текущее значение."
+            code={dynamicCode}
+        >
+            <div class="w-full max-w-xs px-2" x-data="{ volume: 50 }">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm font-medium">Громкость:</span>
+                    <span class="text-sm font-bold text-primary" x-text="volume + '%'"></span>
+                </div>
+                <Slider defaultValue={[50]} max={100} step={1} @input="volume = $event.detail.values[0]" />
+            </div>
+        </ComponentDoc>
+
+        <!-- 5. ДИНАМИЧЕСКИЙ ДИАПАЗОН (Фильтр цен) -->
+        <ComponentDoc
+            title="Фильтр цен (Range + Output)"
+            description="Двойной ползунок с выводом обоих значений. Классический фильтр для интернет-магазинов."
+            code={rangeDynamicCode}
+        >
+            <div class="w-full max-w-xs px-2" x-data="{ minPrice: 2500, maxPrice: 7500 }">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm font-medium">Цена:</span>
+                    <span class="text-sm font-bold text-primary">
+                        <span x-text="minPrice.toLocaleString('ru-RU') + ' ₽'"></span>
+                        —
+                        <span x-text="maxPrice.toLocaleString('ru-RU') + ' ₽'"></span>
+                    </span>
+                </div>
+                <Slider
+                    defaultValue={[2500, 7500]}
+                    max={10000}
+                    step={100}
+                    @input="minPrice = $event.detail.values[0]; maxPrice = $event.detail.values[1]"
+                />
+            </div>
+        </ComponentDoc>
+
+        <!-- 6. ОТПРАВКА В ФОРМУ -->
+        <ComponentDoc
+            title="Отправка в форму (Form Submit)"
+            description="Просто передай пропс name, и компонент создаст скрытый input. Значения (для диапазона — через запятую) улетят на сервер."
+            code={formCode}
+        >
+            <form
+                @submit.prevent="alert('Цена: ' + new FormData($event.target).get('price'))"
+                class="flex flex-col gap-6 w-full max-w-xs px-2"
+            >
+                <Slider defaultValue={[2500, 7500]} name="price" max={10000} step={100} />
+                <Button type="submit" class="w-full">Отправить</Button>
+            </form>
+        </ComponentDoc>
+    </div>
+</DashboardLayout>

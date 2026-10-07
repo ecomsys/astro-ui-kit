@@ -1,0 +1,15 @@
+---
+import Button from "../Button.astro";
+const { class: className, ...rest } = Astro.props;
+---
+
+<Button
+  type="button"
+  variant="outline"
+  x-on:click="open = false"
+  data-slot="dialog-close"
+  class={className}
+  {...rest}
+>
+  <slot />
+</Button>

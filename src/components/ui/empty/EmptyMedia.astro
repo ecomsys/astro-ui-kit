@@ -1,0 +1,21 @@
+---
+import { cn } from "../../../lib/utils";
+
+export interface Props {
+    variant?: "default" | "icon";
+    class?: string;
+    [key: string]: any;
+}
+
+const { variant = "default", class: className, ...rest } = Astro.props;
+
+const baseClasses = "mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0";
+const variants = {
+    default: "bg-transparent",
+    icon: "flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-4",
+};
+---
+
+<div data-slot="empty-icon" data-variant={variant} class={cn(baseClasses, variants[variant], className)} {...rest}>
+    <slot />
+</div>
